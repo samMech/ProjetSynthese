@@ -15,6 +15,9 @@ namespace ProjetRDV247
         public string GetData(int value)
         {
             return string.Format("You entered: {0}", value);
+
+
+
         }
 
         public CompositeType GetDataUsingDataContract(CompositeType composite)
@@ -26,6 +29,9 @@ namespace ProjetRDV247
             if (composite.BoolValue)
             {
                 composite.StringValue += "Suffix";
+
+
+
             }
             return composite;
         }

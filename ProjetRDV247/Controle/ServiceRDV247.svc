@@ -1,1 +1,0 @@
-﻿<%@ ServiceHost Language="C#" Debug="true" Service="ProjetRDV247.Controle.ServiceRDV247" CodeBehind="ServiceRDV247.svc.cs" %>

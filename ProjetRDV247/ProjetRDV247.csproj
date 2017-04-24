@@ -41,14 +41,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Security" />
@@ -74,8 +66,8 @@
     <Content Include="Controle\ServiceRDV247.svc" />
     <Content Include="Modele\ModeleRDV247.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>ModeleRDV247.edmx</DependentUpon>
       <LastGenOutput>ModeleRDV247.Context.cs</LastGenOutput>
+      <DependentUpon>ModeleRDV247.edmx</DependentUpon>
     </Content>
     <Content Include="Modele\ModeleRDV247.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -113,12 +105,6 @@
     <Compile Include="Modele\rendezvous.cs">
       <DependentUpon>ModeleRDV247.tt</DependentUpon>
     </Compile>
-    <Compile Include="Modele\sp_helpdiagramdefinition_Result.cs">
-      <DependentUpon>ModeleRDV247.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Modele\sp_helpdiagrams_Result.cs">
-      <DependentUpon>ModeleRDV247.tt</DependentUpon>
-    </Compile>
     <Compile Include="Modele\sysdiagrams.cs">
       <DependentUpon>ModeleRDV247.tt</DependentUpon>
     </Compile>
@@ -137,6 +123,7 @@
     <Folder Include="Utils\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="packages.config" />
     <EntityDeploy Include="Modele\ModeleRDV247.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>ModeleRDV247.Designer.cs</LastGenOutput>
@@ -144,7 +131,6 @@
     <Content Include="Modele\ModeleRDV247.edmx.diagram">
       <DependentUpon>ModeleRDV247.edmx</DependentUpon>
     </Content>
-    <Content Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

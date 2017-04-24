@@ -6,9 +6,9 @@ using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
 
-namespace ProjetRDV247
+namespace ProjetRDV247.Controle
 {
-    // REMARQUE : vous pouvez utiliser la commande Renommer du menu Refactoriser pour changer le nom d'interface "IServiceRDV247" à la fois dans le code et le fichier de configuration.
+    // NOTE: You can use the "Rename" command on the "Refactor" menu to change the interface name "IServiceRDV247" in both code and config file together.
     [ServiceContract]
     public interface IServiceRDV247
     {

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
+using ProjetRDV247.Modele;
 
 namespace ProjetRDV247.Controle
 {
@@ -16,6 +17,16 @@ namespace ProjetRDV247.Controle
         public string TestREST()
         {
             return "Hello World !";
+        }
+
+        public List<employe> GetEmployes()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<rendezvous> GetDispoEmploye(employe emp, DateTime date)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

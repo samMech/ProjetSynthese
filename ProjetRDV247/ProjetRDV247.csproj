@@ -71,6 +71,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Controle\ServiceConnexion.svc" />
     <Content Include="Controle\ServiceRDV247.svc" />
     <Content Include="Modele\ModeleRDV247.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -82,16 +83,23 @@
       <DependentUpon>ModeleRDV247.edmx</DependentUpon>
       <LastGenOutput>ModeleRDV247.cs</LastGenOutput>
     </Content>
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controle\IServiceConnexion.cs" />
     <Compile Include="Controle\IServiceRDV247.cs" />
+    <Compile Include="Controle\ServiceConnexion.svc.cs">
+      <DependentUpon>ServiceConnexion.svc</DependentUpon>
+    </Compile>
     <Compile Include="Controle\ServiceRDV247.svc.cs">
       <DependentUpon>ServiceRDV247.svc</DependentUpon>
     </Compile>
     <Compile Include="Modele\client.cs">
       <DependentUpon>ModeleRDV247.tt</DependentUpon>
     </Compile>
+    <Compile Include="Modele\Dao.cs" />
     <Compile Include="Modele\employe.cs">
       <DependentUpon>ModeleRDV247.tt</DependentUpon>
     </Compile>
@@ -113,6 +121,12 @@
     <Compile Include="Modele\rendezvous.cs">
       <DependentUpon>ModeleRDV247.tt</DependentUpon>
     </Compile>
+    <Compile Include="Modele\sp_helpdiagramdefinition_Result.cs">
+      <DependentUpon>ModeleRDV247.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Modele\sp_helpdiagrams_Result.cs">
+      <DependentUpon>ModeleRDV247.tt</DependentUpon>
+    </Compile>
     <Compile Include="Modele\sysdiagrams.cs">
       <DependentUpon>ModeleRDV247.tt</DependentUpon>
     </Compile>
@@ -126,6 +140,7 @@
     <Folder Include="Utils\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="packages.config" />
     <EntityDeploy Include="Modele\ModeleRDV247.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>ModeleRDV247.Designer.cs</LastGenOutput>
@@ -133,7 +148,6 @@
     <Content Include="Modele\ModeleRDV247.edmx.diagram">
       <DependentUpon>ModeleRDV247.edmx</DependentUpon>
     </Content>
-    <Content Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

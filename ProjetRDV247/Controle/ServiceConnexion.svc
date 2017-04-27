@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="ProjetRDV247.Controle.ServiceConnexion" CodeBehind="ServiceConnexion.svc.cs" %>

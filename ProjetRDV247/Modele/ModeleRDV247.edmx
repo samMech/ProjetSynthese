@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="RDV247Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="RDV247Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="client">
           <Key>
             <PropertyRef Name="id_client" />
@@ -114,6 +114,7 @@
           <Parameter Name="pCourriel" Type="nvarchar" Mode="In" />
           <Parameter Name="pPassword" Type="nvarchar" Mode="In" />
           <Parameter Name="responseMessage" Type="nvarchar" Mode="InOut" />
+          <Parameter Name="responseCode" Type="int" Mode="InOut" />
         </Function>
         <Function Name="ajouterEmploye" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="pNom" Type="nvarchar" Mode="In" />
@@ -122,18 +123,21 @@
           <Parameter Name="pTypeCompte" Type="nchar" Mode="In" />
           <Parameter Name="pPassword" Type="nvarchar" Mode="In" />
           <Parameter Name="responseMessage" Type="nvarchar" Mode="InOut" />
+          <Parameter Name="responseCode" Type="int" Mode="InOut" />
         </Function>
         <Function Name="authentifierClient" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="pCourriel" Type="nvarchar" Mode="In" />
           <Parameter Name="pPassword" Type="nvarchar" Mode="In" />
           <Parameter Name="responseMessage" Type="nvarchar" Mode="InOut" />
           <Parameter Name="responseCode" Type="int" Mode="InOut" />
+          <Parameter Name="id_client" Type="int" Mode="InOut" />
         </Function>
         <Function Name="authentifierEmploye" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="pNumEmp" Type="nvarchar" Mode="In" />
           <Parameter Name="pPassword" Type="nvarchar" Mode="In" />
           <Parameter Name="responseMessage" Type="nvarchar" Mode="InOut" />
           <Parameter Name="responseCode" Type="int" Mode="InOut" />
+          <Parameter Name="id_employe" Type="int" Mode="InOut" />
         </Function>
         <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
         <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -189,8 +193,7 @@
             <End Role="typerdv" EntitySet="typerdv" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="RDV247Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -304,7 +307,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="RDV247EntitiesConnexionString" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="RDV247Entities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="client" EntityType="Self.client" />
           <EntitySet Name="employe" EntityType="Self.employe" />
           <EntitySet Name="rendezvous" EntityType="Self.rendezvous" />
@@ -333,6 +336,7 @@
             <Parameter Name="pCourriel" Mode="In" Type="String" />
             <Parameter Name="pPassword" Mode="In" Type="String" />
             <Parameter Name="responseMessage" Mode="InOut" Type="String" />
+            <Parameter Name="responseCode" Mode="InOut" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="ajouterEmploye">
             <Parameter Name="pNom" Mode="In" Type="String" />
@@ -341,18 +345,21 @@
             <Parameter Name="pTypeCompte" Mode="In" Type="String" />
             <Parameter Name="pPassword" Mode="In" Type="String" />
             <Parameter Name="responseMessage" Mode="InOut" Type="String" />
+            <Parameter Name="responseCode" Mode="InOut" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="authentifierClient">
             <Parameter Name="pCourriel" Mode="In" Type="String" />
             <Parameter Name="pPassword" Mode="In" Type="String" />
             <Parameter Name="responseMessage" Mode="InOut" Type="String" />
             <Parameter Name="responseCode" Mode="InOut" Type="Int32" />
+            <Parameter Name="id_client" Mode="InOut" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="authentifierEmploye">
             <Parameter Name="pNumEmp" Mode="In" Type="String" />
             <Parameter Name="pPassword" Mode="In" Type="String" />
             <Parameter Name="responseMessage" Mode="InOut" Type="String" />
             <Parameter Name="responseCode" Mode="InOut" Type="Int32" />
+            <Parameter Name="id_employe" Mode="InOut" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="sp_alterdiagram">
             <Parameter Name="diagramname" Mode="In" Type="String" />
@@ -370,11 +377,11 @@
             <Parameter Name="diagramname" Mode="In" Type="String" />
             <Parameter Name="owner_id" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="sp_helpdiagramdefinition">
+          <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(RDV247Model.sp_helpdiagramdefinition_Result)">
             <Parameter Name="diagramname" Mode="In" Type="String" />
             <Parameter Name="owner_id" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="sp_helpdiagrams">
+          <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(RDV247Model.sp_helpdiagrams_Result)">
             <Parameter Name="diagramname" Mode="In" Type="String" />
             <Parameter Name="owner_id" Mode="In" Type="Int32" />
           </FunctionImport>
@@ -385,12 +392,23 @@
           </FunctionImport>
           <FunctionImport Name="sp_upgraddiagrams" />
         </EntityContainer>
+        <ComplexType Name="sp_helpdiagramdefinition_Result">
+          <Property Type="Int32" Name="version" Nullable="true" />
+          <Property Type="Binary" Name="definition" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_helpdiagrams_Result">
+          <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+          <Property Type="Int32" Name="OwnerID" Nullable="false" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="RDV247ModelStoreContainer" CdmEntityContainer="RDV247EntitiesConnexionString">
+        <EntityContainerMapping StorageEntityContainer="RDV247ModelStoreContainer" CdmEntityContainer="RDV247Entities">
           <EntitySetMapping Name="client">
             <EntityTypeMapping TypeName="RDV247Model.client">
               <MappingFragment StoreEntitySet="client">
@@ -457,8 +475,25 @@
           <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="RDV247Model.Store.sp_alterdiagram" />
           <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="RDV247Model.Store.sp_creatediagram" />
           <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="RDV247Model.Store.sp_dropdiagram" />
-          <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition" FunctionName="RDV247Model.Store.sp_helpdiagramdefinition" />
-          <FunctionImportMapping FunctionImportName="sp_helpdiagrams" FunctionName="RDV247Model.Store.sp_helpdiagrams" />
+          <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition" FunctionName="RDV247Model.Store.sp_helpdiagramdefinition">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="RDV247Model.sp_helpdiagramdefinition_Result">
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_helpdiagrams" FunctionName="RDV247Model.Store.sp_helpdiagrams">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="RDV247Model.sp_helpdiagrams_Result">
+                <ScalarProperty Name="Database" ColumnName="Database" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Owner" ColumnName="Owner" />
+                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="RDV247Model.Store.sp_renamediagram" />
           <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="RDV247Model.Store.sp_upgraddiagrams" />
         </EntityContainerMapping>
@@ -478,7 +513,7 @@
         <DesignerProperty Name="EnablePluralization" Value="false" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
         <DesignerProperty Name="UseLegacyProvider" Value="false" />
-        <DesignerProperty Name="CodeGenerationStrategy" Value="Aucun" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
       </DesignerInfoPropertySet>
     </Options>
     <!-- Diagram content (shape and connector positions) -->

@@ -14,9 +14,10 @@ namespace ProjetRDV247.Controle
     {
         [OperationContract]
         [WebInvoke(Method = "GET",
+            RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
             UriTemplate = "json/{id}")]
-        void DoWork();
+        int DoWork();
     }
 }

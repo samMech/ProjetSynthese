@@ -11,7 +11,7 @@ namespace ProjetRDV247.Modele
 {
     using System;
     using System.Collections.Generic;
-    
+        
     public partial class rendezvous
     {
         public int id_rdv { get; set; }

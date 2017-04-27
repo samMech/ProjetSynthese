@@ -17,6 +17,7 @@ namespace ProjetRDV247.Modele
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public client()
         {
+            //TODO Remettre les noms de classes/table avec une majuscule au début
             this.rendezvous = new HashSet<rendezvous>();
         }
     

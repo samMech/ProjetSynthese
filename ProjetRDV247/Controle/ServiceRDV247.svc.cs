@@ -12,11 +12,35 @@ namespace ProjetRDV247.Controle
     // REMARQUE : pour lancer le client test WCF afin de tester ce service, sélectionnez ServiceRDV247.svc ou ServiceRDV247.svc.cs dans l'Explorateur de solutions et démarrez le débogage.
     public class ServiceRDV247 : IServiceRDV247
     {
-        #region IRestService Members
+        // Le data entity
+        private RDV247Entities bd;
 
         public string TestREST()
         {
             return "Hello World !";
+        }
+
+        //============================================================================================================================
+
+        public rendezvous AjouterDispo(employe employe, DateTime date, TimeSpan debut, TimeSpan fin, TimeSpan dureeRDV)
+        {
+            //bd = new RDV247Entities();
+            throw new NotImplementedException();
+        }
+
+        public bool AnnulerDispo(employe employe, rendezvous dispo, string raison)
+        {
+            throw new NotImplementedException();
+        }              
+
+        public bool AnnulerRDV(client client, rendezvous rdv)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<rendezvous> GetDispoEmploye(int idEmploye, DateTime date)
+        {
+            throw new NotImplementedException();
         }
 
         public List<employe> GetEmployes()
@@ -24,11 +48,25 @@ namespace ProjetRDV247.Controle
             throw new NotImplementedException();
         }
 
-        public List<rendezvous> GetDispoEmploye(employe emp, DateTime date)
+        public List<rendezvous> GetRDVClient(int idClient)
         {
             throw new NotImplementedException();
         }
 
-        #endregion
+        public List<rendezvous> GetRDVEmploye(int idEmploye, DateTime date)
+        {
+            throw new NotImplementedException();
+        }
+
+        public rendezvous ModifierDispo(employe employe, rendezvous dispo, DateTime newdate, TimeSpan newdebut, TimeSpan newfin, TimeSpan newdureeRDV, string raison)
+        {
+            throw new NotImplementedException();
+        }
+
+        public rendezvous PrendreRDV(client client, rendezvous rdv)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProjetRDV247.Modele;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -14,10 +15,27 @@ namespace ProjetRDV247.Controle
     {
         [OperationContract]
         [WebInvoke(Method = "GET",
-            RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
-            UriTemplate = "json/{id}")]
-        int DoWork();
+            UriTemplate = "")]
+         string TestREST();
+
+        [OperationContract]
+        [WebInvoke(Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Wrapped,
+            UriTemplate = "")]
+        List<employe> GetEmployes();
+                
+        [OperationContract]
+        [WebInvoke(Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Wrapped,
+            UriTemplate = "")]
+        List<rendezvous> GetDispoEmploye(employe emp, DateTime date);
+
+
+
+
     }
 }

@@ -13,9 +13,9 @@ namespace ProjetRDV247.Controle
     {
         #region IRestService Members
 
-        public int DoWork()
+        public string TestREST()
         {
-            return 100;
+            return "Hello World !";
         }
 
         #endregion

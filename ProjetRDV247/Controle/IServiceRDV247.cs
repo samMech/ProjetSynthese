@@ -76,20 +76,20 @@ namespace ProjetRDV247.Controle
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
             UriTemplate = "AjouterDispo")]
-        Rendezvous AjouterDispo(Employe employe, DateTime date, TimeSpan debut, TimeSpan fin, TimeSpan dureeRDV);
+        List<Rendezvous> AjouterDispo(int idEmploye, DateTime debut, DateTime fin, TimeSpan dureeDispo, int idType);
 
         [OperationContract]
         [WebInvoke(Method = "POST",
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
             UriTemplate = "ModifierDispo")]
-        Rendezvous ModifierDispo(Employe employe, Rendezvous dispo, DateTime newdate, TimeSpan newdebut, TimeSpan newfin, TimeSpan newdureeRDV, string raison);
+        Rendezvous ModifierDispo(int idEmploye, Rendezvous dispo, DateTime newDebut, DateTime newFin, TimeSpan newDureeRDV, int idType, string raison);
 
         [OperationContract]
         [WebInvoke(Method = "POST",
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
-            UriTemplate = "AnnulerDispo")]
-        bool AnnulerDispo(Employe employe, Rendezvous dispo, string raison);
+            UriTemplate = "SupprimerDispo")]
+        bool SupprimerDispo(int idEmploye, Rendezvous dispo, string raison);
     }
 }

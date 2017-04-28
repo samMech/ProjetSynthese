@@ -46,7 +46,7 @@ namespace ProjetRDV247.Controle
 
                 if ((int)responseCode.Value == 1)
                 {
-                    client = dao.getClientById((int)idClient.Value);
+                    client = dao.GetClientById((int)idClient.Value);
                 }
 
                 return client;
@@ -68,7 +68,7 @@ namespace ProjetRDV247.Controle
 
                 if ((int) responseCode.Value == 1)
                 {
-                    employe = dao.getEmployeById((int)idEmploye.Value);
+                    employe = dao.GetEmployeById((int)idEmploye.Value);
                 }
 
                 return employe;

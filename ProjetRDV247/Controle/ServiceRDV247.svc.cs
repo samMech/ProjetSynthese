@@ -14,7 +14,7 @@ namespace ProjetRDV247.Controle
     {
         // Le data entity
         private RDV247Entities bd;
-
+        
         public string TestREST()
         {
             return "Hello World !";
@@ -22,48 +22,48 @@ namespace ProjetRDV247.Controle
 
         //============================================================================================================================
 
-        public rendezvous AjouterDispo(employe employe, DateTime date, TimeSpan debut, TimeSpan fin, TimeSpan dureeRDV)
+        public Rendezvous AjouterDispo(Employe employe, DateTime date, TimeSpan debut, TimeSpan fin, TimeSpan dureeRDV)
         {
             //bd = new RDV247Entities();
             throw new NotImplementedException();
         }
 
-        public bool AnnulerDispo(employe employe, rendezvous dispo, string raison)
+        public bool AnnulerDispo(Employe employe, Rendezvous dispo, string raison)
         {
             throw new NotImplementedException();
         }              
 
-        public bool AnnulerRDV(client client, rendezvous rdv)
+        public bool AnnulerRDV(Client client, Rendezvous rdv)
         {
             throw new NotImplementedException();
         }
 
-        public List<rendezvous> GetDispoEmploye(int idEmploye, DateTime date)
+        public List<Rendezvous> GetDispoEmploye(int idEmploye, DateTime date)
         {
             throw new NotImplementedException();
         }
 
-        public List<employe> GetEmployes()
+        public List<Employe> GetEmployes()
         {
             throw new NotImplementedException();
         }
 
-        public List<rendezvous> GetRDVClient(int idClient)
+        public List<Rendezvous> GetRDVClient(int idClient)
         {
             throw new NotImplementedException();
         }
 
-        public List<rendezvous> GetRDVEmploye(int idEmploye, DateTime date)
+        public List<Rendezvous> GetRDVEmploye(int idEmploye, DateTime date)
         {
             throw new NotImplementedException();
         }
 
-        public rendezvous ModifierDispo(employe employe, rendezvous dispo, DateTime newdate, TimeSpan newdebut, TimeSpan newfin, TimeSpan newdureeRDV, string raison)
+        public Rendezvous ModifierDispo(Employe employe, Rendezvous dispo, DateTime newdate, TimeSpan newdebut, TimeSpan newfin, TimeSpan newdureeRDV, string raison)
         {
             throw new NotImplementedException();
         }
 
-        public rendezvous PrendreRDV(client client, rendezvous rdv)
+        public Rendezvous PrendreRDV(Client client, Rendezvous rdv)
         {
             throw new NotImplementedException();
         }

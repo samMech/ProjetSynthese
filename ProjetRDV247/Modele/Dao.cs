@@ -8,12 +8,12 @@ namespace ProjetRDV247.Modele
 {
     public class Dao
     {
-        public employe getEmployeById(int idEmployeValue)
+        public Employe getEmployeById(int idEmployeValue)
         {
             throw new NotImplementedException();
         }
 
-        public client getClientById(int idClientValue)
+        public Client getClientById(int idClientValue)
         {
             throw new NotImplementedException();
         }

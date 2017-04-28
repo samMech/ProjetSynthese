@@ -12,13 +12,13 @@ namespace ProjetRDV247.Modele
     using System;
     using System.Collections.Generic;
     
-    public partial class employe
+    public partial class Employe
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public employe()
+        public Employe()
         {
-            this.rendezvous = new HashSet<rendezvous>();
-            this.typerdv = new HashSet<typerdv>();
+            this.Rendezvous = new HashSet<Rendezvous>();
+            this.Typerdv = new HashSet<Typerdv>();
         }
     
         public int id_employe { get; set; }
@@ -30,8 +30,8 @@ namespace ProjetRDV247.Modele
         public System.Guid salt_employe { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<rendezvous> rendezvous { get; set; }
+        public virtual ICollection<Rendezvous> Rendezvous { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<typerdv> typerdv { get; set; }
+        public virtual ICollection<Typerdv> Typerdv { get; set; }
     }
 }

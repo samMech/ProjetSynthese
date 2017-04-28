@@ -4,8 +4,8 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="RDV247Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityType Name="client">
+      <Schema Namespace="RDV247Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Client">
           <Key>
             <PropertyRef Name="id_client" />
           </Key>
@@ -17,7 +17,7 @@
           <Property Name="password_client" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="salt" Type="uniqueidentifier" Nullable="false" />
         </EntityType>
-        <EntityType Name="employe">
+        <EntityType Name="Employe">
           <Key>
             <PropertyRef Name="id_employe" />
           </Key>
@@ -29,7 +29,7 @@
           <Property Name="password_employe" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="salt_employe" Type="uniqueidentifier" Nullable="false" />
         </EntityType>
-        <EntityType Name="rendezvous">
+        <EntityType Name="Rendezvous">
           <Key>
             <PropertyRef Name="id_rdv" />
           </Key>
@@ -41,17 +41,7 @@
           <Property Name="id_employe_rdv" Type="int" Nullable="false" />
           <Property Name="id_typerdv_rdv" Type="int" Nullable="false" />
         </EntityType>
-        <EntityType Name="sysdiagrams">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="principal_id" Type="int" Nullable="false" />
-          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="version" Type="int" />
-          <Property Name="definition" Type="varbinary(max)" />
-        </EntityType>
-        <EntityType Name="typerdv">
+        <EntityType Name="Typerdv">
           <Key>
             <PropertyRef Name="id_typerdv" />
           </Key>
@@ -60,49 +50,49 @@
           <Property Name="id_employe_typerdv" Type="int" Nullable="false" />
         </EntityType>
         <Association Name="FK_rendezvous_client">
-          <End Role="client" Type="Self.client" Multiplicity="0..1" />
-          <End Role="rendezvous" Type="Self.rendezvous" Multiplicity="*" />
+          <End Role="Client" Type="Self.Client" Multiplicity="0..1" />
+          <End Role="Rendezvous" Type="Self.Rendezvous" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="client">
+            <Principal Role="Client">
               <PropertyRef Name="id_client" />
             </Principal>
-            <Dependent Role="rendezvous">
+            <Dependent Role="Rendezvous">
               <PropertyRef Name="id_client_rdv" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_rendezvous_employe">
-          <End Role="employe" Type="Self.employe" Multiplicity="1" />
-          <End Role="rendezvous" Type="Self.rendezvous" Multiplicity="*" />
+          <End Role="Employe" Type="Self.Employe" Multiplicity="1" />
+          <End Role="Rendezvous" Type="Self.Rendezvous" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="employe">
+            <Principal Role="Employe">
               <PropertyRef Name="id_employe" />
             </Principal>
-            <Dependent Role="rendezvous">
+            <Dependent Role="Rendezvous">
               <PropertyRef Name="id_employe_rdv" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_rendezvous_typerdv">
-          <End Role="typerdv" Type="Self.typerdv" Multiplicity="1" />
-          <End Role="rendezvous" Type="Self.rendezvous" Multiplicity="*" />
+          <End Role="Typerdv" Type="Self.Typerdv" Multiplicity="1" />
+          <End Role="Rendezvous" Type="Self.Rendezvous" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="typerdv">
+            <Principal Role="Typerdv">
               <PropertyRef Name="id_typerdv" />
             </Principal>
-            <Dependent Role="rendezvous">
+            <Dependent Role="Rendezvous">
               <PropertyRef Name="id_typerdv_rdv" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_typerdv_employe">
-          <End Role="employe" Type="Self.employe" Multiplicity="1" />
-          <End Role="typerdv" Type="Self.typerdv" Multiplicity="*" />
+          <End Role="Employe" Type="Self.Employe" Multiplicity="1" />
+          <End Role="Typerdv" Type="Self.Typerdv" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="employe">
+            <Principal Role="Employe">
               <PropertyRef Name="id_employe" />
             </Principal>
-            <Dependent Role="typerdv">
+            <Dependent Role="Typerdv">
               <PropertyRef Name="id_employe_typerdv" />
             </Dependent>
           </ReferentialConstraint>
@@ -171,33 +161,33 @@
         </Function>
         <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="RDV247ModelStoreContainer">
-          <EntitySet Name="client" EntityType="Self.client" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="employe" EntityType="Self.employe" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="rendezvous" EntityType="Self.rendezvous" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="typerdv" EntityType="Self.typerdv" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Client" EntityType="Self.Client" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Employe" EntityType="Self.Employe" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Rendezvous" EntityType="Self.Rendezvous" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Typerdv" EntityType="Self.Typerdv" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_rendezvous_client" Association="Self.FK_rendezvous_client">
-            <End Role="client" EntitySet="client" />
-            <End Role="rendezvous" EntitySet="rendezvous" />
+            <End Role="Client" EntitySet="Client" />
+            <End Role="Rendezvous" EntitySet="Rendezvous" />
           </AssociationSet>
           <AssociationSet Name="FK_rendezvous_employe" Association="Self.FK_rendezvous_employe">
-            <End Role="employe" EntitySet="employe" />
-            <End Role="rendezvous" EntitySet="rendezvous" />
+            <End Role="Employe" EntitySet="Employe" />
+            <End Role="Rendezvous" EntitySet="Rendezvous" />
           </AssociationSet>
           <AssociationSet Name="FK_rendezvous_typerdv" Association="Self.FK_rendezvous_typerdv">
-            <End Role="typerdv" EntitySet="typerdv" />
-            <End Role="rendezvous" EntitySet="rendezvous" />
+            <End Role="Typerdv" EntitySet="Typerdv" />
+            <End Role="Rendezvous" EntitySet="Rendezvous" />
           </AssociationSet>
           <AssociationSet Name="FK_typerdv_employe" Association="Self.FK_typerdv_employe">
-            <End Role="employe" EntitySet="employe" />
-            <End Role="typerdv" EntitySet="typerdv" />
+            <End Role="Employe" EntitySet="Employe" />
+            <End Role="Typerdv" EntitySet="Typerdv" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="RDV247Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="client">
+        <EntityType Name="Client">
           <Key>
             <PropertyRef Name="id_client" />
           </Key>
@@ -208,9 +198,9 @@
           <Property Name="courriel_client" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="password_client" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="salt" Type="Guid" Nullable="false" />
-          <NavigationProperty Name="rendezvous" Relationship="Self.FK_rendezvous_client" FromRole="client" ToRole="rendezvous" />
+          <NavigationProperty Name="Rendezvous" Relationship="Self.FK_rendezvous_client" FromRole="Client" ToRole="Rendezvous" />
         </EntityType>
-        <EntityType Name="employe">
+        <EntityType Name="Employe">
           <Key>
             <PropertyRef Name="id_employe" />
           </Key>
@@ -221,10 +211,10 @@
           <Property Name="typecompte_employe" Type="String" MaxLength="1" FixedLength="true" Unicode="true" Nullable="false" />
           <Property Name="password_employe" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="salt_employe" Type="Guid" Nullable="false" />
-          <NavigationProperty Name="rendezvous" Relationship="Self.FK_rendezvous_employe" FromRole="employe" ToRole="rendezvous" />
-          <NavigationProperty Name="typerdv" Relationship="Self.FK_typerdv_employe" FromRole="employe" ToRole="typerdv" />
+          <NavigationProperty Name="Rendezvous" Relationship="Self.FK_rendezvous_employe" FromRole="Employe" ToRole="Rendezvous" />
+          <NavigationProperty Name="Typerdv" Relationship="Self.FK_typerdv_employe" FromRole="Employe" ToRole="Typerdv" />
         </EntityType>
-        <EntityType Name="rendezvous">
+        <EntityType Name="Rendezvous">
           <Key>
             <PropertyRef Name="id_rdv" />
           </Key>
@@ -235,99 +225,88 @@
           <Property Name="id_client_rdv" Type="Int32" />
           <Property Name="id_employe_rdv" Type="Int32" Nullable="false" />
           <Property Name="id_typerdv_rdv" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="client" Relationship="Self.FK_rendezvous_client" FromRole="rendezvous" ToRole="client" />
-          <NavigationProperty Name="employe" Relationship="Self.FK_rendezvous_employe" FromRole="rendezvous" ToRole="employe" />
-          <NavigationProperty Name="typerdv" Relationship="Self.FK_rendezvous_typerdv" FromRole="rendezvous" ToRole="typerdv" />
+          <NavigationProperty Name="Client" Relationship="Self.FK_rendezvous_client" FromRole="Rendezvous" ToRole="Client" />
+          <NavigationProperty Name="Employe" Relationship="Self.FK_rendezvous_employe" FromRole="Rendezvous" ToRole="Employe" />
+          <NavigationProperty Name="Typerdv" Relationship="Self.FK_rendezvous_typerdv" FromRole="Rendezvous" ToRole="Typerdv" />
         </EntityType>
-        <EntityType Name="sysdiagrams">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="principal_id" Type="Int32" Nullable="false" />
-          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="version" Type="Int32" />
-          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
-        </EntityType>
-        <EntityType Name="typerdv">
+        <EntityType Name="Typerdv">
           <Key>
             <PropertyRef Name="id_typerdv" />
           </Key>
           <Property Name="id_typerdv" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="nom_typerdv" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="id_employe_typerdv" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="employe" Relationship="Self.FK_typerdv_employe" FromRole="typerdv" ToRole="employe" />
-          <NavigationProperty Name="rendezvous" Relationship="Self.FK_rendezvous_typerdv" FromRole="typerdv" ToRole="rendezvous" />
+          <NavigationProperty Name="Employe" Relationship="Self.FK_typerdv_employe" FromRole="Typerdv" ToRole="Employe" />
+          <NavigationProperty Name="Rendezvous" Relationship="Self.FK_rendezvous_typerdv" FromRole="Typerdv" ToRole="Rendezvous" />
         </EntityType>
         <Association Name="FK_rendezvous_client">
-          <End Role="client" Type="Self.client" Multiplicity="0..1" />
-          <End Role="rendezvous" Type="Self.rendezvous" Multiplicity="*" />
+          <End Role="Client" Type="Self.Client" Multiplicity="0..1" />
+          <End Role="Rendezvous" Type="Self.Rendezvous" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="client">
+            <Principal Role="Client">
               <PropertyRef Name="id_client" />
             </Principal>
-            <Dependent Role="rendezvous">
+            <Dependent Role="Rendezvous">
               <PropertyRef Name="id_client_rdv" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_rendezvous_employe">
-          <End Role="employe" Type="Self.employe" Multiplicity="1" />
-          <End Role="rendezvous" Type="Self.rendezvous" Multiplicity="*" />
+          <End Role="Employe" Type="Self.Employe" Multiplicity="1" />
+          <End Role="Rendezvous" Type="Self.Rendezvous" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="employe">
+            <Principal Role="Employe">
               <PropertyRef Name="id_employe" />
             </Principal>
-            <Dependent Role="rendezvous">
+            <Dependent Role="Rendezvous">
               <PropertyRef Name="id_employe_rdv" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_typerdv_employe">
-          <End Role="employe" Type="Self.employe" Multiplicity="1" />
-          <End Role="typerdv" Type="Self.typerdv" Multiplicity="*" />
+          <End Role="Employe" Type="Self.Employe" Multiplicity="1" />
+          <End Role="Typerdv" Type="Self.Typerdv" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="employe">
+            <Principal Role="Employe">
               <PropertyRef Name="id_employe" />
             </Principal>
-            <Dependent Role="typerdv">
+            <Dependent Role="Typerdv">
               <PropertyRef Name="id_employe_typerdv" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_rendezvous_typerdv">
-          <End Role="typerdv" Type="Self.typerdv" Multiplicity="1" />
-          <End Role="rendezvous" Type="Self.rendezvous" Multiplicity="*" />
+          <End Role="Typerdv" Type="Self.Typerdv" Multiplicity="1" />
+          <End Role="Rendezvous" Type="Self.Rendezvous" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="typerdv">
+            <Principal Role="Typerdv">
               <PropertyRef Name="id_typerdv" />
             </Principal>
-            <Dependent Role="rendezvous">
+            <Dependent Role="Rendezvous">
               <PropertyRef Name="id_typerdv_rdv" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="RDV247Entities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="client" EntityType="Self.client" />
-          <EntitySet Name="employe" EntityType="Self.employe" />
-          <EntitySet Name="rendezvous" EntityType="Self.rendezvous" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
-          <EntitySet Name="typerdv" EntityType="Self.typerdv" />
+          <EntitySet Name="Client" EntityType="Self.Client" />
+          <EntitySet Name="Employe" EntityType="Self.Employe" />
+          <EntitySet Name="Rendezvous" EntityType="Self.Rendezvous" />
+          <EntitySet Name="Typerdv" EntityType="Self.Typerdv" />
           <AssociationSet Name="FK_rendezvous_client" Association="Self.FK_rendezvous_client">
-            <End Role="client" EntitySet="client" />
-            <End Role="rendezvous" EntitySet="rendezvous" />
+            <End Role="Client" EntitySet="Client" />
+            <End Role="Rendezvous" EntitySet="Rendezvous" />
           </AssociationSet>
           <AssociationSet Name="FK_rendezvous_employe" Association="Self.FK_rendezvous_employe">
-            <End Role="employe" EntitySet="employe" />
-            <End Role="rendezvous" EntitySet="rendezvous" />
+            <End Role="Employe" EntitySet="Employe" />
+            <End Role="Rendezvous" EntitySet="Rendezvous" />
           </AssociationSet>
           <AssociationSet Name="FK_typerdv_employe" Association="Self.FK_typerdv_employe">
-            <End Role="employe" EntitySet="employe" />
-            <End Role="typerdv" EntitySet="typerdv" />
+            <End Role="Employe" EntitySet="Employe" />
+            <End Role="Typerdv" EntitySet="Typerdv" />
           </AssociationSet>
           <AssociationSet Name="FK_rendezvous_typerdv" Association="Self.FK_rendezvous_typerdv">
-            <End Role="typerdv" EntitySet="typerdv" />
-            <End Role="rendezvous" EntitySet="rendezvous" />
+            <End Role="Typerdv" EntitySet="Typerdv" />
+            <End Role="Rendezvous" EntitySet="Rendezvous" />
           </AssociationSet>
           <FunctionImport Name="ajouterClient">
             <Parameter Name="pNom" Mode="In" Type="String" />
@@ -409,9 +388,9 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="RDV247ModelStoreContainer" CdmEntityContainer="RDV247Entities">
-          <EntitySetMapping Name="client">
-            <EntityTypeMapping TypeName="RDV247Model.client">
-              <MappingFragment StoreEntitySet="client">
+          <EntitySetMapping Name="Client">
+            <EntityTypeMapping TypeName="RDV247Model.Client">
+              <MappingFragment StoreEntitySet="Client">
                 <ScalarProperty Name="id_client" ColumnName="id_client" />
                 <ScalarProperty Name="nom_client" ColumnName="nom_client" />
                 <ScalarProperty Name="prenom_client" ColumnName="prenom_client" />
@@ -422,9 +401,9 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="employe">
-            <EntityTypeMapping TypeName="RDV247Model.employe">
-              <MappingFragment StoreEntitySet="employe">
+          <EntitySetMapping Name="Employe">
+            <EntityTypeMapping TypeName="RDV247Model.Employe">
+              <MappingFragment StoreEntitySet="Employe">
                 <ScalarProperty Name="id_employe" ColumnName="id_employe" />
                 <ScalarProperty Name="nom_employe" ColumnName="nom_employe" />
                 <ScalarProperty Name="prenom_employe" ColumnName="prenom_employe" />
@@ -435,9 +414,9 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="rendezvous">
-            <EntityTypeMapping TypeName="RDV247Model.rendezvous">
-              <MappingFragment StoreEntitySet="rendezvous">
+          <EntitySetMapping Name="Rendezvous">
+            <EntityTypeMapping TypeName="RDV247Model.Rendezvous">
+              <MappingFragment StoreEntitySet="Rendezvous">
                 <ScalarProperty Name="id_rdv" ColumnName="id_rdv" />
                 <ScalarProperty Name="debut_rdv" ColumnName="debut_rdv" />
                 <ScalarProperty Name="fin_rdv" ColumnName="fin_rdv" />
@@ -448,20 +427,9 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="sysdiagrams">
-            <EntityTypeMapping TypeName="RDV247Model.sysdiagrams">
-              <MappingFragment StoreEntitySet="sysdiagrams">
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
-                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="definition" ColumnName="definition" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="typerdv">
-            <EntityTypeMapping TypeName="RDV247Model.typerdv">
-              <MappingFragment StoreEntitySet="typerdv">
+          <EntitySetMapping Name="Typerdv">
+            <EntityTypeMapping TypeName="RDV247Model.Typerdv">
+              <MappingFragment StoreEntitySet="Typerdv">
                 <ScalarProperty Name="id_typerdv" ColumnName="id_typerdv" />
                 <ScalarProperty Name="nom_typerdv" ColumnName="nom_typerdv" />
                 <ScalarProperty Name="id_employe_typerdv" ColumnName="id_employe_typerdv" />

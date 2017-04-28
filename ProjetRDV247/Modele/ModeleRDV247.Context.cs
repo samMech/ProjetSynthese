@@ -27,11 +27,10 @@ namespace ProjetRDV247.Modele
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<client> client { get; set; }
-        public virtual DbSet<employe> employe { get; set; }
-        public virtual DbSet<rendezvous> rendezvous { get; set; }
-        public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
-        public virtual DbSet<typerdv> typerdv { get; set; }
+        public virtual DbSet<Client> Client { get; set; }
+        public virtual DbSet<Employe> Employe { get; set; }
+        public virtual DbSet<Rendezvous> Rendezvous { get; set; }
+        public virtual DbSet<Typerdv> Typerdv { get; set; }
     
         public virtual int ajouterClient(string pNom, string pPrenom, string pTel, string pCourriel, string pPassword, ObjectParameter responseMessage, ObjectParameter responseCode)
         {

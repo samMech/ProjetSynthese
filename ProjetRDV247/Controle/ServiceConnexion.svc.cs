@@ -18,7 +18,7 @@ namespace ProjetRDV247.Controle
             return "Hello World !";
         }
 
-        public bool CreerClient(client c)
+        public bool CreerClient(Client c)
         {
             using (RDV247Entities bd = new RDV247Entities())
             {
@@ -32,7 +32,7 @@ namespace ProjetRDV247.Controle
             }
         }
 
-        public client AuthentifierClient(string login, string password)
+        public Client AuthentifierClient(string login, string password)
         {
             using (RDV247Entities bd = new RDV247Entities())
             {
@@ -42,7 +42,7 @@ namespace ProjetRDV247.Controle
 
                 bd.authentifierClient(login, password, responseMessage, responseCode, idClient);
                 Dao dao = new Dao();
-                client client = null;
+                Client client = null;
 
                 if ((int)responseCode.Value == 1)
                 {
@@ -53,17 +53,18 @@ namespace ProjetRDV247.Controle
             }
         }
 
-        public employe AuthentifierEmp(string login, string password)
+        public Employe AuthentifierEmp(string login, string password)
         {
             using (RDV247Entities bd = new RDV247Entities())
             {
+                
                 ObjectParameter responseMessage = new ObjectParameter("responseMessage", typeof(string));
                 ObjectParameter responseCode = new ObjectParameter("responseCode", typeof(int));
                 ObjectParameter idEmploye = new ObjectParameter("idEmploye", typeof(int));
 
                 bd.authentifierClient(login, password, responseMessage, responseCode, idEmploye);
                 Dao dao = new Dao();
-                employe employe = null;
+                Employe employe = null;
 
                 if ((int) responseCode.Value == 1)
                 {

@@ -12,20 +12,20 @@ namespace ProjetRDV247.Modele
     using System;
     using System.Collections.Generic;
     
-    public partial class typerdv
+    public partial class Typerdv
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public typerdv()
+        public Typerdv()
         {
-            this.rendezvous = new HashSet<rendezvous>();
+            this.Rendezvous = new HashSet<Rendezvous>();
         }
     
         public int id_typerdv { get; set; }
         public string nom_typerdv { get; set; }
         public int id_employe_typerdv { get; set; }
     
-        public virtual employe employe { get; set; }
+        public virtual Employe Employe { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<rendezvous> rendezvous { get; set; }
+        public virtual ICollection<Rendezvous> Rendezvous { get; set; }
     }
 }

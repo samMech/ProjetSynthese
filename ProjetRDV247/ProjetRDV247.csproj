@@ -96,11 +96,11 @@
     <Compile Include="Controle\ServiceRDV247.svc.cs">
       <DependentUpon>ServiceRDV247.svc</DependentUpon>
     </Compile>
-    <Compile Include="Modele\client.cs">
+    <Compile Include="Modele\Client.cs">
       <DependentUpon>ModeleRDV247.tt</DependentUpon>
     </Compile>
     <Compile Include="Modele\Dao.cs" />
-    <Compile Include="Modele\employe.cs">
+    <Compile Include="Modele\Employe.cs">
       <DependentUpon>ModeleRDV247.tt</DependentUpon>
     </Compile>
     <Compile Include="Modele\ModeleRDV247.Context.cs">
@@ -118,7 +118,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ModeleRDV247.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Modele\rendezvous.cs">
+    <Compile Include="Modele\Rendezvous.cs">
       <DependentUpon>ModeleRDV247.tt</DependentUpon>
     </Compile>
     <Compile Include="Modele\sp_helpdiagramdefinition_Result.cs">
@@ -127,10 +127,7 @@
     <Compile Include="Modele\sp_helpdiagrams_Result.cs">
       <DependentUpon>ModeleRDV247.tt</DependentUpon>
     </Compile>
-    <Compile Include="Modele\sysdiagrams.cs">
-      <DependentUpon>ModeleRDV247.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Modele\typerdv.cs">
+    <Compile Include="Modele\Typerdv.cs">
       <DependentUpon>ModeleRDV247.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />

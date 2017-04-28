@@ -12,13 +12,12 @@ namespace ProjetRDV247.Modele
     using System;
     using System.Collections.Generic;
     
-    public partial class client
+    public partial class Client
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public client()
+        public Client()
         {
-            //TODO Remettre les noms de classes/table avec une majuscule au début
-            this.rendezvous = new HashSet<rendezvous>();
+            this.Rendezvous = new HashSet<Rendezvous>();
         }
     
         public int id_client { get; set; }
@@ -30,6 +29,6 @@ namespace ProjetRDV247.Modele
         public System.Guid salt { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<rendezvous> rendezvous { get; set; }
+        public virtual ICollection<Rendezvous> Rendezvous { get; set; }
     }
 }

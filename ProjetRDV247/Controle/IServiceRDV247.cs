@@ -23,7 +23,7 @@ namespace ProjetRDV247.Controle
             UriTemplate = "")]
          string TestREST();
 
-        // Client
+        // GET
         //=============================================================
 
         [OperationContract]
@@ -46,30 +46,30 @@ namespace ProjetRDV247.Controle
             BodyStyle = WebMessageBodyStyle.Wrapped,
             UriTemplate = "GetRDVClient/{idClient}")]
         List<Rendezvous> GetRDVClient(int idClient);
-
-        [OperationContract]
-        [WebInvoke(Method = "POST",
-            ResponseFormat = WebMessageFormat.Json,
-            BodyStyle = WebMessageBodyStyle.Wrapped,
-            UriTemplate = "PrendreRDV")]
-        Rendezvous PrendreRDV(Client client, Rendezvous rdv);
-
-        [OperationContract]
-        [WebInvoke(Method = "POST",
-            ResponseFormat = WebMessageFormat.Json,
-            BodyStyle = WebMessageBodyStyle.Wrapped,
-            UriTemplate = "AnnulerRDV")]
-        bool AnnulerRDV(Client client, Rendezvous rdv);
-
-        // Employé
-        //=============================================================
-
+        
         [OperationContract]
         [WebInvoke(Method = "GET",
            ResponseFormat = WebMessageFormat.Json,
            BodyStyle = WebMessageBodyStyle.Wrapped,
            UriTemplate = "GetRDVEmploye/{idEmploye}/{date}")]
         List<Rendezvous> GetRDVEmploye(int idEmploye, DateTime date);
+
+        // POST
+        //=============================================================
+
+        [OperationContract]
+        [WebInvoke(Method = "POST",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Wrapped,
+            UriTemplate = "PrendreRDV")]
+        Rendezvous PrendreRDV(int idClient, int idRDV);
+
+        [OperationContract]
+        [WebInvoke(Method = "POST",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Wrapped,
+            UriTemplate = "AnnulerRDV")]
+        void AnnulerRDV(int idClient, int idRDV);
 
         [OperationContract]
         [WebInvoke(Method = "POST",
@@ -83,13 +83,20 @@ namespace ProjetRDV247.Controle
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
             UriTemplate = "ModifierDispo")]
-        Rendezvous ModifierDispo(int idEmploye, Rendezvous dispo, DateTime newDebut, DateTime newFin, TimeSpan newDureeRDV, int idType, string raison);
+        Rendezvous ModifierDispo(int idEmploye, int idDispo, DateTime newDebut, DateTime newFin, int idType, string raison);
 
         [OperationContract]
         [WebInvoke(Method = "POST",
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
             UriTemplate = "SupprimerDispo")]
-        bool SupprimerDispo(int idEmploye, Rendezvous dispo, string raison);
+        void SupprimerDispo(int idEmploye, int idDispo, string raison);
+        
+        [OperationContract]
+        [WebInvoke(Method = "POST",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Wrapped,
+            UriTemplate = "SupprimerDispo")]
+        void SupprimerDispo(int idEmploye, List<int> idDispos, string raison);
     }
 }

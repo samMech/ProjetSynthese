@@ -131,7 +131,9 @@
       <DependentUpon>ModeleRDV247.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\CommunicationUtil.cs" />
     <Compile Include="Utils\HoraireUtil.cs" />
+    <Compile Include="Utils\Utilitaire.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

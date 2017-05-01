@@ -6,6 +6,13 @@
         xmlns:local="clr-namespace:InterfaceEntrepriseWPF.Vues_Modeles"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
-    <UserControl Content="{Binding Path=CurrentPageViewModel}" />
+    
+    <!--Ressources globales-->
+    <Window.Resources>
+        
+    </Window.Resources>
+    
+    <!-- Contenu-->
+    <ContentControl Content="{Binding Path=VueCourante}"/>
 
 </Window>

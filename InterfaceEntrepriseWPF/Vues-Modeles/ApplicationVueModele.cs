@@ -1,8 +1,10 @@
-﻿using System;
+﻿using InterfaceEntrepriseWPF.Vues;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace InterfaceEntrepriseWPF.Vues_Modeles
@@ -13,10 +15,10 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
     class ApplicationVueModele : VueModele
     {
         // Attributs
-        private ICommand _changePageCommand;
+        private ICommand _changeViewCommand;
 
-        private VueModele _currentPageViewModel;
-        private List<VueModele> _pageViewModels;
+        private UserControl _vueCourante;
+        private List<UserControl> _vues;
 
         /// <summary>
         /// Constructeur par défaut
@@ -24,10 +26,10 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         public ApplicationVueModele()
         {
             // Ajout des différentes vues-modèles de l'application
-            PageViewModels.Add(new ConnexionVueModele());
+            Vues.Add(new VueConnexion());
 
             // Initialisation de la page d'accueil
-            CurrentPageViewModel = PageViewModels[0];
+            VueCourante = Vues[0];
         }
 
         //============//
@@ -37,51 +39,51 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         /// <summary>
         /// Commande pour changer de page
         /// </summary>
-        public ICommand ChangePageCommand
+        public ICommand ChangeViewCommand
         {
             get
             {
-                if (_changePageCommand == null)
+                if (_changeViewCommand == null)
                 {
                     // Création de la commande si elle n'existe pas encore
-                    _changePageCommand = new RelayCommand(
-                        p => ChangeViewModel((VueModele)p),
-                        p => p is VueModele);
+                    _changeViewCommand = new RelayCommand(
+                        p => ChangerVueCourante((UserControl)p),
+                        p => p is UserControl);
                 }
-                return _changePageCommand;
+                return _changeViewCommand;
             }
         }
 
         /// <summary>
         /// Liste des pages
         /// </summary>
-        public List<VueModele> PageViewModels
+        public List<UserControl> Vues
         {
             get
             {
                 // Création de la commande si elle n'existe pas encore
-                if (_pageViewModels == null)
+                if (_vues == null)
                 {
-                    _pageViewModels = new List<VueModele>();
+                    _vues = new List<UserControl>();
                 }
-                return _pageViewModels;
+                return _vues;
             }
         }
 
         /// <summary>
         /// La page courante
         /// </summary>
-        public VueModele CurrentPageViewModel
+        public UserControl VueCourante
         {
             get
             {
-                return _currentPageViewModel;
+                return _vueCourante;
             }
             set
             {
-                if (_currentPageViewModel != value)
+                if (_vueCourante != value)
                 {
-                    _currentPageViewModel = value;
+                    _vueCourante = value;
                     OnPropertyChanged();
                 }
             }
@@ -92,16 +94,16 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         //==========//
 
         // Méthode pour changer de page
-        private void ChangeViewModel(VueModele viewModel)
+        private void ChangerVueCourante(UserControl vue)
         {            
-            if (!PageViewModels.Contains(viewModel))
+            if (!Vues.Contains(vue))
             {
                 // Si la page n'existe pas encore, on l'ajoute
-                PageViewModels.Add(viewModel);
+                Vues.Add(vue);
             }                
 
             // On remplace le contenu de la fenêtre par la nouvelle page
-            CurrentPageViewModel = PageViewModels.FirstOrDefault(vm => vm == viewModel);
+            VueCourante = Vues.FirstOrDefault(vm => vm == vue);
         }
 
     }

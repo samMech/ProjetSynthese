@@ -20,7 +20,6 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
 
         // Attributs
         private ICommand _changePageCommand;
-
         private VueModele _pageCourante;
         private List<VueModele> _pages;
 

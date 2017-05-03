@@ -29,4 +29,26 @@ namespace ProjetRDV247.Utils
             return dateCourante.AddDays(deltaJour);
         }
 
+        /// <summary>
+        /// Méthode pour valider un entier
+        /// </summary>
+        /// <param name="entier">La chaîne de caractères contenant l'entier</param>
+        /// <returns>Vrai si la chaîne peut être convertie en entier valide</returns>
+        public static bool ValiderEntier(string entier)
+        {
+            int valeur;
+            return Int32.TryParse(entier, out valeur);
+        }
+
+        /// <summary>
+        /// Méthode pour valider une date
+        /// </summary>
+        /// <param name="date">La chaîne de caractères contenant la date</param>
+        /// <returns>Vrai si la chaîne peut être convertie en une date valide</returns>
+        public static bool ValiderDate(string date)
+        {
+            DateTime datetime;
+            return DateTime.TryParse(date, out datetime);
+        }
+    }
 }

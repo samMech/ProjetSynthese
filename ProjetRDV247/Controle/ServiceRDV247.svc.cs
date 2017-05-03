@@ -44,16 +44,20 @@ namespace ProjetRDV247.Controle
         /// <param name="idEmploye">L'identifiant de l'employé</param>
         /// <param name="date">La date d'un jour dans la semaine</param>
         /// <returns>La liste de toutes les disponibilités de l'employé pour cette semaine</returns>
-        public List<Rendezvous> GetDispoEmploye(int idEmploye, DateTime date)
+        public List<Rendezvous> GetDispoEmploye(string idEmploye, string date)
         {
+            // Validation des paramètres
+            if (Utilitaire.ValiderEntier(idEmploye) == false || Utilitaire.ValiderDate(date) == false)         
+                throw new WebFaultException(HttpStatusCode.BadRequest);
+            
             // Création de l'objet d'accès aux données
             dao = new Dao();
 
             // On trouve la date du premier jour de la semaine
-            DateTime dateDebut = Utilitaire.TrouverLundiPrecedent(date);
+            DateTime dateDebut = Utilitaire.TrouverLundiPrecedent(Convert.ToDateTime(date));
 
             // On retourne les disponibilités de l'employé pour la semaine
-            return dao.GetDisposEmploye(idEmploye, dateDebut, dateDebut.AddDays(7));
+            return dao.GetDisposEmploye(Convert.ToInt32(idEmploye), dateDebut, dateDebut.AddDays(7));
         }
         
         /// <summary>
@@ -61,12 +65,16 @@ namespace ProjetRDV247.Controle
         /// </summary>
         /// <param name="idClient">L'identifiant de l'employé</param>        
         /// <returns>La liste de tous les rendez-vous futurs pour ce client</returns>
-        public List<Rendezvous> GetRDVClient(int idClient)
+        public List<Rendezvous> GetRDVClient(string idClient)
         {
+            // Validation des paramètres
+            if (Utilitaire.ValiderEntier(idClient) == false)
+                throw new WebFaultException(HttpStatusCode.BadRequest);
+
             // Création de l'objet d'accès aux données
             dao = new Dao();
 
-            return dao.GetRendezvousClient(idClient, Utilitaire.TrouverLundiPrecedent(DateTime.Today));
+            return dao.GetRendezvousClient(Convert.ToInt32(idClient), Utilitaire.TrouverLundiPrecedent(DateTime.Today));
         }
 
         /// <summary>
@@ -75,7 +83,7 @@ namespace ProjetRDV247.Controle
         /// <param name="idEmploye">L'identifiant de l'employé</param>
         /// <param name="date">La date d'un jour dans la semaine</param>
         /// <returns>La liste de tous les rendez-vous pour cet employé cette semaine</returns>
-        public List<Rendezvous> GetRDVEmploye(int idEmploye, DateTime date)
+        public List<Rendezvous> GetRDVEmploye(string idEmploye, string date)
         {
             return GetDispoEmploye(idEmploye, date).Where(r => r.statut_rdv.Equals("LIBRE") == false).ToList();
         }
@@ -307,7 +315,7 @@ namespace ProjetRDV247.Controle
         /// <param name="idEmploye">L'identifiant de l'employé</param>
         /// <param name="idDispos">La liste des disponibilités à supprimer</param>
         /// <param name="raison">La raison à fournir en cas de rendez-vous annulé</param>        
-        public void SupprimerDispo(int idEmploye, List<int> idDispos, string raison)
+        public void SupprimerDispos(int idEmploye, List<int> idDispos, string raison)
         {
             foreach (int idDispo in idDispos)
             {

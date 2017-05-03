@@ -20,7 +20,7 @@ namespace ProjetRDV247.Controle
         [WebInvoke(Method = "GET",
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
-            UriTemplate = "")]
+            UriTemplate = "TestREST")]
          string TestREST();
 
         // GET
@@ -38,21 +38,21 @@ namespace ProjetRDV247.Controle
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
             UriTemplate = "GetDispoEmploye/{idEmploye}/{date}")]
-        List<Rendezvous> GetDispoEmploye(int idEmploye, DateTime date);
+        List<Rendezvous> GetDispoEmploye(string idEmploye, string date);
 
         [OperationContract]
         [WebInvoke(Method = "GET",
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
             UriTemplate = "GetRDVClient/{idClient}")]
-        List<Rendezvous> GetRDVClient(int idClient);
+        List<Rendezvous> GetRDVClient(string idClient);
         
         [OperationContract]
         [WebInvoke(Method = "GET",
            ResponseFormat = WebMessageFormat.Json,
            BodyStyle = WebMessageBodyStyle.Wrapped,
            UriTemplate = "GetRDVEmploye/{idEmploye}/{date}")]
-        List<Rendezvous> GetRDVEmploye(int idEmploye, DateTime date);
+        List<Rendezvous> GetRDVEmploye(string idEmploye, string date);
 
         // POST
         //=============================================================
@@ -96,7 +96,7 @@ namespace ProjetRDV247.Controle
         [WebInvoke(Method = "POST",
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
-            UriTemplate = "SupprimerDispo")]
-        void SupprimerDispo(int idEmploye, List<int> idDispos, string raison);
+            UriTemplate = "SupprimerDispos")]
+        void SupprimerDispos(int idEmploye, List<int> idDispos, string raison);
     }
 }

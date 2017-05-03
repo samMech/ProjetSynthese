@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProjetRDV247.Modele;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -77,7 +78,20 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         // Méthode pour faire la connexion            
         private void ConnexionUsager(object obj)
         {
-            ApplicationVueModele.Instance.ChangePageCommand.Execute((new PortailEmployeVueModele()));
+            string endPoint = @"http://localhost:2057/rest";
+            //var client = new RestClient(endPoint);
+            //var json = client.MakeRequest();
+
+
+
+            // Tentative de connexion
+            // Client client = 
+
+            if (true)
+            {                
+                ApplicationVueModele.Instance.ChangePageCommand.Execute((new PortailEmployeVueModele()));
+            }
+            
         }
 
         // Méthode pour savoir si la connexion est possible

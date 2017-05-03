@@ -3,16 +3,50 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:InterfaceEntrepriseWPF.Vues_Modeles"
+        xmlns:localVues="clr-namespace:InterfaceEntrepriseWPF.Vues"
+        xmlns:localVuesModeles="clr-namespace:InterfaceEntrepriseWPF.Vues_Modeles"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     
     <!--Ressources globales-->
     <Window.Resources>
+
+        <!-- Bordures -->
+        <Style TargetType="{x:Type Border}">
+            <Setter Property="BorderBrush" Value="#7F00B9FF" />
+            <Setter Property="CornerRadius" Value="5" />
+            <Setter Property="Margin" Value="2" />            
+        </Style>
         
+        <!-- Titres -->
+        <Style x:Key="StyleTitre" TargetType="{x:Type Control}">
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="14" />
+        </Style>
+        
+        <!-- Texte -->
+        <Style x:Key="StyleTexte" TargetType="{x:Type Control}">
+            <Setter Property="FontWeight" Value="Normal" />
+            <Setter Property="FontSize" Value="12" />
+        </Style>     
+        <!-- Label -->
+        <Style TargetType="{x:Type Label}" BasedOn="{StaticResource StyleTexte}" />
+        <!-- Bouton -->
+        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource StyleTexte}" />
+
+        <!-- Template mapping pour les différentes page -->
+        <DataTemplate DataType="{x:Type localVuesModeles:ConnexionVueModele}">
+            <localVues:VueConnexion />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type localVuesModeles:PortailEmployeVueModele}">
+            <localVues:VuePortailEmploye />
+        </DataTemplate>
+
     </Window.Resources>
     
     <!-- Contenu-->
-    <ContentControl Content="{Binding Path=VueCourante}"/>
+    <DockPanel>
+        <ContentControl Content="{Binding PageCourante}" />        
+    </DockPanel>
 
 </Window>

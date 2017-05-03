@@ -10,80 +10,108 @@ using System.Windows.Input;
 namespace InterfaceEntrepriseWPF.Vues_Modeles
 {
     /// <summary>
-    /// Classe vue-modèle pour toute l'application
+    /// Classe vue-modèle singleton pour toute l'application
     /// </summary>
-    class ApplicationVueModele : VueModele
+    sealed class ApplicationVueModele : VueModele
     {
-        // Attributs
-        private ICommand _changeViewCommand;
+        // Instance courante et objet pour avoir un singleton "thread safe"
+        private static volatile ApplicationVueModele _instance;
+        private static object syncRoot = new Object();
 
-        private UserControl _vueCourante;
-        private List<UserControl> _vues;
+        // Attributs
+        private ICommand _changePageCommand;
+
+        private VueModele _pageCourante;
+        private List<VueModele> _pages;
 
         /// <summary>
-        /// Constructeur par défaut
+        /// Constructeur privé
         /// </summary>
-        public ApplicationVueModele()
+        private ApplicationVueModele()
         {
             // Ajout des différentes vues-modèles de l'application
-            Vues.Add(new VueConnexion());
+            Pages.Add(new ConnexionVueModele());
 
             // Initialisation de la page d'accueil
-            VueCourante = Vues[0];
+            PageCourante = Pages[0];
         }
 
         //============//
         // Propriétés //
         //============//
+        
+        /// <summary>
+        /// Retourne l'instance courante due ViewModele de l'application
+        /// </summary>
+        public static ApplicationVueModele Instance
+        {
+            get
+            {
+                // Double-checked locking (pour garantir le "thread safe" à faible coût)
+                if (_instance == null)
+                {
+                    // Locking --> opération très couteuse ! (Fait juste la première fois)
+                    lock (syncRoot)
+                    {
+                        if (_instance == null)
+                        {
+                            _instance = new ApplicationVueModele();
+                        }                            
+                    }
+                }
+
+                return _instance;
+            }
+        }
 
         /// <summary>
         /// Commande pour changer de page
         /// </summary>
-        public ICommand ChangeViewCommand
+        public ICommand ChangePageCommand
         {
             get
             {
-                if (_changeViewCommand == null)
-                {
+                if (_changePageCommand == null)
+                {                 
                     // Création de la commande si elle n'existe pas encore
-                    _changeViewCommand = new RelayCommand(
-                        p => ChangerVueCourante((UserControl)p),
-                        p => p is UserControl);
+                    _changePageCommand = new RelayCommand(
+                        p => ChangerPageCourante((VueModele)p),
+                        p => p is VueModele);
                 }
-                return _changeViewCommand;
+                return _changePageCommand;
             }
         }
 
         /// <summary>
         /// Liste des pages
         /// </summary>
-        public List<UserControl> Vues
+        public List<VueModele> Pages
         {
             get
             {
                 // Création de la commande si elle n'existe pas encore
-                if (_vues == null)
+                if (_pages == null)
                 {
-                    _vues = new List<UserControl>();
+                    _pages = new List<VueModele>();
                 }
-                return _vues;
+                return _pages;
             }
         }
 
         /// <summary>
         /// La page courante
         /// </summary>
-        public UserControl VueCourante
+        public VueModele PageCourante
         {
             get
             {
-                return _vueCourante;
+                return _pageCourante;
             }
             set
             {
-                if (_vueCourante != value)
+                if (_pageCourante != value)
                 {
-                    _vueCourante = value;
+                    _pageCourante = value;
                     OnPropertyChanged();
                 }
             }
@@ -94,16 +122,16 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         //==========//
 
         // Méthode pour changer de page
-        private void ChangerVueCourante(UserControl vue)
+        private void ChangerPageCourante(VueModele page)
         {            
-            if (!Vues.Contains(vue))
+            if (!Pages.Contains(page))
             {
                 // Si la page n'existe pas encore, on l'ajoute
-                Vues.Add(vue);
+                Pages.Add(page);
             }                
 
             // On remplace le contenu de la fenêtre par la nouvelle page
-            VueCourante = Vues.FirstOrDefault(vm => vm == vue);
+            PageCourante = Pages.FirstOrDefault(vm => vm == page);
         }
 
     }

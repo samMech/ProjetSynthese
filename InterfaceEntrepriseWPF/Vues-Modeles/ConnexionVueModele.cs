@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace InterfaceEntrepriseWPF.Vues_Modeles
@@ -76,15 +77,13 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         // Méthode pour faire la connexion            
         private void ConnexionUsager(object obj)
         {
-            
-
-
+            ApplicationVueModele.Instance.ChangePageCommand.Execute((new PortailEmployeVueModele()));
         }
 
         // Méthode pour savoir si la connexion est possible
         private bool ConnexionUsagerPossible(object obj)
         {
-            return _login.Length != 0 && _password.Length != 0;
+            return _login.Length > 0 && _password.Length > 0;
         }
 
     }        

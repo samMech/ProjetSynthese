@@ -55,12 +55,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Vues-Modeles\PortailEmployeVueModele.cs" />
     <Compile Include="Vues-Modeles\RelayCommand.cs" />
     <Compile Include="Vues-Modeles\ApplicationVueModele.cs" />
     <Compile Include="Vues-Modeles\ConnexionVueModele.cs" />
     <Compile Include="Vues-Modeles\VueModele.cs" />
     <Compile Include="Vues\VueConnexion.xaml.cs">
       <DependentUpon>VueConnexion.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Vues\VuePortailEmploye.xaml.cs">
+      <DependentUpon>VuePortailEmploye.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -75,6 +79,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Vues\VueConnexion.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Vues\VuePortailEmploye.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

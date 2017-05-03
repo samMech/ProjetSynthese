@@ -59,6 +59,7 @@ namespace ProjetRDV247.Controle
 
         [OperationContract]
         [WebInvoke(Method = "POST",
+            RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
             UriTemplate = "PrendreRDV")]
@@ -66,6 +67,7 @@ namespace ProjetRDV247.Controle
 
         [OperationContract]
         [WebInvoke(Method = "POST",
+            RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
             UriTemplate = "AnnulerRDV")]
@@ -73,6 +75,7 @@ namespace ProjetRDV247.Controle
 
         [OperationContract]
         [WebInvoke(Method = "POST",
+            RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
             UriTemplate = "AjouterDispo")]
@@ -80,6 +83,7 @@ namespace ProjetRDV247.Controle
 
         [OperationContract]
         [WebInvoke(Method = "POST",
+            RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
             UriTemplate = "ModifierDispo")]
@@ -87,6 +91,7 @@ namespace ProjetRDV247.Controle
 
         [OperationContract]
         [WebInvoke(Method = "POST",
+            RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
             UriTemplate = "SupprimerDispo")]
@@ -94,6 +99,7 @@ namespace ProjetRDV247.Controle
         
         [OperationContract]
         [WebInvoke(Method = "POST",
+            RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
             UriTemplate = "SupprimerDispos")]

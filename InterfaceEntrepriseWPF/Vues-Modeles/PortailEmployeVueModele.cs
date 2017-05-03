@@ -13,6 +13,14 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
     {
         // Attributs
 
+        /// <summary>
+        /// Constructeur par défaut
+        /// </summary>
+        public PortailEmployeVueModele()
+        {
+            // Ajustement du titre de la fenêtre
+            TitrePage = "Portail Employé";
+        }
 
         //============//
         // Propriétés //

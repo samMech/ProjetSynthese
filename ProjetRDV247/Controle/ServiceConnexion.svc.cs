@@ -6,6 +6,8 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
 using ProjetRDV247.Modele;
+using System.Net;
+using System.ServiceModel.Web;
 
 namespace ProjetRDV247.Controle
 {
@@ -57,20 +59,23 @@ namespace ProjetRDV247.Controle
         {
             using (RDV247Entities bd = new RDV247Entities())
             {
-                
                 ObjectParameter responseMessage = new ObjectParameter("responseMessage", typeof(string));
                 ObjectParameter responseCode = new ObjectParameter("responseCode", typeof(int));
                 ObjectParameter idEmploye = new ObjectParameter("idEmploye", typeof(int));
 
-                bd.authentifierClient(login, password, responseMessage, responseCode, idEmploye);
-                Dao dao = new Dao();
-                Employe employe = null;
+                //bd.authentifierEmploye(login, password, responseMessage, responseCode, idEmploye);                    
 
-                if ((int) responseCode.Value == 1)
-                {
-                    employe = dao.GetEmployeById((int)idEmploye.Value);
-                }
+                //Dao dao = new Dao();
+                //Employe employe = null;
 
+                //if ((int)responseCode.Value == 1)
+                //{
+                //    employe = dao.GetEmployeById((int)idEmploye.Value);
+                //}
+                Employe employe = new Employe();
+                employe.id_employe = 1;
+                employe.nom_employe = "Alain";
+                employe.prenom_employe = "Flouflou";
                 return employe;
             }
         }

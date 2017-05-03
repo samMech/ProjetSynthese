@@ -22,6 +22,7 @@ namespace ProjetRDV247.Controle
 
         [OperationContract]
         [WebInvoke(Method = "POST",
+            RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
             UriTemplate = "CreerClient")]
@@ -29,6 +30,7 @@ namespace ProjetRDV247.Controle
 
         [OperationContract]
         [WebInvoke(Method = "POST",
+            RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
             UriTemplate = "AuthentifierClient")]
@@ -36,6 +38,7 @@ namespace ProjetRDV247.Controle
 
         [OperationContract]
         [WebInvoke(Method = "POST",
+            RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
             UriTemplate = "AuthentifierEmp")]

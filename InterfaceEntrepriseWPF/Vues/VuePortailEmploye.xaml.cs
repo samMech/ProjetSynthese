@@ -21,6 +21,9 @@ namespace InterfaceEntrepriseWPF.Vues
     /// </summary>
     public partial class VuePortailEmploye : UserControl
     {
+        /// <summary>
+        /// Constructeur par défaut
+        /// </summary>
         public VuePortailEmploye()
         {
             InitializeComponent();

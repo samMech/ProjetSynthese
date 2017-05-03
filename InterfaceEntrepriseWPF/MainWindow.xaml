@@ -6,7 +6,8 @@
         xmlns:localVues="clr-namespace:InterfaceEntrepriseWPF.Vues"
         xmlns:localVuesModeles="clr-namespace:InterfaceEntrepriseWPF.Vues_Modeles"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="{Binding Path=TitrePage}" Height="350" Width="525"
+        SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen">
     
     <!--Ressources globales-->
     <Window.Resources>
@@ -45,7 +46,7 @@
     </Window.Resources>
     
     <!-- Contenu-->
-    <DockPanel>
+    <DockPanel Margin="10">
         <ContentControl Content="{Binding PageCourante}" />        
     </DockPanel>
 

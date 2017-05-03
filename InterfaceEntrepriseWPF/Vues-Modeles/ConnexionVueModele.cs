@@ -1,4 +1,5 @@
-﻿using ProjetRDV247.Modele;
+﻿using InterfaceEntrepriseWPF.Modele;
+using ProjetRDV247.Modele;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,15 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         private string _login = "";
         private string _password = "";
         private ICommand _loginCommand;
+
+        /// <summary>
+        /// Constructeur par défaut
+        /// </summary>
+        public ConnexionVueModele()
+        {
+            // Ajustement du titre de la fenêtre
+            TitrePage = "Connexion";
+        }
 
         //============//
         // Propriétés //
@@ -78,18 +88,18 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         // Méthode pour faire la connexion            
         private void ConnexionUsager(object obj)
         {
-            string endPoint = @"http://localhost:2057/rest";
-            //var client = new RestClient(endPoint);
-            //var json = client.MakeRequest();
-
-
-
             // Tentative de connexion
-            // Client client = 
+            Employe emp = RestDao.ConnexionEmploye(Login, Password);
 
-            if (true)
-            {                
-                ApplicationVueModele.Instance.ChangePageCommand.Execute((new PortailEmployeVueModele()));
+            if (emp != null)
+            {
+                ApplicationVueModele app = ApplicationVueModele.Instance;
+                app.EmployeConnecte = emp;
+                app.ChangePageCommand.Execute((new PortailEmployeVueModele()));
+            }
+            else
+            {
+                // TODO: afficher erreur (binding ????)
             }
             
         }

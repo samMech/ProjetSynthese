@@ -78,7 +78,7 @@ namespace ProjetRDV247.Modele
                 return dispos;
             }
         }
-
+        
         /// <summary>
         /// Ajoute une liste de nouvelles disponibilités
         /// </summary>

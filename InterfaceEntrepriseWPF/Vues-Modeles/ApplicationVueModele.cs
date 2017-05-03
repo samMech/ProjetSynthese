@@ -1,4 +1,5 @@
 ﻿using InterfaceEntrepriseWPF.Vues;
+using ProjetRDV247.Modele;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,9 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
     /// </summary>
     sealed class ApplicationVueModele : VueModele
     {
+        // Constante pour le nom de l'application
+        private const string NOM_APPLICATION = "Rendez-vous 24/7";
+
         // Instance courante et objet pour avoir un singleton "thread safe"
         private static volatile ApplicationVueModele _instance;
         private static object syncRoot = new Object();
@@ -22,23 +26,23 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         private ICommand _changePageCommand;
         private VueModele _pageCourante;
         private List<VueModele> _pages;
-
+        
+        // L'employé connecté
+        private Employe _employeConnecte = null;
+        
         /// <summary>
         /// Constructeur privé
         /// </summary>
         private ApplicationVueModele()
         {
-            // Ajout des différentes vues-modèles de l'application
-            Pages.Add(new ConnexionVueModele());
-
             // Initialisation de la page d'accueil
-            PageCourante = Pages[0];
+            ChangerPageCourante(new ConnexionVueModele());
         }
 
         //============//
         // Propriétés //
         //============//
-        
+
         /// <summary>
         /// Retourne l'instance courante due ViewModele de l'application
         /// </summary>
@@ -116,6 +120,25 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
             }
         }
 
+        /// <summary>
+        /// L'employé connecté
+        /// </summary>
+        public Employe EmployeConnecte
+        {
+            get
+            {
+                return _employeConnecte;
+            }
+            set
+            {
+                if (! Object.Equals(_employeConnecte, value))
+                {
+                    _employeConnecte = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        
         //==========//
         // Méthodes //
         //==========//
@@ -131,6 +154,14 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
 
             // On remplace le contenu de la fenêtre par la nouvelle page
             PageCourante = Pages.FirstOrDefault(vm => vm == page);
+
+            // Ajustement du titre de la fenêtre
+            string nouveauTitre = String.Format("{0} ({1})", NOM_APPLICATION, PageCourante.TitrePage);
+            if (EmployeConnecte != null)
+            {
+                nouveauTitre += String.Format(" - {1} {0}", EmployeConnecte.nom_employe, EmployeConnecte.prenom_employe);
+            }
+            TitrePage = nouveauTitre;
         }
 
     }

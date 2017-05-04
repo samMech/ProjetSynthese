@@ -95,7 +95,7 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
             {
                 ApplicationVueModele app = ApplicationVueModele.Instance;
                 app.EmployeConnecte = emp;
-                app.ChangePageCommand.Execute((new PortailEmployeVueModele()));
+                app.ChangePageCommand.Execute(new PortailEmployeVueModele());
             }
             else
             {

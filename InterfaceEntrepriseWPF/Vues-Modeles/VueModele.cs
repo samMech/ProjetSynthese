@@ -50,5 +50,10 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
             }
         }
 
+        /// <summary>
+        /// Méthode pour mettre à jour les données de la page
+        /// </summary>
+        public virtual void UpdateData() { }
+
     }
 }

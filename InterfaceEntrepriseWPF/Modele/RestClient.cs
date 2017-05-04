@@ -28,7 +28,7 @@ namespace InterfaceEntrepriseWPF.Modele
     public class RestClient
     {
         // Propriétés
-        public string EndPoint { get; set; }
+        public string RestURL { get; set; }
         public string PostData { get; set; }
         public HttpVerb Method { get; set; }
 
@@ -43,41 +43,31 @@ namespace InterfaceEntrepriseWPF.Modele
         /// <summary>
         /// Constructeur avec une adresse
         /// </summary>
-        /// <param name="endpoint">L'adresse pour accéder au service web</param>
-        public RestClient(string endpoint) : this()
+        /// <param name="restURL">L'adresse pour accéder au service web</param>
+        public RestClient(string restURL) : this()
         {
-            EndPoint = endpoint;
+            RestURL = restURL;
         }
         
         /// <summary>
         /// Constructeur avec une adresse et la méthode Http
         /// </summary>
-        /// <param name="endpoint">L'adresse pour accéder au service web</param>
+        /// <param name="restURL">L'adresse pour accéder au service web</param>
         /// <param name="method">La méthode d'accès</param>
-        public RestClient(string endpoint, HttpVerb method) : this()
+        public RestClient(string restURL, HttpVerb method) : this()
         {
-            EndPoint = endpoint;
+            RestURL = restURL;
             Method = method;
         }
-
+        
         /// <summary>
-        /// Méthode pour faire une requête sans paramètres
+        /// Méthode pour faire une requête selon les paramètres déjà en place dans l'url ou les données POST
         /// </summary>
         /// <returns>Les données retournées en format Json</returns>
         public string MakeRequest()
         {
-            return MakeRequest("");
-        }
-
-        /// <summary>
-        /// Méthode pour faire une requête avec paramètres
-        /// </summary>
-        /// <param name="parameters">Les paramètres en format Json</param>
-        /// <returns>Les données retournées en format Json</returns>
-        public string MakeRequest(string parameters)
-        {
             // Construction de la requête
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(EndPoint + parameters);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Uri.EscapeUriString(RestURL));
             request.Method = Method.ToString();
             request.ContentLength = 0;
             request.ContentType = (Method == HttpVerb.GET) ? "text/xml" : "application/json";

@@ -153,7 +153,7 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
             }                
 
             // On remplace le contenu de la fenêtre par la nouvelle page
-            PageCourante = Pages.FirstOrDefault(vm => vm == page);
+            PageCourante = Pages.FirstOrDefault(vm => vm == page);            
 
             // Ajustement du titre de la fenêtre
             string nouveauTitre = String.Format("{0} ({1})", NOM_APPLICATION, PageCourante.TitrePage);
@@ -162,7 +162,10 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
                 nouveauTitre += String.Format(" - {1} {0}", EmployeConnecte.nom_employe, EmployeConnecte.prenom_employe);
             }
             TitrePage = nouveauTitre;
-        }
 
+            // Mise à jour des données
+            PageCourante.UpdateData();
+        }
+        
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 
@@ -48,7 +49,7 @@ namespace ProjetRDV247.Utils
         public static bool ValiderDate(string date)
         {
             DateTime datetime;
-            return DateTime.TryParse(date, out datetime);
+            return DateTime.TryParseExact(date, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out datetime);
         }
     }
 }

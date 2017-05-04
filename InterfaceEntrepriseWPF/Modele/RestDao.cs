@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using InterfaceEntrepriseWPF.Utilitaire;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ProjetRDV247.Modele;
 using System;
@@ -25,19 +26,31 @@ namespace InterfaceEntrepriseWPF.Modele
             // Création du client rest
             RestClient rc = new RestClient("http://localhost:2057/Controle/ServiceConnexion.svc/AuthentifierEmp", HttpVerb.POST);
 
-            // Ajout des paramètres
-            string parametres = JsonConvert.SerializeObject(new { login = sLogin, password = sPassword });
-            rc.PostData = parametres;
+            // Ajout des paramètres POST
+            rc.PostData = JsonConvert.SerializeObject(new { login = sLogin, password = sPassword });
 
             // Récupération de la réponse
             string response = rc.MakeRequest();
-            JObject jObj = (JObject) JsonConvert.DeserializeObject(response);
-                       
-            // Récupération de l'employé connecté
-            Employe emp = jObj["AuthentifierEmpResult"].ToObject<Employe>();
-            
-            return emp;
+            return JsonUtil.DeserialiserJson<Employe>(response, "AuthentifierEmpResult");            
         }
 
+        /// <summary>
+        /// Méthode pour récupérer la liste des rendez-vous de l'employé
+        /// </summary>
+        /// <param name="id_employe">L'identifiant de l'employé</param>
+        /// <returns>La liste des rendez-vous de l'employé</returns>
+        public static List<Rendezvous> GetRendezVousEmploye(int id_employe)
+        {
+            // Création du client rest
+            RestClient rc = new RestClient("http://localhost:2057/Controle/ServiceRDV247.svc/GetRDVEmploye", HttpVerb.GET);
+
+            // Ajout des paramètres GET
+            rc.RestURL += String.Format("/{0}", id_employe);
+            rc.RestURL += String.Format("/{0}", DateTime.Today.ToString("yyyyMMdd"));
+
+            // Récupération de la réponse
+            string response = rc.MakeRequest();
+            return JsonUtil.DeserialiserListeJson<Rendezvous>(response, "GetRDVEmployeResult");
+        }
     }
 }

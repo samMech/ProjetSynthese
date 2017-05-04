@@ -7,8 +7,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System.ComponentModel.DataAnnotations.Schema;
-
 namespace ProjetRDV247.Modele
 {
     using System;
@@ -28,9 +26,7 @@ namespace ProjetRDV247.Modele
         public string prenom_employe { get; set; }
         public string numero_employe { get; set; }
         public string typecompte_employe { get; set; }
-        [NotMapped]
         public string password_employe { get; set; }
-        [NotMapped]
         public System.Guid salt_employe { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

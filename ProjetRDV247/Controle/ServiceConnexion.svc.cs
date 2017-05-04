@@ -40,7 +40,7 @@ namespace ProjetRDV247.Controle
             {
                 ObjectParameter responseMessage = new ObjectParameter("responseMessage", typeof(string));
                 ObjectParameter responseCode = new ObjectParameter("responseCode", typeof(int));
-                ObjectParameter idClient = new ObjectParameter("idClient", typeof(int));
+                ObjectParameter idClient = new ObjectParameter("id_Client", typeof(int));
 
                 bd.authentifierClient(login, password, responseMessage, responseCode, idClient);
                 Dao dao = new Dao();
@@ -61,21 +61,17 @@ namespace ProjetRDV247.Controle
             {
                 ObjectParameter responseMessage = new ObjectParameter("responseMessage", typeof(string));
                 ObjectParameter responseCode = new ObjectParameter("responseCode", typeof(int));
-                ObjectParameter idEmploye = new ObjectParameter("idEmploye", typeof(int));
+                ObjectParameter idEmploye = new ObjectParameter("id_Employe", typeof(int));
 
-                //bd.authentifierEmploye(login, password, responseMessage, responseCode, idEmploye);                    
+                bd.authentifierEmploye(login, password, responseMessage, responseCode, idEmploye);
 
-                //Dao dao = new Dao();
-                //Employe employe = null;
+                Dao dao = new Dao();
+                Employe employe = null;
 
-                //if ((int)responseCode.Value == 1)
-                //{
-                //    employe = dao.GetEmployeById((int)idEmploye.Value);
-                //}
-                Employe employe = new Employe();
-                employe.id_employe = 1;
-                employe.nom_employe = "Alain";
-                employe.prenom_employe = "Flouflou";
+                if ((int)responseCode.Value == 1)
+                {
+                    employe = dao.GetEmployeById((int)idEmploye.Value);
+                }
 
                 return employe;
             }

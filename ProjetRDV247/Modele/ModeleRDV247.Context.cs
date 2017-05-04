@@ -14,8 +14,7 @@ namespace ProjetRDV247.Modele
     using System.Data.Entity.Infrastructure;
     using System.Data.Entity.Core.Objects;
     using System.Linq;
-    using System.Collections.Generic;
-
+    
     public partial class RDV247Entities : DbContext
     {
         public RDV247Entities()
@@ -57,7 +56,7 @@ namespace ProjetRDV247.Modele
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ajouterClient", pNomParameter, pPrenomParameter, pTelParameter, pCourrielParameter, pPasswordParameter, responseMessage, responseCode);
         }
-        
+    
         public virtual int ajouterEmploye(string pNom, string pPrenom, string pNumEmp, string pTypeCompte, string pPassword, ObjectParameter responseMessage, ObjectParameter responseCode)
         {
             var pNomParameter = pNom != null ?

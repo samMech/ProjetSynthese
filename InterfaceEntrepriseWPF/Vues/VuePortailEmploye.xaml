@@ -1,0 +1,52 @@
+﻿<UserControl x:Class="InterfaceEntrepriseWPF.Vues.VuePortailEmploye"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" Height="340" Width="580">
+
+    <!-- Ressources -->
+    <UserControl.Resources>
+        <BitmapImage x:Key="Banniere" UriSource="../Ressources/side_banner.jpg" />
+    </UserControl.Resources>
+
+    <DockPanel LastChildFill="True">
+
+        <!-- Bannière -->
+        <Image DockPanel.Dock="Left" Source="{StaticResource Banniere}" Grid.Column="0"/>
+
+        <!-- Contenu -->
+        <DockPanel LastChildFill="True" Margin="10">
+            <Label DockPanel.Dock="Top" Content="Bienvenue !" Style="{StaticResource StyleTitre}"/>
+            <Label DockPanel.Dock="Top" Content="{Binding Path=TexteLabelTitre}"/>
+            <Grid DockPanel.Dock="Bottom">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Button x:Name="btnConsulterRDV" Content="Consulter vos rendez-vous" Grid.Column="0"/>
+                <Button x:Name="btnGererRDV" Content="Gérer vos disponibilité" Grid.Column="1"/>
+            </Grid>
+
+            <!-- Liste des rendez-vous -->
+            <Border BorderThickness="5">
+                <ItemsControl ItemsSource="{Binding ListeRendezVous}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="{Binding id_client_rdv}"/>
+                                    <Label Content="{Binding debut_rdv}"/>
+                                    <Label Content="{Binding fin_rdv}"/>
+                                </StackPanel>
+                                <Separator VerticalContentAlignment="Bottom" VerticalAlignment="Bottom"/>
+                            </Grid>                        
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Border>
+
+        </DockPanel>
+    </DockPanel>
+    
+</UserControl>

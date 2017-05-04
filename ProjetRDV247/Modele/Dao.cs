@@ -72,13 +72,13 @@ namespace ProjetRDV247.Modele
             {
                 List<Rendezvous> dispos = (from r in bd.Rendezvous
                                            where r.id_employe_rdv == idEmploye
-                                            && r.debut_rdv.Date >= dateDebut
-                                            && r.fin_rdv.Date <= dateFin.AddDays(1)
+                                            && r.debut_rdv >= DbFunctions.TruncateTime(dateDebut)
+                                            && r.fin_rdv <= DbFunctions.TruncateTime(DbFunctions.AddDays(dateFin,1))
                                            select r).ToList();
                 return dispos;
             }
         }
-
+        
         /// <summary>
         /// Ajoute une liste de nouvelles disponibilités
         /// </summary>
@@ -132,7 +132,7 @@ namespace ProjetRDV247.Modele
             {
                 List<Rendezvous> rdvs = (from r in bd.Rendezvous
                                          where r.id_client_rdv == idClient
-                                            && r.debut_rdv.Date >= date
+                                            && r.debut_rdv >= DbFunctions.TruncateTime(date)
                                          select r).ToList();
                 return rdvs;
             }

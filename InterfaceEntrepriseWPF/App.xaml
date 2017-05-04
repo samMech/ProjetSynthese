@@ -3,7 +3,35 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:InterfaceEntrepriseWPF"
              StartupUri="MainWindow.xaml">
+
+    <!-- Ressources globales -->
     <Application.Resources>
-         
+        
+        <!-- Bordures -->
+        <Style TargetType="{x:Type Border}">              
+            <Setter Property="BorderBrush" Value="#7F00B9FF" />
+            <Setter Property="CornerRadius" Value="5" />
+            <Setter Property="Margin" Value="5" />
+        </Style>
+
+        <!-- Texte -->
+        <Style x:Key="StyleTexte" TargetType="{x:Type Control}">
+            <Setter Property="FontWeight" Value="Normal" />
+            <Setter Property="FontSize" Value="14" />
+        </Style>
+        <!-- Label -->
+        <Style TargetType="{x:Type Label}" BasedOn="{StaticResource StyleTexte}" />
+        <!-- Bouton -->
+        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource StyleTexte}" >
+            <Setter Property="Margin" Value="10" />
+        </Style>
+
+        <!-- Titres -->
+        <Style x:Key="StyleTitre" TargetType="{x:Type Control}" BasedOn="{StaticResource StyleTexte}">
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontWeight" Value="Bold" />              
+        </Style>
+
     </Application.Resources>
+    
 </Application>

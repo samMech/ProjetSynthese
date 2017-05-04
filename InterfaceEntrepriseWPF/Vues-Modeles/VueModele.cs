@@ -13,6 +13,9 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
     /// </summary>
     public abstract class VueModele : INotifyPropertyChanged
     {
+        // Attributs
+        private string _titrePage = "";
+
         /// <summary>
         /// Événement à déclencher quand une propriété change
         /// </summary>
@@ -28,5 +31,29 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nomPropriete));
         }
         
+        /// <summary>
+        /// Le titre de la page
+        /// </summary>
+        public string TitrePage
+        {
+            get
+            {
+                return _titrePage;
+            }
+            set
+            {
+                if (! _titrePage.Equals(value))
+                {
+                    _titrePage = value;
+                    OnPropertyChanged();
+                }                
+            }
+        }
+
+        /// <summary>
+        /// Méthode pour mettre à jour les données de la page
+        /// </summary>
+        public virtual void UpdateData() { }
+
     }
 }

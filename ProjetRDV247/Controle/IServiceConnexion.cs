@@ -17,25 +17,28 @@ namespace ProjetRDV247.Controle
         [WebInvoke(Method = "GET",
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
-            UriTemplate = "")]
+            UriTemplate = "DoWork")]
         string DoWork();
 
         [OperationContract]
-        [WebInvoke(Method = "PUT",
+        [WebInvoke(Method = "POST",
+            RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
             UriTemplate = "CreerClient")]
         bool CreerClient(Client c);
 
         [OperationContract]
-        [WebInvoke(Method = "GET",
+        [WebInvoke(Method = "POST",
+            RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
             UriTemplate = "AuthentifierClient")]
         Client AuthentifierClient(string login, string password);
 
         [OperationContract]
-        [WebInvoke(Method = "GET",
+        [WebInvoke(Method = "POST",
+            RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
             UriTemplate = "AuthentifierEmp")]

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using InterfaceEntrepriseWPF.Vues_Modeles;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,26 +13,23 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using InterfaceEntrepriseWPF.Vues;
-using InterfaceEntrepriseWPF.Vues_Modeles;
 
-namespace InterfaceEntrepriseWPF
+namespace InterfaceEntrepriseWPF.Vues
 {
     /// <summary>
-    /// Logique d'interaction pour MainWindow.xaml
+    /// Logique d'interaction pour VuePortailEmploye.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class VuePortailEmploye : UserControl
     {
         /// <summary>
         /// Constructeur par défaut
         /// </summary>
-        public MainWindow()
+        public VuePortailEmploye()
         {
             InitializeComponent();
 
             // Initialisation du contexte
-            this.DataContext = ApplicationVueModele.Instance;
+            this.DataContext = new PortailEmployeVueModele();
         }
-        
     }
 }

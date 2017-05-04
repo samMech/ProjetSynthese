@@ -28,5 +28,5 @@ namespace ProjetRDV247.Utils
 
             return dateCourante.AddDays(deltaJour);
         }
-
+    }
 }

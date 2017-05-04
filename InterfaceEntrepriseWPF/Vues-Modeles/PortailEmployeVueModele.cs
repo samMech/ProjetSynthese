@@ -83,6 +83,7 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
             // Récupération des rendez-vous
             Employe emp = ApplicationVueModele.Instance.EmployeConnecte;
             ListeRendezVous = new ObservableCollection<Rendezvous>(RestDao.GetRendezVousEmploye(emp.id_employe));
+            Console.WriteLine(ListeRendezVous.Count);
         }
 
     }

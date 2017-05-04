@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace InterfaceEntrepriseWPF.Vues_Modeles
 {
@@ -29,6 +30,16 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         {
             // Si l'événement n'est pas null
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nomPropriete));
+        }
+
+        /// <summary>
+        /// Méthode pour déclencher l'événement de notification du changement d'un propriété
+        /// </summary>
+        /// <param name="nomPropriete">Le nom de la propriété qui a changée</param>
+        protected virtual void OnPropertyChanged(object sender, [CallerMemberName] string nomPropriete = null)
+        {
+            // Si l'événement n'est pas null
+            this.PropertyChanged?.Invoke(sender, new PropertyChangedEventArgs(nomPropriete));
         }
         
         /// <summary>

@@ -67,12 +67,12 @@ namespace ProjetRDV247.Controle
 
                 Dao dao = new Dao();
                 Employe employe = null;
-
+                
                 if ((int)responseCode.Value == 1)
                 {
                     employe = dao.GetEmployeById((int)idEmploye.Value);
                 }
-
+                
                 return employe;
             }
         }

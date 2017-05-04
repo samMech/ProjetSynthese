@@ -10,8 +10,8 @@ namespace ProjetRDV247.Modele
         public Employe GetEmployeById(int idEmployeValue)
         {
             using (RDV247Entities bd = new RDV247Entities())
-            {
-                return bd.Employe.Find(idEmployeValue);
+            {                
+                return bd.Employe.Find(idEmployeValue);                
             }
         }
 

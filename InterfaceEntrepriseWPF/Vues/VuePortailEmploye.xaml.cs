@@ -27,9 +27,6 @@ namespace InterfaceEntrepriseWPF.Vues
         public VuePortailEmploye()
         {
             InitializeComponent();
-
-            // Initialisation du contexte
-            this.DataContext = new PortailEmployeVueModele();
         }
     }
 }

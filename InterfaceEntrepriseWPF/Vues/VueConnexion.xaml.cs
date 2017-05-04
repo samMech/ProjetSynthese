@@ -27,9 +27,6 @@ namespace InterfaceEntrepriseWPF.Vues
         public VueConnexion()
         {
             InitializeComponent();
-
-            // Initialisation du contexte
-            this.DataContext = new ConnexionVueModele();
         }
     }
 }

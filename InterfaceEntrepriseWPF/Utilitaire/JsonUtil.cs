@@ -47,7 +47,7 @@ namespace InterfaceEntrepriseWPF.Utilitaire
         {
             // Désérialisation des données json
             JObject jObj = (JObject)JsonConvert.DeserializeObject(json);
-            
+            Console.WriteLine(jObj);
             // Récupération de la liste des objets
             List<T> listeObj = new List<T>();
             foreach (JToken jt in jObj[parent].Children())

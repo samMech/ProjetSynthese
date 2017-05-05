@@ -33,18 +33,29 @@
                 <ItemsControl ItemsSource="{Binding ListeRendezVous}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Grid>
+                            <Grid Margin="0,0,5,0">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="1*"/>
-                                    <ColumnDefinition Width="1*"/>
-                                    <ColumnDefinition Width="3*"/>
+                                    <ColumnDefinition Width="2*"/>
                                 </Grid.ColumnDefinitions>
 
-                                <Label Content="{Binding debut_rdv}" ContentStringFormat="De   {0:HH:mm}" Grid.Column="0"/>
-                                <Label Content="{Binding fin_rdv}" ContentStringFormat="à   {0:HH:mm}" Grid.Column="1"/>
-                                <Label Content="{Binding id_client_rdv}" ContentStringFormat="Client #{0}" Grid.Column="2"/>
+                                <Label Grid.Column="0" HorizontalContentAlignment="Center">
+                                    <Label.Content>
+                                        <TextBlock>
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="De {0:HH:mm} à {1:HH:mm}">
+                                                    <Binding Path="debut_rdv" />
+                                                    <Binding Path="fin_rdv" />
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </Label.Content>
+                                </Label>
+                                <Separator VerticalContentAlignment="Bottom" VerticalAlignment="Bottom" Grid.Column="0"/>
                                 
-                                <Separator VerticalContentAlignment="Bottom" VerticalAlignment="Bottom" Grid.ColumnSpan="3"/>
+                                <Label Content="{Binding id_client_rdv}" ContentStringFormat="Client #{0}" Grid.Column="1"/>                                
+                                <Separator VerticalContentAlignment="Bottom" VerticalAlignment="Bottom" Grid.Column="1"/>
+                                
                             </Grid>                        
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>

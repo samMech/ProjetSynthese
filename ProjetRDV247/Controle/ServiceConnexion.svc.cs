@@ -36,6 +36,7 @@ namespace ProjetRDV247.Controle
 
         public Client AuthentifierClient(string login, string password)
         {
+
             using (RDV247Entities bd = new RDV247Entities())
             {
                 ObjectParameter responseMessage = new ObjectParameter("responseMessage", typeof(string));

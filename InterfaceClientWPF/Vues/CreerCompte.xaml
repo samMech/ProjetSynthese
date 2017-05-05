@@ -6,7 +6,50 @@
              xmlns:local="clr-namespace:InterfaceClientWPF.Vues"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-            
+    <Grid Margin="20">
+        <Grid.Resources>
+            <!-- Style de la grille -->
+            <Style x:Key="StyleGrille" TargetType="{x:Type Control}" BasedOn="{StaticResource StyleTexte}">
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="HorizontalAlignment" Value="Stretch" />
+            </Style>
+            <Style TargetType="{x:Type Label}" BasedOn="{StaticResource StyleGrille}"/>
+            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource StyleGrille}" />
+
+            <!-- Style pour les zones de saisies -->
+            <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource StyleGrille}">
+                <Style.Triggers>
+                    <Trigger Property="IsFocused" Value="True">
+                        <Setter Property="BorderBrush" Value="{Binding BorderBrush, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Border}, AncestorLevel=2}}" />
+                        <Setter Property="BorderThickness" Value="2" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
+        
+        <Label Content="Nom" Grid.Row="0" Grid.Column="0"/>
+        <Label Content="Prenom" Grid.Row="1" Grid.Column="0"/>
+        <Label Content="Telephone" Grid.Row="2" Grid.Column="0"/>
+        <Label Content="Courriel" Grid.Row="3" Grid.Column="0"/>
+        <Label Content="Mot de Passe" Grid.Row="4" Grid.Column="0"/>
+        <TextBox Text="{Binding Path=Nom}" Grid.Row="0" Grid.Column="1"/>
+        <TextBox Text="{Binding Path=Prenom}" Grid.Row="1" Grid.Column="1"/>
+        <TextBox Text="{Binding Path=Telephone}" Grid.Row="2" Grid.Column="1"/>
+        <TextBox Text="{Binding Path=Courriel}" Grid.Row="3" Grid.Column="1"/>
+        <TextBox Text="{Binding Path=Password}" Grid.Row="4" Grid.Column="1"/>
+        <Button Command="{Binding Path=RegisterCommand}" Content="Enregistrer" Grid.Row="5" Grid.Column="1"/>
+
     </Grid>
 </UserControl>

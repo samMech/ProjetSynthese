@@ -34,12 +34,17 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Grid>
-                                <StackPanel Orientation="Horizontal">
-                                    <Label Content="{Binding id_client_rdv}"/>
-                                    <Label Content="{Binding debut_rdv}"/>
-                                    <Label Content="{Binding fin_rdv}"/>
-                                </StackPanel>
-                                <Separator VerticalContentAlignment="Bottom" VerticalAlignment="Bottom"/>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="3*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Label Content="{Binding debut_rdv}" ContentStringFormat="De   {0:HH:mm}" Grid.Column="0"/>
+                                <Label Content="{Binding fin_rdv}" ContentStringFormat="à   {0:HH:mm}" Grid.Column="1"/>
+                                <Label Content="{Binding id_client_rdv}" ContentStringFormat="Client #{0}" Grid.Column="2"/>
+                                
+                                <Separator VerticalContentAlignment="Bottom" VerticalAlignment="Bottom" Grid.ColumnSpan="3"/>
                             </Grid>                        
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>

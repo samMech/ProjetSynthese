@@ -70,8 +70,14 @@
     <Compile Include="Vues-Modeles\ApplicationVueModele.cs" />
     <Compile Include="Vues-Modeles\ConnexionVueModele.cs" />
     <Compile Include="Vues-Modeles\VueModele.cs" />
+    <Compile Include="Vues\VueAffichageRDV.xaml.cs">
+      <DependentUpon>VueAffichageRDV.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Vues\VueConnexion.xaml.cs">
       <DependentUpon>VueConnexion.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Vues\VueGestionDispos.xaml.cs">
+      <DependentUpon>VueGestionDispos.xaml</DependentUpon>
     </Compile>
     <Compile Include="Vues\VuePortailEmploye.xaml.cs">
       <DependentUpon>VuePortailEmploye.xaml</DependentUpon>
@@ -88,7 +94,15 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Vues\VueAffichageRDV.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Vues\VueConnexion.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Vues\VueGestionDispos.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

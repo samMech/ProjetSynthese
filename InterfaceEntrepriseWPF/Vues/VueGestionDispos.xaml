@@ -1,0 +1,64 @@
+﻿<UserControl xmlns:CalendrierRDV="clr-namespace:CalendrierRDV;assembly=CalendrierRDV"  x:Class="InterfaceEntrepriseWPF.Vues.VueGestionDispos"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:InterfaceEntrepriseWPF.Vues"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="1000">
+    
+    <DockPanel LastChildFill="True">
+
+        <Grid DockPanel.Dock="Left">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="9*"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+            
+            <!-- Zone d'ajout -->
+            <GroupBox Header="Ajout de disponibilités" Style="{StaticResource StyleTitre}" VerticalAlignment="Stretch" Margin="5" Grid.Row="0">
+                <StackPanel>
+                    <!-- Zone d'ajout -->
+            
+                        <Label Content="1) Choisir une date"/>
+                        <Calendar />
+
+                        <Label Content="2) Choisir une plage horaire"/>
+
+                        <Label Content="3) Choisir la durée des rendez-vous"/>
+
+                
+            
+                </StackPanel>
+            </GroupBox>
+            <Button Content="Retour" Grid.Row="1"/>
+        </Grid>
+
+        <!-- Zone de modification -->
+        <GroupBox DockPanel.Dock="Bottom" Header="Modification / Suppression" Style="{StaticResource StyleTitre}" Margin="5">
+            <Grid  Margin="10,5">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
+                <Button Content="Modifier la disponibilité" Grid.Row="1" Grid.Column="0"/>
+                <Button Content="Supprimer les disponibilités" Grid.Row="1" Grid.Column="1"/>
+                <TextBox Text="Raison..."  VerticalContentAlignment="Center" Grid.Row="1" Grid.Column="2"/>
+                <Label Content="Attention la/les disponibilités sélectionnées contiennent des rendez-vous ! Veuillez fournir une raison." VerticalContentAlignment="Center" Grid.Row="0" Grid.ColumnSpan="3" HorizontalContentAlignment="Center"/>
+            </Grid>
+        </GroupBox>
+        
+        
+        <!-- Composant graphique -->
+        <Border BorderThickness="2" Margin="5,15,5,0">
+            
+        </Border>
+        
+    </DockPanel>
+    
+</UserControl>

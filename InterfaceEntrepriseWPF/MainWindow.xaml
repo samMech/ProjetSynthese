@@ -17,6 +17,12 @@
         <DataTemplate DataType="{x:Type localVuesModeles:PortailEmployeVueModele}">
             <localVues:VuePortailEmploye />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type localVuesModeles:AffichageRDVVueModele}">
+            <localVues:VueAffichageRDV />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type localVuesModeles:GestionDisposVueModele}">
+            <localVues:VueGestionDispos />
+        </DataTemplate>
     </Window.Resources>
        
     <!-- Contenu-->

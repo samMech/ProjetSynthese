@@ -55,6 +55,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Model\RestClient.cs" />
+    <Compile Include="Model\RestDao.cs" />
+    <Compile Include="ViewModels\ConnexionViewModel.cs" />
+    <Compile Include="ViewModels\RelayCommand.cs" />
+    <Compile Include="ViewModels\VueModele.cs" />
     <Compile Include="Vues\Connexion.xaml.cs">
       <DependentUpon>Connexion.xaml</DependentUpon>
     </Compile>
@@ -124,7 +129,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="ViewModels\" />
+    <ProjectReference Include="..\ProjetRDV247\ProjetRDV247.csproj">
+      <Project>{114e6f0f-ec8b-46b9-9604-b7a913051b1b}</Project>
+      <Name>ProjetRDV247</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

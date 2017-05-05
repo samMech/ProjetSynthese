@@ -63,6 +63,8 @@
     <Compile Include="Modele\RestDao.cs" />
     <Compile Include="Modele\RestClient.cs" />
     <Compile Include="Utilitaire\JsonUtil.cs" />
+    <Compile Include="Vues-Modeles\AffichageRDVVueModele.cs" />
+    <Compile Include="Vues-Modeles\GestionDisposVueModele.cs" />
     <Compile Include="Vues-Modeles\PortailEmployeVueModele.cs" />
     <Compile Include="Vues-Modeles\RelayCommand.cs" />
     <Compile Include="Vues-Modeles\ApplicationVueModele.cs" />

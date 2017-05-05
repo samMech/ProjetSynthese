@@ -3,6 +3,7 @@ using ProjetRDV247.Modele;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -20,6 +21,10 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         private string _password = "";
         private ICommand _loginCommand;
 
+        // Pour les erreurs
+        private string _messageErreurService = "";
+        private bool _erreurAuthentificationUsager = false;
+        
         /// <summary>
         /// Constructeur par défaut
         /// </summary>
@@ -81,6 +86,38 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
             }
         }
 
+        /// <summary>
+        /// Est-ce que l'authentification a réussie
+        /// </summary>
+        public bool ErreurAuthentificationUsager
+        {
+            get
+            {
+                return _erreurAuthentificationUsager;
+            }
+            set
+            {
+                _erreurAuthentificationUsager = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Le message en cas d'erreur du service web
+        /// </summary>
+        public string MessageErreurService
+        {
+            get
+            {
+                return _messageErreurService;
+            }
+            set
+            {
+                _messageErreurService = value;
+                OnPropertyChanged();
+            }
+        }
+
         //==========//
         // Méthodes //
         //==========//
@@ -88,20 +125,39 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         // Méthode pour faire la connexion            
         private void ConnexionUsager(object obj)
         {
-            // Tentative de connexion
-            Employe emp = RestDao.ConnexionEmploye(Login, Password);
+            // Réinitialisation des erreurs
+            MessageErreurService = "";
+            ErreurAuthentificationUsager = false;
 
-            if (emp != null)
+            try
             {
-                ApplicationVueModele app = ApplicationVueModele.Instance;
-                app.EmployeConnecte = emp;
-                app.ChangePageCommand.Execute(new PortailEmployeVueModele());                
+                // Tentative de connexion (authentification)
+                Employe emp = RestDao.ConnexionEmploye(Login, Password);
+
+                if (emp != null)
+                {
+                    ApplicationVueModele app = ApplicationVueModele.Instance;
+                    app.EmployeConnecte = emp;
+                    app.ChangePageCommand.Execute(new PortailEmployeVueModele());
+                }
+                else
+                {
+                    ErreurAuthentificationUsager = true;
+                }
             }
-            else
+            catch (WebException e)
             {
-                // TODO: afficher erreur (binding ????)
+                switch (e.Status)
+                {                    
+                    case WebExceptionStatus.ConnectFailure:
+                        MessageErreurService = "Le service n'est pas disponible !";
+                        break;
+                    default:
+                        MessageErreurService = "Le service a rencontré une erreur !";
+                        break;
+                }
             }
-            
+                  
         }
 
         // Méthode pour savoir si la connexion est possible

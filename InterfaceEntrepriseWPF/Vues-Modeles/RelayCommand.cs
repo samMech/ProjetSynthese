@@ -38,13 +38,10 @@ namespace InterfaceEntrepriseWPF
             // Validation
             if (execute == null)
                 throw new ArgumentNullException("execute");
-
-            if (canExecute == null)
-                throw new ArgumentNullException("canExecute");
-
+            
             // Initialisation
             this.execute = execute;
-            this.canExecute = canExecute;
+            this.canExecute = (canExecute == null) ? (x => true) : canExecute;
         }
 
 

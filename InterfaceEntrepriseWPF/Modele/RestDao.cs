@@ -47,9 +47,7 @@ namespace InterfaceEntrepriseWPF.Modele
             // Ajout des paramètres GET
             rc.RestURL += String.Format("/{0}", id_employe);
             rc.RestURL += String.Format("/{0}", DateTime.Today.ToString("yyyyMMdd"));
-
-            Console.WriteLine(rc.RestURL);
-
+            
             // Récupération de la réponse
             string response = rc.MakeRequest();
             return JsonUtil.DeserialiserListeJson<Rendezvous>(response, "GetRDVEmployeResult");

@@ -24,8 +24,8 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <Button x:Name="btnConsulterRDV" Content="Consulter vos rendez-vous" Grid.Column="0"/>
-                <Button x:Name="btnGererRDV" Content="Gérer vos disponibilité" Grid.Column="1"/>
+                <Button x:Name="btnConsulterRDV" Content="Consulter vos rendez-vous" Command="{Binding Path=ConsulterRDVCommand}" Grid.Column="0"/>
+                <Button x:Name="btnGererRDV" Content="Gérer vos disponibilité" Command="{Binding Path=GererDisposCommand}" Grid.Column="1"/>
             </Grid>
 
             <!-- Liste des rendez-vous -->

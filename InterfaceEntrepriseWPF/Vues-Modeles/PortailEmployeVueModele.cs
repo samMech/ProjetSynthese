@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
+using System.Windows.Input;
 using System.Windows.Threading;
 
 namespace InterfaceEntrepriseWPF.Vues_Modeles
@@ -19,7 +20,10 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         // Attributs
         private string _texteLabelTitre = "";        
         private ObservableCollection<Rendezvous> _listeRendezVous = new ObservableCollection<Rendezvous>();
-        
+
+        private ICommand _consulterRDVCommand;
+        private ICommand _gererDisposCommand;
+
         /// <summary>
         /// Constructeur par défaut
         /// </summary>
@@ -71,6 +75,38 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
             }
         }
 
+        /// <summary>
+        /// Commande pour le bouton permettant d'aller à la page pour consulter tous les rendez-vous
+        /// </summary>
+        public ICommand ConsulterRDVCommand
+        {
+            get
+            {
+                if (_consulterRDVCommand == null)
+                {
+                    // Création de la commande si elle n'existe pas encore
+                    _consulterRDVCommand = new RelayCommand(ChargerAffichageRDV);
+                }
+                return _consulterRDVCommand;
+            }
+        }
+        
+        /// <summary>
+        /// Commande pour le bouton permettant d'aller à la page pour gérer les disponibilités
+        /// </summary>
+        public ICommand GererDisposCommand
+        {
+            get
+            {
+                if (_gererDisposCommand == null)
+                {
+                    // Création de la commande si elle n'existe pas encore
+                    _gererDisposCommand = new RelayCommand(ChargerGestionDispo);
+                }
+                return _gererDisposCommand;
+            }
+        }
+
         //==========//
         // Méthodes //
         //==========//
@@ -83,8 +119,38 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
             // Récupération des rendez-vous
             Employe emp = ApplicationVueModele.Instance.EmployeConnecte;
             ListeRendezVous = new ObservableCollection<Rendezvous>(RestDao.GetRendezVousEmploye(emp.id_employe));
-            Console.WriteLine(ListeRendezVous.Count);
         }
+
+        // Méthode pour charger la page d'affichage des rendez-vous
+        private void ChargerAffichageRDV(object obj)
+        {
+            ApplicationVueModele app = ApplicationVueModele.Instance;
+            VueModele page = app.Pages.Find(v => v.GetType() is AffichageRDVVueModele);
+            if (page != null)
+            {
+                app.ChangePageCommand.Execute(page);
+            }
+            else
+            {
+                app.ChangePageCommand.Execute(new AffichageRDVVueModele());
+            }            
+        }
+
+        // Méthode pour charger la page de gestion des disponibilités           
+        private void ChargerGestionDispo(object obj)
+        {
+            ApplicationVueModele app = ApplicationVueModele.Instance;
+            VueModele page = app.Pages.Find(v => v.GetType() is GestionDisposVueModele);
+            if (page != null)
+            {
+                app.ChangePageCommand.Execute(page);
+            }
+            else
+            {
+                app.ChangePageCommand.Execute(new GestionDisposVueModele());
+            }
+        }
+
 
     }
 }

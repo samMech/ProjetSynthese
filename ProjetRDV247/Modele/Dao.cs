@@ -74,7 +74,7 @@ namespace ProjetRDV247.Modele
                                            where r.id_employe_rdv == idEmploye
                                             && r.debut_rdv >= DbFunctions.TruncateTime(dateDebut)
                                             && r.fin_rdv <= DbFunctions.TruncateTime(DbFunctions.AddDays(dateFin,1))
-                                           select r).ToList();
+                                           select r).OrderBy(r => r.debut_rdv.TimeOfDay).ToList();
                 return dispos;
             }
         }
@@ -133,7 +133,7 @@ namespace ProjetRDV247.Modele
                 List<Rendezvous> rdvs = (from r in bd.Rendezvous
                                          where r.id_client_rdv == idClient
                                             && r.debut_rdv >= DbFunctions.TruncateTime(date)
-                                         select r).ToList();
+                                         select r).OrderBy(r => r.debut_rdv.TimeOfDay).ToList();
                 return rdvs;
             }
         }

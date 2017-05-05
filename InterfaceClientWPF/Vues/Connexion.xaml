@@ -7,12 +7,13 @@
              mc:Ignorable="d" 
              d:DesignHeight="158.45" d:DesignWidth="320.071">
     <Grid>
-        <Label x:Name="label" Content="Username" HorizontalAlignment="Left" Margin="36,30,0,0" VerticalAlignment="Top" Width="81"/>
-        <Label x:Name="label1" Content="Mot de Passe" HorizontalAlignment="Left" Margin="36,61,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="23" Margin="169,33,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="textBox1" HorizontalAlignment="Left" Height="23" Margin="169,63,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <Button x:Name="button" Content="Inscription" HorizontalAlignment="Left" Margin="36,109,0,0" VerticalAlignment="Top" Width="75"/>
-        <Button x:Name="button1" Content="Connexion" HorizontalAlignment="Left" Margin="214,109,0,0" VerticalAlignment="Top" Width="75" IsDefault="True"/>
+        <Label Content="Username" HorizontalAlignment="Left" Margin="36,30,0,0" VerticalAlignment="Top" Width="81"/>
+        <Label Content="Mot de Passe" HorizontalAlignment="Left" Margin="36,61,0,0" VerticalAlignment="Top"/>
+        <TextBox Text="{Binding Path=Login, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="23" Margin="169,33,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox  Text="{Binding Path=Password, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="23" Margin="169,63,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Button Command="{Binding Path=RegisterCommand}" Content="Inscription" HorizontalAlignment="Left" Margin="36,109,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button Command="{Binding Path=LoginCommand}"  Content="Connexion" HorizontalAlignment="Left" Margin="214,109,0,0" VerticalAlignment="Top" Width="75" IsDefault="True"/>
+        <Label Content="{Binding MessageErreurService}" HorizontalAlignment="Left" Margin="36,131,0,0" VerticalAlignment="Top"/>
 
     </Grid>
 </UserControl>

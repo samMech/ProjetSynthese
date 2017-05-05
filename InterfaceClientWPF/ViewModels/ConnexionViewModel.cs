@@ -16,6 +16,7 @@ namespace InterfaceClientWPF.ViewModels
         private string _login = "";
         private string _password = "";
         private ICommand _loginCommand;
+        private ICommand _registerCommand;
 
         //pour les erreurs
         private string _messageErreurService = "";
@@ -66,7 +67,7 @@ namespace InterfaceClientWPF.ViewModels
 
         public bool ErreurAuthentificationClient
         {
-            get { return _erreurAuthentificationClient = false; }
+            get { return _erreurAuthentificationClient; }
             set
             {
                 _erreurAuthentificationClient = value;
@@ -81,6 +82,31 @@ namespace InterfaceClientWPF.ViewModels
             {
                 _messageErreurService = value;
                 OnPropertyChanged();
+            }
+        }
+
+        public ICommand RegisterCommand
+        {
+            get
+            {
+                if (_registerCommand == null)
+                {
+                    _registerCommand = new RelayCommand(OuvrirInscription);
+                }
+                return _registerCommand;
+            }
+        }
+
+        private void OuvrirInscription(object obj)
+        {
+            try
+            {
+                ApplicationViewModel app = ApplicationViewModel.Instance;
+                app.ChangePageCommand.Execute(new CreerCompteViewModel());
+            }
+            catch (WebException e)
+            {
+                MessageErreurService = "Le service a rencontré un probleme";
             }
         }
 

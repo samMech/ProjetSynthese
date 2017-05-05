@@ -25,8 +25,9 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         // Attributs
         private ICommand _changePageCommand;
         private VueModele _pageCourante;
+        private VueModele _pagePrecedente = null;
         private List<VueModele> _pages;
-        
+
         // L'employé connecté
         private Employe _employeConnecte = null;
         
@@ -121,6 +122,14 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         }
 
         /// <summary>
+        /// La page précédente
+        /// </summary>
+        public VueModele PagePrecedente
+        {
+            get { return _pagePrecedente; }
+        }
+
+        /// <summary>
         /// L'employé connecté
         /// </summary>
         public Employe EmployeConnecte
@@ -150,9 +159,10 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
             {
                 // Si la page n'existe pas encore, on l'ajoute
                 Pages.Add(page);
-            }                
+            }
 
             // On remplace le contenu de la fenêtre par la nouvelle page
+            _pagePrecedente = PageCourante;
             PageCourante = Pages.FirstOrDefault(vm => vm == page);            
 
             // Ajustement du titre de la fenêtre

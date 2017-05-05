@@ -62,6 +62,7 @@
     </ApplicationDefinition>
     <Compile Include="Modele\RestDao.cs" />
     <Compile Include="Modele\RestClient.cs" />
+    <Compile Include="Utilitaire\IntToStringConverter.cs" />
     <Compile Include="Utilitaire\JsonUtil.cs" />
     <Compile Include="Vues-Modeles\AffichageRDVVueModele.cs" />
     <Compile Include="Vues-Modeles\GestionDisposVueModele.cs" />
@@ -143,6 +144,10 @@
     <ProjectReference Include="..\CalendrierRDV\CalendrierRDV.vbproj">
       <Project>{b8ea3888-0ae0-41e3-9a28-756dfe82ff1b}</Project>
       <Name>CalendrierRDV</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ComposantsUtils\ComposantsUtils.csproj">
+      <Project>{41867FC9-D9BD-49E8-93B4-22E21CDCAA7D}</Project>
+      <Name>ComposantsUtils</Name>
     </ProjectReference>
     <ProjectReference Include="..\ProjetRDV247\ProjetRDV247.csproj">
       <Project>{114e6f0f-ec8b-46b9-9604-b7a913051b1b}</Project>

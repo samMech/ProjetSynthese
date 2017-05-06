@@ -14,8 +14,9 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         private DateTime _dateJour;
         private DateTime _debutPlageAjout;
         private DateTime _finPlageAjout;
-        
+
         // Commandes
+        private ICommand _consulterRDVCommand;
         private ICommand _ajouterDisposCommand;
         private ICommand _modifierDispoCommand;
         private ICommand _supprimerDisposCommand;
@@ -137,6 +138,22 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
             }
         }
 
+        /// <summary>
+        /// Commande pour le bouton permettant d'aller à la page pour consulter tous les rendez-vous
+        /// </summary>
+        public ICommand ConsulterRDVCommand
+        {
+            get
+            {
+                if (_consulterRDVCommand == null)
+                {
+                    // Création de la commande si elle n'existe pas encore
+                    _consulterRDVCommand = new RelayCommand(ChargerConsultationRDV);
+                }
+                return _consulterRDVCommand;
+            }
+        }
+
         //==========//
         // Méthodes //
         //==========//
@@ -175,6 +192,13 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         private bool CanSupprimerDispos(object obj)
         {
             return true;
+        }
+
+        // Méthode pour aller à la page d'affichage des rendez-vous
+        protected void ChargerConsultationRDV(object obj)
+        {
+            ApplicationVueModele app = ApplicationVueModele.Instance;
+            app.ChangePageCommand.Execute(Pages.AFFICHAGE_RDV);
         }
 
     }

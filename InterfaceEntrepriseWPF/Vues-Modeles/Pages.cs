@@ -11,6 +11,7 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
     /// </summary>
     enum Pages
     {
+        NONE,
         CONNEXION,
         PORTAIL,
         AFFICHAGE_RDV,

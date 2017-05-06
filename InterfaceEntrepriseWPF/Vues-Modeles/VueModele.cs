@@ -87,7 +87,7 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         }
 
         /// <summary>
-        /// Commande pour le bouton permettant de retourner à la page précédente
+        /// Commande pour le bouton permettant de retourner à la page d'accueil
         /// </summary>
         public ICommand PagePrecedenteCommand
         {
@@ -96,8 +96,7 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
                 if (_pagePrecedenteCommand == null)
                 {
                     // Création de la commande si elle n'existe pas encore
-                    _pagePrecedenteCommand = new RelayCommand(RetournerPagePrecedente,
-                        (x => ApplicationVueModele.Instance.PagePrecedente != null));
+                    _pagePrecedenteCommand = new RelayCommand(RetournerPagePrecedente);
                 }
                 return _pagePrecedenteCommand;
             }

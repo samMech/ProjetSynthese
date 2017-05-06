@@ -85,7 +85,7 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
                 if (_consulterRDVCommand == null)
                 {
                     // Création de la commande si elle n'existe pas encore
-                    _consulterRDVCommand = new RelayCommand(ChargerAffichageRDV);
+                    _consulterRDVCommand = new RelayCommand(ChargerConsultationRDV);
                 }
                 return _consulterRDVCommand;
             }
@@ -122,7 +122,7 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         }
 
         // Méthode pour charger la page d'affichage des rendez-vous
-        private void ChargerAffichageRDV(object obj)
+        private void ChargerConsultationRDV(object obj)
         {
             ApplicationVueModele app = ApplicationVueModele.Instance;
             app.ChangePageCommand.Execute(Pages.AFFICHAGE_RDV);

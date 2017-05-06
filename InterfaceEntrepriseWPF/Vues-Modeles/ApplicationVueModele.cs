@@ -90,7 +90,7 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         }
         
         /// <summary>
-        /// La page courante
+        /// La page courante pour le binding
         /// </summary>
         public VueModele PageCourante
         {
@@ -111,9 +111,19 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         /// <summary>
         /// La page précédente
         /// </summary>
-        public VueModele PagePrecedente
+        public Pages PagePrecedente
         {
-            get { return _pagePrecedente; }
+            get
+            {
+                if (_pagePrecedente == null)
+                {
+                    return Pages.NONE;
+                }
+                else
+                {
+                    return pages.First(x => x.Value.Equals(_pagePrecedente)).Key;
+                }                
+            }
         }
 
         /// <summary>

@@ -66,6 +66,7 @@
     <Compile Include="Utilitaire\JsonUtil.cs" />
     <Compile Include="Vues-Modeles\AffichageRDVVueModele.cs" />
     <Compile Include="Vues-Modeles\GestionDisposVueModele.cs" />
+    <Compile Include="Vues-Modeles\Pages.cs" />
     <Compile Include="Vues-Modeles\PortailEmployeVueModele.cs" />
     <Compile Include="Vues-Modeles\RelayCommand.cs" />
     <Compile Include="Vues-Modeles\ApplicationVueModele.cs" />

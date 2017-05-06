@@ -55,24 +55,24 @@
                         </ComboBox.ItemTemplate>
                     </ComboBox>
 
-                    <Button Content="Ajouter les disponibilités"/>
+                    <Button Content="Ajouter les disponibilités" Command="{Binding Path=AjouterDisposCommand}"/>
 
                 </StackPanel>
             </GroupBox>
 
             <!-- Zone de modification -->
             <GroupBox Header="Modification / Suppression" Style="{StaticResource StyleTitre}" Grid.Row="1">
-                <StackPanel Margin="5" HorizontalAlignment="Center">                    
-                    <Button Content="Modifier la disponibilité"/>
-                    <Button Content="Supprimer les disponibilités"/>
+                <StackPanel Margin="5" HorizontalAlignment="Center">
+                    <Button Content="Modifier la disponibilité" Command="{Binding Path=ModifierDispoCommand}"/>
+                    <Button Content="Supprimer les disponibilités" Command="{Binding Path=SupprimerDisposCommand}"/>
                     <TextBox Text="Raison..." VerticalContentAlignment="Center" Style="{StaticResource StyleTexte}" TextWrapping="Wrap" AcceptsReturn="True"/>
                 </StackPanel>            
             </GroupBox>
 
             <!-- Navigation -->
             <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Center">
-                <Button Content="Accueil"/>
-                <Button Content="Consulter les rendez-vous"/>                
+                <Button Content="Accueil" Command="{Binding Path=PageAccueilCommand}"/>
+                <Button Content="Consulter les rendez-vous" Command="{Binding Path=PagePrecedenteCommand}"/>                
             </StackPanel>
         </Grid>
 

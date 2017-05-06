@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 namespace InterfaceEntrepriseWPF.Vues_Modeles
 {
@@ -16,6 +17,10 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
     {
         // Attributs
         private string _titrePage = "";
+
+        // Commandes
+        private ICommand _pageAccueilCommand;
+        private ICommand _pagePrecedenteCommand;
 
         /// <summary>
         /// Événement à déclencher quand une propriété change
@@ -41,7 +46,11 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
             // Si l'événement n'est pas null
             this.PropertyChanged?.Invoke(sender, new PropertyChangedEventArgs(nomPropriete));
         }
-        
+
+        //============//
+        // Propriétés //
+        //============//
+
         /// <summary>
         /// Le titre de la page
         /// </summary>
@@ -62,9 +71,60 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         }
 
         /// <summary>
+        /// Commande pour le bouton permettant de retourner à la page d'accueil
+        /// </summary>
+        public ICommand PageAccueilCommand
+        {
+            get
+            {
+                if (_pageAccueilCommand == null)
+                {
+                    // Création de la commande si elle n'existe pas encore
+                    _pageAccueilCommand = new RelayCommand(RetournerPageAccueil);
+                }
+                return _pageAccueilCommand;
+            }
+        }
+
+        /// <summary>
+        /// Commande pour le bouton permettant de retourner à la page précédente
+        /// </summary>
+        public ICommand PagePrecedenteCommand
+        {
+            get
+            {
+                if (_pagePrecedenteCommand == null)
+                {
+                    // Création de la commande si elle n'existe pas encore
+                    _pagePrecedenteCommand = new RelayCommand(RetournerPagePrecedente,
+                        (x => ApplicationVueModele.Instance.PagePrecedente != null));
+                }
+                return _pagePrecedenteCommand;
+            }
+        }
+
+        //==========//
+        // Méthodes //
+        //==========//
+
+        /// <summary>
         /// Méthode pour mettre à jour les données de la page
         /// </summary>
         public virtual void UpdateData() { }
+
+        // Méthode pour revenir à la page d'accueil
+        protected void RetournerPageAccueil(object obj)
+        {
+            ApplicationVueModele app = ApplicationVueModele.Instance;
+            app.ChangePageCommand.Execute(Pages.PORTAIL);
+        }
+
+        // Méthode pour revenir à la page précédente
+        protected void RetournerPagePrecedente(object obj)
+        {
+            ApplicationVueModele app = ApplicationVueModele.Instance;
+            app.ChangePageCommand.Execute(app.PagePrecedente);
+        }
 
     }
 }

@@ -19,6 +19,8 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         // Attributs
         private string _login = "";
         private string _password = "";
+
+        // Commandes
         private ICommand _loginCommand;
 
         // Pour les erreurs
@@ -80,7 +82,7 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
                 if (_loginCommand == null)
                 {
                     // Création de la commande si elle n'existe pas encore
-                    _loginCommand = new RelayCommand(ConnexionUsager, ConnexionUsagerPossible);
+                    _loginCommand = new RelayCommand(ConnexionUsager, CanConnexionUsager);
                 }
                 return _loginCommand;
             }
@@ -138,7 +140,7 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
                 {
                     ApplicationVueModele app = ApplicationVueModele.Instance;
                     app.EmployeConnecte = emp;
-                    app.ChangePageCommand.Execute(new PortailEmployeVueModele());
+                    app.ChangePageCommand.Execute(Pages.PORTAIL);
                 }
                 else
                 {
@@ -161,7 +163,7 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         }
 
         // Méthode pour savoir si la connexion est possible
-        private bool ConnexionUsagerPossible(object obj)
+        private bool CanConnexionUsager(object obj)
         {
             return _login.Length > 0 && _password.Length > 0;
         }

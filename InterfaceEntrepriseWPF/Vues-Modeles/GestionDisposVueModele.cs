@@ -11,10 +11,11 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
     {
         // Attributs
         private static readonly List<int> _dureesRDV = new List<int>(new int[]{10, 15, 20, 30, 45, 60, 90, 120});
+        private DateTime _dateJour;
         private DateTime _debutPlageAjout;
         private DateTime _finPlageAjout;
-
-        private ICommand _returnCommand;
+        
+        // Commandes
         private ICommand _ajouterDisposCommand;
         private ICommand _modifierDispoCommand;
         private ICommand _supprimerDisposCommand;
@@ -38,6 +39,22 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         public List<int> DureesRDV
         {
             get { return _dureesRDV; }            
+        }
+
+        /// <summary>
+        /// La date du calendrier
+        /// </summary>
+        public DateTime DateJour
+        {
+            get { return _dateJour; }
+            set
+            {
+                if (_dateJour != null)
+                {
+                    _dateJour = value;
+                    OnPropertyChanged();
+                }
+            }
         }
 
         /// <summary>
@@ -73,19 +90,50 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         }
 
         /// <summary>
-        /// Commande pour le bouton permettant de retourner à la page précédente
+        /// Commande pour le bouton pour l'ajout de disponibilités
         /// </summary>
-        public ICommand ReturnCommand
+        public ICommand AjouterDisposCommand
         {
             get
             {
-                if (_returnCommand == null)
+                if (_ajouterDisposCommand == null)
                 {
                     // Création de la commande si elle n'existe pas encore
-                    _returnCommand = new RelayCommand(RetournerPagePrecedente,
-                        (x => ApplicationVueModele.Instance.PagePrecedente != null));
+                    _ajouterDisposCommand = new RelayCommand(AjouterDispos, CanAjouterDispos);
                 }
-                return _returnCommand;
+                return _ajouterDisposCommand;
+            }
+        }
+
+        /// <summary>
+        /// Commande pour le bouton pour la modification d'une disponibilité
+        /// </summary>
+        public ICommand ModifierDispoCommand
+        {
+            get
+            {
+                if (_modifierDispoCommand == null)
+                {
+                    // Création de la commande si elle n'existe pas encore
+                    _modifierDispoCommand = new RelayCommand(ModifierDispo, CanModifierDispo);
+                }
+                return _modifierDispoCommand;
+            }
+        }
+
+        /// <summary>
+        /// Commande pour le bouton pour la suppression de disponibilités
+        /// </summary>
+        public ICommand SupprimerDisposCommand
+        {
+            get
+            {
+                if (_supprimerDisposCommand == null)
+                {
+                    // Création de la commande si elle n'existe pas encore
+                    _supprimerDisposCommand = new RelayCommand(SupprimerDispos, CanSupprimerDispos);
+                }
+                return _supprimerDisposCommand;
             }
         }
 
@@ -93,11 +141,40 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         // Méthodes //
         //==========//
 
-            // Méthode pour revenir à la page précédente
-        private void RetournerPagePrecedente(object obj)
+        // Méthode pour ajouter des disponibilités
+        private void AjouterDispos(object obj)
         {
-            ApplicationVueModele app = ApplicationVueModele.Instance;
-            app.ChangePageCommand.Execute(app.PagePrecedente);
+
+        }
+
+        // Méthode pour savoir si on peut ajouter des disponibilités
+        private bool CanAjouterDispos(object obj)
+        {
+            return DateJour >= DateTime.Today && DebutPlageAjout.TimeOfDay >= DateTime.Now.TimeOfDay;
+        }
+
+        // Méthode pour modifier une disponibilité
+        private void ModifierDispo(object obj)
+        {
+
+        }
+
+        // Méthode pour savoir si on peut modifier une disponibilité
+        private bool CanModifierDispo(object obj)
+        {
+            return true;
+        }
+
+        // Méthode pour supprimer des disponibilités
+        private void SupprimerDispos(object obj)
+        {
+
+        }
+
+        // Méthode pour savoir si on peut supprimer des disponibilités
+        private bool CanSupprimerDispos(object obj)
+        {
+            return true;
         }
 
     }

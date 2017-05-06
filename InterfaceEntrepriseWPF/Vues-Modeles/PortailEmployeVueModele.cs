@@ -125,30 +125,14 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         private void ChargerAffichageRDV(object obj)
         {
             ApplicationVueModele app = ApplicationVueModele.Instance;
-            VueModele page = app.Pages.Find(v => v.GetType() is AffichageRDVVueModele);
-            if (page != null)
-            {
-                app.ChangePageCommand.Execute(page);
-            }
-            else
-            {
-                app.ChangePageCommand.Execute(new AffichageRDVVueModele());
-            }            
+            app.ChangePageCommand.Execute(Pages.AFFICHAGE_RDV);
         }
 
         // Méthode pour charger la page de gestion des disponibilités           
         private void ChargerGestionDispo(object obj)
         {
             ApplicationVueModele app = ApplicationVueModele.Instance;
-            VueModele page = app.Pages.Find(v => v.GetType() is GestionDisposVueModele);
-            if (page != null)
-            {
-                app.ChangePageCommand.Execute(page);
-            }
-            else
-            {
-                app.ChangePageCommand.Execute(new GestionDisposVueModele());
-            }
+            app.ChangePageCommand.Execute(Pages.GESTION_DISPOS);
         }
 
 

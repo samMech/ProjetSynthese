@@ -24,9 +24,9 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
 
         // Attributs
         private ICommand _changePageCommand;
-        private VueModele _pageCourante;
+        private VueModele _pageCourante = null;
         private VueModele _pagePrecedente = null;
-        private List<VueModele> _pages;
+        private Dictionary<Pages, VueModele> pages;
 
         // L'employé connecté
         private Employe _employeConnecte = null;
@@ -36,8 +36,11 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         /// </summary>
         private ApplicationVueModele()
         {
+            // Création du dictionnaire pour contenir les pages
+            pages = new Dictionary<Pages, VueModele>();
+
             // Initialisation de la page d'accueil
-            ChangerPageCourante(new ConnexionVueModele());
+            ChangerPageCourante(Pages.CONNEXION);
         }
 
         //============//
@@ -79,29 +82,13 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
                 {                 
                     // Création de la commande si elle n'existe pas encore
                     _changePageCommand = new RelayCommand(
-                        p => ChangerPageCourante((VueModele)p),
+                        p => ChangerPageCourante((Pages)p),
                         p => p is VueModele);
                 }
                 return _changePageCommand;
             }
         }
-
-        /// <summary>
-        /// Liste des pages
-        /// </summary>
-        public List<VueModele> Pages
-        {
-            get
-            {
-                // Création de la commande si elle n'existe pas encore
-                if (_pages == null)
-                {
-                    _pages = new List<VueModele>();
-                }
-                return _pages;
-            }
-        }
-
+        
         /// <summary>
         /// La page courante
         /// </summary>
@@ -153,18 +140,44 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         //==========//
 
         // Méthode pour changer de page
-        private void ChangerPageCourante(VueModele page)
-        {            
-            if (!Pages.Contains(page))
-            {
-                // Si la page n'existe pas encore, on l'ajoute
-                Pages.Add(page);
+        private void ChangerPageCourante(Pages page)
+        {
+            // Si la page n'existe pas encore, on l'ajoute     
+            if (! pages.ContainsKey(page))
+            {   
+                switch (page)
+                {
+                    case Pages.CONNEXION:
+                        pages[page] = new ConnexionVueModele();
+                        break;
+                    case Pages.PORTAIL:
+                        pages[page] = new PortailEmployeVueModele();
+                        break;
+                    case Pages.AFFICHAGE_RDV:
+                        pages[page] = new AffichageRDVVueModele();
+                        break;
+                    case Pages.GESTION_DISPOS:
+                        pages[page] = new GestionDisposVueModele();
+                        break;
+                    default:
+                        break;
+                }                
             }
 
             // On remplace le contenu de la fenêtre par la nouvelle page
             _pagePrecedente = PageCourante;
-            PageCourante = Pages.FirstOrDefault(vm => vm == page);            
+            PageCourante = pages[page];            
+            
+            // Mise à jour des données
+            PageCourante.UpdateData();
+            this.UpdateData();
+        }
 
+        /// <summary>
+        /// Mise à jour des données
+        /// </summary>
+        public override void UpdateData()
+        {
             // Ajustement du titre de la fenêtre
             string nouveauTitre = String.Format("{0} ({1})", NOM_APPLICATION, PageCourante.TitrePage);
             if (EmployeConnecte != null)
@@ -172,10 +185,7 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
                 nouveauTitre += String.Format(" - {1} {0}", EmployeConnecte.nom_employe, EmployeConnecte.prenom_employe);
             }
             TitrePage = nouveauTitre;
-
-            // Mise à jour des données
-            PageCourante.UpdateData();
         }
-        
+
     }
 }

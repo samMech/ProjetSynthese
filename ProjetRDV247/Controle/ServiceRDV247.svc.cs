@@ -117,6 +117,13 @@ namespace ProjetRDV247.Controle
             rv.fin_rdv = DateTime.Today.AddHours(12);
             rv.id_client_rdv = 3;
             resultats.Add(rv);
+            resultats.Add(rv);
+            resultats.Add(rv);
+            resultats.Add(rv);
+            resultats.Add(rv);
+            resultats.Add(rv);
+            resultats.Add(rv);
+            resultats.Add(rv);
 
             return resultats;
         }

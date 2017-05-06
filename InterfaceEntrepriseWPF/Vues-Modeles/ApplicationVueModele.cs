@@ -166,11 +166,11 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
 
             // On remplace le contenu de la fenêtre par la nouvelle page
             _pagePrecedente = PageCourante;
-            PageCourante = pages[page];            
-            
+            PageCourante = pages[page];
+
             // Mise à jour des données
-            PageCourante.UpdateData();
             this.UpdateData();
+            PageCourante.UpdateData();            
         }
 
         /// <summary>
@@ -184,7 +184,7 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
             {
                 nouveauTitre += String.Format(" - {1} {0}", EmployeConnecte.nom_employe, EmployeConnecte.prenom_employe);
             }
-            TitrePage = nouveauTitre;
+            TitrePage = nouveauTitre;            
         }
 
     }

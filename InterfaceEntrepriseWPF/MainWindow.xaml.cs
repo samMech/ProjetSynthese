@@ -32,6 +32,20 @@ namespace InterfaceEntrepriseWPF
             // Initialisation du contexte
             this.DataContext = ApplicationVueModele.Instance;
         }
-        
+
+        // Listener pour garder la fenêtre centrée
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (e.PreviousSize != e.NewSize)
+            {
+                // Récupération des dimensions de l'écran
+                double width = SystemParameters.PrimaryScreenWidth;
+                double height = SystemParameters.PrimaryScreenHeight;
+
+                // Recentrage de la fenêtre
+                this.Left = (width - e.NewSize.Width) / 2;
+                this.Top = (height - e.NewSize.Height) / 2;
+            }
+        }
     }
 }

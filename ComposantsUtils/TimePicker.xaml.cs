@@ -55,7 +55,7 @@ namespace ComposantsUtils
         public static readonly DependencyProperty HeureJourProperty =
                     DependencyProperty.Register("HeureJour",
                         typeof(DateTime), typeof(TimePicker),
-                        new FrameworkPropertyMetadata(DateTime.Today, OnHeureJourPropertyChanged));
+                        new FrameworkPropertyMetadata(DateTime.Today, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnHeureJourPropertyChanged));
         // Encapsulation
         public DateTime HeureJour
         {        

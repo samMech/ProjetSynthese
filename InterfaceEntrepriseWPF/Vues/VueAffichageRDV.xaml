@@ -5,7 +5,17 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:InterfaceEntrepriseWPF.Vues"
              mc:Ignorable="d" d:DesignWidth="1400" d:DesignHeight="750" >
-    
+
+    <!-- Ressources locales -->
+    <UserControl.Resources>
+        <!-- Styles-->
+        <Style TargetType="{x:Type Label}" BasedOn="{StaticResource StyleTexte}"/>
+        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource StyleBoutton}"/>
+        <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource StyleTexte}"/>
+    </UserControl.Resources>
+
+    <!-- Contenu -->
+
     <DockPanel LastChildFill="True">
         
         <!-- La barre latérale -->

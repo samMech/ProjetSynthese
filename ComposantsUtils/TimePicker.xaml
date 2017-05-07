@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ComposantsUtils"
              mc:Ignorable="d"
+             x:Name="This"
              d:DesignHeight="20" d:DesignWidth="80">
     <Border Margin="2,4">
         <Grid>
@@ -14,9 +15,9 @@
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
-            <TextBox Text="{Binding Heure}" Grid.Column="0"/>
+            <TextBox Text="{Binding Path=Heure, ElementName=This}" Grid.Column="0" MaxLength="2"/>
             <TextBlock Text="h" Grid.Column="1" HorizontalAlignment="Center"/>
-            <TextBox Text="{Binding Minutes}" Grid.Column="2"/>
+            <TextBox Text="{Binding Path=Minutes, ElementName=This}" Grid.Column="2" MaxLength="2"/>
             <TextBlock Text="m" Grid.Column="3" HorizontalAlignment="Center"/>
         </Grid>
     </Border>

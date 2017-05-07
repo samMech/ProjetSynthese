@@ -5,20 +5,60 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" Height="440" Width="600">
 
-    <!-- Ressources -->
+    <!-- Ressources locales -->
     <UserControl.Resources>
+        <!-- Bannière -->
         <BitmapImage x:Key="Banniere" UriSource="../Ressources/side_banner.jpg" />
+        
+        <!-- Data Template pour la liste des rendez-vous -->
+        <DataTemplate x:Key="ListeRDV_DataTemplate">
+            <Grid Margin="0,0,10,0">
+                <Grid.Resources>
+                    <Style TargetType="{x:Type Label}" BasedOn="{StaticResource StyleTexte}">
+                        <Setter Property="FontSize" Value="16"/>
+                    </Style>
+                </Grid.Resources>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Column="0" HorizontalContentAlignment="Center">
+                    <Label.Content>
+                        <TextBlock>
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="De {0:HH:mm} à {1:HH:mm}">
+                                    <Binding Path="debut_rdv" />
+                                    <Binding Path="fin_rdv" />
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </Label.Content>
+                </Label>
+                <Separator VerticalContentAlignment="Bottom" VerticalAlignment="Bottom" Grid.Column="0"/>
+
+                <Label Content="{Binding id_client_rdv}" ContentStringFormat="Client #{0}" Grid.Column="1"/>
+                <Separator VerticalContentAlignment="Bottom" VerticalAlignment="Bottom" Grid.Column="1"/>
+
+            </Grid>
+        </DataTemplate>
+
     </UserControl.Resources>
 
+    <!-- Contenu -->
     <DockPanel LastChildFill="True">
 
         <!-- Bannière -->
-        <Image DockPanel.Dock="Left" Source="{StaticResource Banniere}" Grid.Column="0"/>
-
-        <!-- Contenu -->
+        <Image DockPanel.Dock="Left" Source="{StaticResource Banniere}"/>
+        
+        <!-- Centre -->
         <DockPanel LastChildFill="True" Margin="10">
+            
+            <!-- Labels-->
             <Label DockPanel.Dock="Top" Content="Bienvenue !" Style="{StaticResource StyleTitre}"/>
-            <Label DockPanel.Dock="Top" Content="{Binding Path=TexteLabelTitre}"/>
+            <Label DockPanel.Dock="Top" Content="{Binding Path=TexteLabelTitre}" Style="{StaticResource StyleTexte}"/>
+            
+            <!-- Boutons -->
             <Grid DockPanel.Dock="Bottom">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
@@ -31,36 +71,7 @@
             <!-- Liste des rendez-vous -->
             <Border BorderThickness="5">
                 <ScrollViewer PanningMode="VerticalOnly" >
-                    <ItemsControl ItemsSource="{Binding ListeRendezVous}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Grid Margin="0,0,5,0">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="1*"/>
-                                        <ColumnDefinition Width="2*"/>
-                                    </Grid.ColumnDefinitions>
-
-                                    <Label Grid.Column="0" HorizontalContentAlignment="Center">
-                                        <Label.Content>
-                                            <TextBlock>
-                                                <TextBlock.Text>
-                                                    <MultiBinding StringFormat="De {0:HH:mm} à {1:HH:mm}">
-                                                        <Binding Path="debut_rdv" />
-                                                        <Binding Path="fin_rdv" />
-                                                    </MultiBinding>
-                                                </TextBlock.Text>
-                                            </TextBlock>
-                                        </Label.Content>
-                                    </Label>
-                                    <Separator VerticalContentAlignment="Bottom" VerticalAlignment="Bottom" Grid.Column="0"/>
-                                
-                                    <Label Content="{Binding id_client_rdv}" ContentStringFormat="Client #{0}" Grid.Column="1"/>                                
-                                    <Separator VerticalContentAlignment="Bottom" VerticalAlignment="Bottom" Grid.Column="1"/>
-                                
-                                </Grid>                        
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
+                    <ItemsControl ItemsSource="{Binding ListeRendezVous}" ItemTemplate="{StaticResource ListeRDV_DataTemplate}"/>
                 </ScrollViewer>
             </Border>
 

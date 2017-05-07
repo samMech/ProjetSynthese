@@ -14,6 +14,7 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         private DateTime _dateJour;
         private DateTime _debutPlageAjout;
         private DateTime _finPlageAjout;
+        private string _raison;
 
         // Commandes
         private ICommand _consulterRDVCommand;
@@ -87,6 +88,19 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
                     _finPlageAjout = value;
                     OnPropertyChanged();
                 }
+            }
+        }
+
+        /// <summary>
+        /// La raison en cas de modification
+        /// </summary>
+        public string Raison
+        {
+            get { return _raison; }
+            set
+            {
+                _raison = value;
+                OnPropertyChanged();
             }
         }
 
@@ -167,6 +181,7 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         // Méthode pour savoir si on peut ajouter des disponibilités
         private bool CanAjouterDispos(object obj)
         {
+            Console.WriteLine("Date:{0:dd} / Début {0:HH:mm} / Fin {0:HH:mm}", DateJour, DebutPlageAjout, FinPlageAjout);
             return DateJour >= DateTime.Today && DebutPlageAjout.TimeOfDay >= DateTime.Now.TimeOfDay;
         }
 

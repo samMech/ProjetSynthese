@@ -6,7 +6,7 @@
         xmlns:localVues="clr-namespace:InterfaceEntrepriseWPF.Vues"
         xmlns:localVuesModeles="clr-namespace:InterfaceEntrepriseWPF.Vues_Modeles"
         mc:Ignorable="d"
-        Title="{Binding Path=TitrePage}" Height="350" Width="525"
+        Title="{Binding Path=TitrePage}" Height="300" Width="300"
         SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" SizeChanged="Window_SizeChanged">
 
     <Window.Resources>
@@ -24,10 +24,10 @@
             <localVues:VueGestionDispos />
         </DataTemplate>
     </Window.Resources>
-       
+    
     <!-- Contenu-->
     <Border BorderThickness="5" HorizontalAlignment="Center" VerticalAlignment="Center">
-        <ContentControl Content="{Binding PageCourante}" />        
+        <ContentControl Content="{Binding PageCourante}"/>        
     </Border>
 
 </Window>

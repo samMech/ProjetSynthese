@@ -4,77 +4,97 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:InterfaceEntrepriseWPF.Vues"
-             mc:Ignorable="d" d:DesignWidth="1400" d:DesignHeight="750" >
+             x:Name="This"
+             mc:Ignorable="d" d:DesignWidth="1400" Height="800" >
 
+    <!-- Ressources locales -->
+    <UserControl.Resources>
+        <!-- Styles-->
+        <Style TargetType="{x:Type Label}" BasedOn="{StaticResource StyleTexte}"/>
+        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource StyleBoutton}"/>
+        <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource StyleTexte}"/>
+
+        <!-- Style pour la zone de commentaire -->
+        <Style x:Key="StyleTextBoxRaison" TargetType="{x:Type TextBox}" BasedOn="{StaticResource StyleTexte}">
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="AcceptsReturn" Value="True"/>
+            <Setter Property="MinLines" Value="5"/>
+            <Setter Property="MaxLines" Value="5"/>
+            <Setter Property="MaxLength" Value="200"/>
+            <Setter Property="UndoLimit" Value="200"/>
+            <Setter Property="SpellCheck.IsEnabled" Value="True"/>            
+        </Style>
+
+    </UserControl.Resources>
+
+    <!-- Contenu -->
     <DockPanel LastChildFill="True">
 
-        <Grid DockPanel.Dock="Left">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="6*"/>
-                <RowDefinition Height="3*"/>
-                <RowDefinition Height="1*"/>
-            </Grid.RowDefinitions>
-
-            <!-- Zone d'ajout -->
-            <GroupBox Header="Ajout de disponibilités" Style="{StaticResource StyleTitre}" Margin="5" Grid.Row="0">
-                <StackPanel Margin="5,0">
-
-                    <!-- Date -->
-                    <Label Content="1) Choisir une date"/>
-                    <Calendar x:Name="CalendrierSelection"/>
-
-                    <!-- Plage horaire -->
-                    <Label Content="2) Choisir une plage horaire"/>
-                    <Grid>
-                        <Grid.Resources>
-                            <Style TargetType="{x:Type Label}" BasedOn="{StaticResource StyleTexte}">
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                                <Setter Property="HorizontalAlignment" Value="Center"/>
-                            </Style>
-                        </Grid.Resources>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="3*"/>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="3*"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Content="De" Grid.Column="0"/>
-                        <ComposantsUtils:TimePicker Grid.Column="1" HeureJour="{Binding DebutPlageAjout}"/>
-                        <Label Content="à" Grid.Column="2"/>
-                        <ComposantsUtils:TimePicker Grid.Column="3" HeureJour="{Binding FinPlageAjout}"/>
-                    </Grid>
-
-                    <!-- Durée -->
-                    <Label Content="3) Choisir la durée d'un rendez-vous"/>
-                    <ComboBox Margin="10" ItemsSource="{Binding DureesRDV}" Padding="0" SelectedIndex="0">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <Label Content="{Binding}" ContentStringFormat="{}{0} minutes" Style="{StaticResource StyleTexte}" Padding="0"/>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-
-                    <Button Content="Ajouter les disponibilités" Command="{Binding Path=AjouterDisposCommand}"/>
-
-                </StackPanel>
-            </GroupBox>
-
-            <!-- Zone de modification -->
-            <GroupBox Header="Modification / Suppression" Style="{StaticResource StyleTitre}" Grid.Row="1">
-                <StackPanel Margin="5" HorizontalAlignment="Center">
-                    <Button Content="Modifier la disponibilité" Command="{Binding Path=ModifierDispoCommand}"/>
-                    <Button Content="Supprimer les disponibilités" Command="{Binding Path=SupprimerDisposCommand}"/>
-                    <TextBox Text="Raison..." VerticalContentAlignment="Center" Style="{StaticResource StyleTexte}" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" />
-                </StackPanel>
-            </GroupBox>
+        <!-- Barre latérale -->
+        <DockPanel DockPanel.Dock="Left">
 
             <!-- Navigation -->
-            <StackPanel Grid.Row="2" Margin="5,0" VerticalAlignment="Bottom">
+            <StackPanel DockPanel.Dock="Bottom">
                 <Button Content="Accueil" Command="{Binding Path=PageAccueilCommand}"/>
                 <Button Content="Consulter les rendez-vous" Command="{Binding Path=ConsulterRDVCommand}"/>
             </StackPanel>
-        </Grid>
 
+            <StackPanel Margin="5">
+                <!-- Zone d'ajout -->
+                <GroupBox Header="Ajout de disponibilités" Style="{StaticResource StyleTitre}">
+                    <StackPanel Margin="5">
+
+                        <!-- Date -->
+                        <Label Content="1) Choisir une date"/>
+                        <Calendar x:Name="CalendrierSelection" SelectedDate="{Binding Path=DateJour}"/>
+
+                        <!-- Plage horaire -->
+                        <Label Content="2) Choisir une plage horaire"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="4*"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="4*"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <Label Content="De" Grid.Column="0"/>
+                            <ComposantsUtils:TimePicker Grid.Column="1" HeureJour="{Binding Path=DebutPlageAjout}"/>
+                            <Label Content="à" Grid.Column="2"/>
+                            <ComposantsUtils:TimePicker Grid.Column="3" HeureJour="{Binding Path=FinPlageAjout}"/>
+                        </Grid>
+
+                        <!-- Durée -->
+                        <Label Content="3) Choisir la durée d'un rendez-vous"/>
+                        <ComboBox Margin="10" ItemsSource="{Binding DureesRDV}" SelectedIndex="0">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Label Content="{Binding}" ContentStringFormat="{}{0} minutes" Style="{StaticResource StyleTexte}" Padding="0"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+
+                        <Button Content="Ajouter les disponibilités" Command="{Binding Path=AjouterDisposCommand}"/>
+
+                    </StackPanel>
+                </GroupBox>
+
+                <!-- Zone de modification -->
+                <GroupBox Header="Modification / Suppression" Style="{StaticResource StyleTitre}">
+                    <StackPanel Margin="5,0">
+                        <Button Content="Modifier la disponibilité" Command="{Binding Path=ModifierDispoCommand}"/>
+                        <Button Content="Supprimer les disponibilités" Command="{Binding Path=SupprimerDisposCommand}"/>
+                        <TextBox Text="Raison..." Style="{StaticResource StyleTextBoxRaison}"/>
+                    </StackPanel>
+                </GroupBox>
+
+            </StackPanel>            
+            
+        </DockPanel>
+        
         <!-- Avertissement -->
         <Label DockPanel.Dock="Bottom" Content="Attention la/les disponibilités sélectionnées contiennent des rendez-vous ! Veuillez fournir une raison." VerticalContentAlignment="Center" Grid.Row="0" Grid.ColumnSpan="3" HorizontalContentAlignment="Center"/>
 

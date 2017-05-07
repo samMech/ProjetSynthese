@@ -7,48 +7,37 @@
              mc:Ignorable="d" 
              d:DesignHeight="440" d:DesignWidth="680">
 
-    <GroupBox x:Name="groupBox" Header="Connexion" Style="{StaticResource StyleTitre}" Margin="20" HorizontalAlignment="Center" VerticalAlignment="Center" Width="540" Height="300">
-        <Grid Margin="20">
-            <Grid.Resources>
-                <!-- Style de la grille -->
-                <Style x:Key="StyleGrille" TargetType="{x:Type Control}" BasedOn="{StaticResource StyleTexte}">
-                    <Setter Property="VerticalAlignment" Value="Center" />
-                    <Setter Property="HorizontalAlignment" Value="Stretch" />
-                </Style>
-                <Style TargetType="{x:Type Label}" BasedOn="{StaticResource StyleGrille}"/>
-                <Style TargetType="{x:Type Button}" BasedOn="{StaticResource StyleGrille}" />
-                
-                <!-- Style pour les zones de saisies -->
-                <Style x:Key="StyleZoneSaisie" TargetType="{x:Type Control}" BasedOn="{StaticResource StyleGrille}">                    
-                    <Style.Triggers>
-                        <Trigger Property="IsFocused" Value="True">
-                            <Setter Property="BorderBrush" Value="{Binding BorderBrush, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Border}, AncestorLevel=2}}" />
-                            <Setter Property="BorderThickness" Value="2" />
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-                <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource StyleZoneSaisie}"/>
-                <Style TargetType="{x:Type PasswordBox}" BasedOn="{StaticResource StyleZoneSaisie}"/>
+    <!-- Ressources locales -->
+    <UserControl.Resources>
+        <!-- Style pour le texte -->
+        <Style x:Key="StyleGrille" TargetType="{x:Type Control}" BasedOn="{StaticResource StyleTexte}">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+        </Style>
+        <Style TargetType="{x:Type Label}" BasedOn="{StaticResource StyleGrille}"/>
+        
+        <!-- Style pour la saisie -->
+        <Style x:Key="StyleSaisie"  TargetType="{x:Type Control}" BasedOn="{StaticResource StyleZoneSaisie}">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+        </Style>
+        <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource StyleSaisie}"/>
+        <Style TargetType="{x:Type PasswordBox}" BasedOn="{StaticResource StyleSaisie}"/>
+        
+        <!-- Style pour les messages d'erreur -->
+        <Style x:Key="ErreurAuthentificationUsager" TargetType="{x:Type Label}" BasedOn="{StaticResource StyleErreur}">
+            <Setter Property="Visibility" Value="Hidden"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ErreurAuthentificationUsager}" Value="True">
+                    <Setter Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
 
-                <!-- Style pour les messages d'erreur -->
-                <Style x:Key="StyleErreur" TargetType="{x:Type Label}" BasedOn="{StaticResource StyleGrille}">
-                    <Setter Property="VerticalAlignment" Value="Top" />
-                    <Setter Property="Foreground" Value="Red"/>
-                    <Setter Property="Visibility" Value="Hidden"/>                    
-                </Style>
-                <Style x:Key="ErreurServeur" TargetType="{x:Type Label}" BasedOn="{StaticResource StyleErreur}">
-                   <Setter Property="Visibility" Value="Visible"/>
-                </Style>
-                <Style x:Key="ErreurAuthentificationUsager" TargetType="{x:Type Label}" BasedOn="{StaticResource StyleErreur}">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding ErreurAuthentificationUsager}" Value="True">
-                            <Setter Property="Visibility" Value="Visible"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-                
-            </Grid.Resources>
-                
+    <!-- Contenu -->
+    <GroupBox x:Name="groupBox" Header="Connexion" Style="{StaticResource StyleTitre}" Margin="20" HorizontalAlignment="Center" VerticalAlignment="Center" Width="540" Height="300">
+        <Grid Margin="20">                
             <Grid.RowDefinitions>
                 <RowDefinition />
                 <RowDefinition />
@@ -59,14 +48,13 @@
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="3*"/>
             </Grid.ColumnDefinitions>
-
-            <!-- Contenu -->
+            
             <Label Content="Numéro d'employé:" Grid.Row="0" Grid.Column="0"/>
             <Label Content="Mot de passe:" Grid.Row="1" Grid.Column="0"/>
             <TextBox Text="{Binding Path=Login, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
             <PasswordBox x:Name="PasswordBox" PasswordChar="*" Grid.Row="1" Grid.Column="1"/>
             <Label Content="La connexion a été refusée !" Style="{StaticResource ErreurAuthentificationUsager}" Grid.Row="2" Grid.Column="1"/>
-            <Label Content="{Binding MessageErreurService}" Style="{StaticResource ErreurServeur}" Grid.Row="2" Grid.Column="1"/>
+            <Label Content="{Binding MessageErreurService}" Style="{StaticResource StyleErreur}" Grid.Row="2" Grid.Column="1"/>
             <Button Command="{Binding Path=LoginCommand}" CommandParameter="{Binding ElementName=This}" Content="Se connecter" Grid.Row="3" Grid.Column="1"/>
         </Grid>
     </GroupBox>

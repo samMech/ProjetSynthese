@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:InterfaceEntrepriseWPF.Vues"
-             x:Name="This"
              mc:Ignorable="d" d:DesignWidth="1400" Height="800" >
 
     <!-- Ressources locales -->
@@ -26,6 +25,30 @@
             <Setter Property="MaxLength" Value="200"/>
             <Setter Property="UndoLimit" Value="200"/>
             <Setter Property="SpellCheck.IsEnabled" Value="True"/>            
+        </Style>
+
+        <!-- Style pour les erreurs de saisies dans la plage horaire -->
+        <Style x:Key="ErreurDebutPlage" TargetType="{x:Type ComposantsUtils:TimePicker}">
+            <Style.Resources>
+                <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource StyleTexte}">                    
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=ErreurDebutPlage}" Value="True">
+                            <Setter Property="Foreground" Value="Red"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Style.Resources>
+        </Style>
+        <Style x:Key="ErreurFinPlage" TargetType="{x:Type ComposantsUtils:TimePicker}">
+            <Style.Resources>
+                <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource StyleTexte}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=ErreurFinPlage}" Value="True">
+                            <Setter Property="Foreground" Value="Red"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Style.Resources>
         </Style>
 
     </UserControl.Resources>
@@ -51,8 +74,18 @@
                         <Label Content="1) Choisir une date"/>
                         <Calendar x:Name="CalendrierSelection" SelectedDate="{Binding Path=DateJour}"/>
 
+                        <!-- Durée -->
+                        <Label Content="2) Choisir la durée d'un rendez-vous"/>
+                        <ComboBox Margin="10" ItemsSource="{Binding Path=DureesRDV}" SelectedValue="{Binding Path=DureeRDV}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Label Content="{Binding}" ContentStringFormat="{}{0} minutes" Style="{StaticResource StyleTexte}" Padding="0"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+
                         <!-- Plage horaire -->
-                        <Label Content="2) Choisir une plage horaire"/>
+                        <Label Content="3) Choisir une plage horaire"/>
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="1*"/>
@@ -62,20 +95,10 @@
                             </Grid.ColumnDefinitions>
                             
                             <Label Content="De" Grid.Column="0"/>
-                            <ComposantsUtils:TimePicker Grid.Column="1" HeureJour="{Binding Path=DebutPlageAjout}"/>
+                            <ComposantsUtils:TimePicker Grid.Column="1" HeureJour="{Binding Path=DebutPlageAjout}" Style="{StaticResource ErreurDebutPlage}"/>
                             <Label Content="à" Grid.Column="2"/>
-                            <ComposantsUtils:TimePicker Grid.Column="3" HeureJour="{Binding Path=FinPlageAjout}"/>
+                            <ComposantsUtils:TimePicker Grid.Column="3" HeureJour="{Binding Path=FinPlageAjout}" Style="{StaticResource ErreurFinPlage}"/>
                         </Grid>
-
-                        <!-- Durée -->
-                        <Label Content="3) Choisir la durée d'un rendez-vous"/>
-                        <ComboBox Margin="10" ItemsSource="{Binding DureesRDV}" SelectedIndex="0">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <Label Content="{Binding}" ContentStringFormat="{}{0} minutes" Style="{StaticResource StyleTexte}" Padding="0"/>
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
 
                         <Button Content="Ajouter les disponibilités" Command="{Binding Path=AjouterDisposCommand}"/>
 

@@ -75,7 +75,7 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         }
 
         /// <summary>
-        /// Est-ce que l'authentification a réussie
+        /// Est-ce que l'authentification a échouée
         /// </summary>
         public bool ErreurAuthentificationUsager
         {

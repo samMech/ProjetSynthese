@@ -10,6 +10,7 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
     class AffichageRDVVueModele : VueModele
     {
         // Attributs
+        private DateTime _dateJour;
 
         // Commandes
         private ICommand _gererDisposCommand;
@@ -26,6 +27,22 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         //============//
         // Propriétés //
         //============//
+
+        /// <summary>
+        /// La date du calendrier
+        /// </summary>
+        public DateTime DateJour
+        {
+            get { return _dateJour; }
+            set
+            {
+                if (_dateJour != null)
+                {
+                    _dateJour = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         /// <summary>
         /// Commande pour le bouton permettant d'aller à la page pour gérer les disponibilités

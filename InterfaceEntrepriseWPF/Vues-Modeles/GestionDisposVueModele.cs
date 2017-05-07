@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace InterfaceEntrepriseWPF.Vues_Modeles
@@ -14,6 +16,7 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         private DateTime _dateJour;
         private DateTime _debutPlageAjout;
         private DateTime _finPlageAjout;
+        private int _dureeRDV;
         private string _raison;
 
         // Commandes
@@ -22,13 +25,23 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         private ICommand _modifierDispoCommand;
         private ICommand _supprimerDisposCommand;
 
+        // Pour les erreurs
+        private bool _erreurDebutPlage;
+        private bool _erreurFinPlage;
+
         /// <summary>
         /// Constructeur par défaut
         /// </summary>
         public GestionDisposVueModele()
         {
             // Ajustement du titre de la fenêtre
-            TitrePage = "Gestion des disponibilités";            
+            TitrePage = "Gestion des disponibilités";
+
+            // Initialisation des valeurs
+            DateJour = DateTime.Today;
+            DureeRDV = DureesRDV.First();
+            DebutPlageAjout = DateTime.Now.AddMinutes(DureeRDV - DateTime.Now.Minute % DureeRDV);
+            FinPlageAjout = DebutPlageAjout.AddMinutes(DureeRDV);
         }
 
         //============//
@@ -41,6 +54,22 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         public List<int> DureesRDV
         {
             get { return _dureesRDV; }            
+        }
+
+        /// <summary>
+        /// La durée d'un rendez-vous
+        /// </summary>
+        public int DureeRDV
+        {
+            get { return _dureeRDV; }
+            set
+            {
+                if (DureesRDV.Contains(value))
+                {
+                    _dureeRDV = value;
+                    OnPropertyChanged();
+                }
+            }
         }
 
         /// <summary>
@@ -76,6 +105,19 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         }
 
         /// <summary>
+        /// Est-ce que le début de la plage est invalide ?
+        /// </summary>
+        public bool ErreurDebutPlage
+        {
+            get { return _erreurDebutPlage; }
+            set
+            {
+                _erreurDebutPlage = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
         /// La fin de la plage d'ajout
         /// </summary>
         public DateTime FinPlageAjout
@@ -88,6 +130,19 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
                     _finPlageAjout = value;
                     OnPropertyChanged();
                 }
+            }
+        }
+        
+        /// <summary>
+        /// Est-ce que la fin de la plage est valide
+        /// </summary>
+        public bool ErreurFinPlage
+        {
+            get { return _erreurFinPlage; }
+            set
+            {
+                _erreurFinPlage = value;
+                OnPropertyChanged();
             }
         }
 
@@ -172,6 +227,20 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         // Méthodes //
         //==========//
 
+        // Méthode pour valider le début de la plage d'ajout
+        private bool ValiderDebutPlage()
+        {
+            ErreurDebutPlage = DebutPlageAjout.TimeOfDay < DateTime.Now.TimeOfDay;
+            return !ErreurDebutPlage; 
+        }
+
+        // Méthode pour valider la fin de la plage d'ajout
+        private bool ValiderFinPlage()
+        {
+            ErreurFinPlage = FinPlageAjout.TimeOfDay < DebutPlageAjout.AddMinutes(DureeRDV).TimeOfDay;
+            return !ErreurFinPlage;
+        }
+
         // Méthode pour ajouter des disponibilités
         private void AjouterDispos(object obj)
         {
@@ -181,8 +250,7 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         // Méthode pour savoir si on peut ajouter des disponibilités
         private bool CanAjouterDispos(object obj)
         {
-            Console.WriteLine("Date:{0:dd} / Début {0:HH:mm} / Fin {0:HH:mm}", DateJour, DebutPlageAjout, FinPlageAjout);
-            return DateJour >= DateTime.Today && DebutPlageAjout.TimeOfDay >= DateTime.Now.TimeOfDay;
+            return DateJour >= DateTime.Today && ValiderDebutPlage() && ValiderFinPlage();
         }
 
         // Méthode pour modifier une disponibilité
@@ -218,3 +286,4 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
 
     }
 }
+

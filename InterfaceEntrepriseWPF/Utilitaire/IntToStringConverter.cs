@@ -11,7 +11,7 @@ namespace InterfaceEntrepriseWPF.Utilitaire
     /// <summary>
     /// Classe pour convertir un int en string et vice versa
     /// </summary>
-    class IntToStringConverter : IValueConverter
+    public class IntToStringConverter : IValueConverter
     {
         // Convertion int --> string
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

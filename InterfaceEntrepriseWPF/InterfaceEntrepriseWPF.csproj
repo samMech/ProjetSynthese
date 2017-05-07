@@ -64,8 +64,10 @@
     <Compile Include="Modele\RestClient.cs" />
     <Compile Include="Utilitaire\IntToStringConverter.cs" />
     <Compile Include="Utilitaire\JsonUtil.cs" />
+    <Compile Include="Utilitaire\ConversionUtil.cs" />
     <Compile Include="Vues-Modeles\AffichageRDVVueModele.cs" />
     <Compile Include="Vues-Modeles\GestionDisposVueModele.cs" />
+    <Compile Include="Vues-Modeles\IPassword.cs" />
     <Compile Include="Vues-Modeles\Pages.cs" />
     <Compile Include="Vues-Modeles\PortailEmployeVueModele.cs" />
     <Compile Include="Vues-Modeles\RelayCommand.cs" />

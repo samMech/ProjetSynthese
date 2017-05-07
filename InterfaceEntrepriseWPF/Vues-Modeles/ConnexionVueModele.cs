@@ -1,9 +1,12 @@
 ﻿using InterfaceEntrepriseWPF.Modele;
+using InterfaceEntrepriseWPF.Utilitaire;
 using ProjetRDV247.Modele;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Runtime.InteropServices;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -18,7 +21,6 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
     {
         // Attributs
         private string _login = "";
-        private string _password = "";
 
         // Commandes
         private ICommand _loginCommand;
@@ -55,23 +57,7 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
                 }
             }
         }
-
-        /// <summary>
-        /// Le mot de passe utilisateur
-        /// </summary>
-        public string Password
-        {
-            get { return _password; }
-            set
-            {
-                if (!_password.Equals(value))
-                {
-                    _password = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
+        
         /// <summary>
         /// Commande pour le bouton de connexion
         /// </summary>
@@ -134,7 +120,7 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
             try
             {
                 // Tentative de connexion (authentification)
-                Employe emp = RestDao.ConnexionEmploye(Login, Password);
+                Employe emp = RestDao.ConnexionEmploye(Login, ConversionUtil.SecureStringToString(GetSecurePassword(obj)));
 
                 if (emp != null)
                 {
@@ -165,7 +151,19 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         // Méthode pour savoir si la connexion est possible
         private bool CanConnexionUsager(object obj)
         {
-            return _login.Length > 0 && _password.Length > 0;
+            SecureString password = GetSecurePassword(obj);
+            if (password != null)
+            {                
+                return Login.Length > 0 && password.Length > 0;
+            }
+            return false;                     
+        }
+
+        // Méthode pour récupérer le password de la vue
+        private SecureString GetSecurePassword(object obj)
+        {
+            IPassword passwordContainer = obj as IPassword;
+            return (passwordContainer != null) ? passwordContainer.Password : null;
         }
 
     }        

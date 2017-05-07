@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -19,7 +20,7 @@ namespace InterfaceEntrepriseWPF.Vues
     /// <summary>
     /// Logique d'interaction pour VueConnexion.xaml
     /// </summary>
-    public partial class VueConnexion : UserControl
+    public partial class VueConnexion : UserControl, IPassword
     {
         /// <summary>
         /// Constructeur par défaut
@@ -28,5 +29,12 @@ namespace InterfaceEntrepriseWPF.Vues
         {
             InitializeComponent();
         }
+
+        // Implémentation de la propriété pour récupérer le password
+        public SecureString Password
+        {
+            get { return PasswordBox.SecurePassword; }
+        }
+
     }
 }

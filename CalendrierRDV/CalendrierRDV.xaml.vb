@@ -275,7 +275,6 @@ Public Class CalendrierRDV
 
     'Méthode pour afficher la liste des rendez-vous actuelle
     Private Sub AfficherListeRV()
-
         'Réinitialisation des rendez-vous affichés
         For Each elem In gHoraire.Children.OfType(Of FrameworkElement).Where(Function(x) x.Name.StartsWith("rvcell")).ToList()
             gHoraire.Children.Remove(elem)

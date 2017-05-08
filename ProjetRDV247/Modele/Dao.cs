@@ -74,7 +74,7 @@ namespace ProjetRDV247.Modele
                                            where r.id_employe_rdv == idEmploye
                                             && r.debut_rdv >= DbFunctions.TruncateTime(dateDebut)
                                             && r.fin_rdv <= DbFunctions.TruncateTime(DbFunctions.AddDays(dateFin,1))
-                                           select r).OrderBy(r => r.debut_rdv.TimeOfDay).ToList();
+                                           select r).OrderBy(r => r.debut_rdv).ToList();
                 return dispos;
             }
         }

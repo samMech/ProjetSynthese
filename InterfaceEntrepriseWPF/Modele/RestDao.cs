@@ -95,9 +95,7 @@ namespace InterfaceEntrepriseWPF.Modele
                 dateDebut = pdateDebut, dateFin = pdateFin,
                 dureeMinutesDispo = dureeMinutesRDV, idType = idTypeRDV },
                 new JsonSerializerSettings() { DateFormatHandling = DateFormatHandling.MicrosoftDateFormat });
-
-            Console.WriteLine("{0}", rc.PostData);
-
+            
             // Récupération de la réponse
             string response = rc.MakeRequest();
             return JsonUtil.DeserialiserListeJson<Rendezvous>(response, "AjouterDisposResult");

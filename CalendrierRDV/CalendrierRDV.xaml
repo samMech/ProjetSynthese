@@ -35,6 +35,7 @@
                                     <Condition Binding="{Binding Path=DateDebut, ElementName=This, Converter={StaticResource IsSemaineCourante}}" Value="True" />
                                 </MultiDataTrigger.Conditions>
                                 <Setter Property="BorderBrush" Value="Green"/>
+                                <Setter Property="BorderThickness" Value="3"/>
                             </MultiDataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -47,7 +48,7 @@
                         <Setter Property="FontSize" Value="12" />
                     </Style>
                     <Style TargetType="{x:Type local:CelluleRDV}">
-                        <Setter Property="Margin" Value="0" />
+                        <Setter Property="Margin" Value="1,0,0,0" />
                     </Style>
                     <Style TargetType="{x:Type Separator}">
                         <Setter Property="Margin" Value="0,0,0,-5" />

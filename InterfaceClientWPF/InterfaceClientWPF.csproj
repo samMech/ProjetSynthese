@@ -64,6 +64,7 @@
     <Compile Include="Utilitaire\JsonUtil.cs" />
     <Compile Include="ViewModels\ApplicationViewModel.cs" />
     <Compile Include="ViewModels\ConnexionViewModel.cs" />
+    <Compile Include="ViewModels\ConsulterHoraireViewModel.cs" />
     <Compile Include="ViewModels\CreerCompteViewModel.cs" />
     <Compile Include="ViewModels\PortailClientViewModel.cs" />
     <Compile Include="ViewModels\RelayCommand.cs" />

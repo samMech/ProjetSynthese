@@ -5,8 +5,31 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:InterfaceClientWPF.Vues"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="400" d:DesignWidth="600">
+    
+    <UserControl.Resources>
+        <DataTemplate x:Key="ListeEmployes_DataTemplate">
+           <Label>
+               <Label.Content>
+                   <TextBlock>
+                       <TextBlock.Text>
+                           <MultiBinding StringFormat="{}{0} {1}">
+                               <Binding Path="prenom_employe"/>
+                               <Binding Path="nom_employe"/>
+                           </MultiBinding>
+                       </TextBlock.Text>
+                   </TextBlock>
+               </Label.Content>
+           </Label>
+        </DataTemplate>
+    </UserControl.Resources>
+    
     <Grid>
-            
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="0*"/>
+        </Grid.RowDefinitions>
+        <ComboBox ItemsSource="{Binding ListeEmployes}" ItemTemplate="{StaticResource ListeEmployes_DataTemplate}" x:Name="comboBox" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" Width="120"/>
+
     </Grid>
 </UserControl>

@@ -133,7 +133,7 @@ namespace ProjetRDV247.Modele
                 List<Rendezvous> rdvs = (from r in bd.Rendezvous
                                          where r.id_client_rdv == idClient
                                             && r.debut_rdv >= DbFunctions.TruncateTime(date)
-                                         select r).OrderBy(r => r.debut_rdv.TimeOfDay).ToList();
+                                         select r).OrderBy(r => r.debut_rdv).ToList();
                 return rdvs;
             }
         }

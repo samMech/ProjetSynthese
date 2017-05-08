@@ -26,7 +26,7 @@ namespace ProjetRDV247.Controle
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
             UriTemplate = "CreerClient")]
-        bool CreerClient(Client c);
+        bool CreerClient(string nom_client, string prenom_client, string telephone_client, string courriel_client, string password_client);
 
         [OperationContract]
         [WebInvoke(Method = "POST",

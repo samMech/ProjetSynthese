@@ -4,6 +4,45 @@
              xmlns:local="clr-namespace:InterfaceClientWPF"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <Style TargetType="{x:Type Border}">
+            <Setter Property="BorderBrush" Value="#7F00B9FF" />
+            <Setter Property="CornerRadius" Value="5" />
+            <Setter Property="Margin" Value="5" />
+        </Style>
+
+        <!-- Texte -->
+        <Style x:Key="StyleTexte" TargetType="{x:Type Control}">
+            <Setter Property="FontWeight" Value="Normal" />
+            <Setter Property="FontSize" Value="14" />
+        </Style>
+
+        <!-- Bouton -->
+        <Style x:Key="StyleBoutton" TargetType="{x:Type Button}" BasedOn="{StaticResource StyleTexte}" >
+            <Setter Property="Margin" Value="10" />
+            <Setter Property="Padding" Value="4,0" />
+            <Setter Property="Height" Value="30"/>
+        </Style>
+        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource StyleBoutton}" />
+
+        <!-- Messages d'erreur -->
+        <Style x:Key="StyleErreur" TargetType="{x:Type Label}" BasedOn="{StaticResource StyleTexte}">
+            <Setter Property="Foreground" Value="Red"/>
+        </Style>
+
+        <!-- Titres -->
+        <Style x:Key="StyleTitre" TargetType="{x:Type Control}" BasedOn="{StaticResource StyleTexte}">
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontWeight" Value="Bold" />
+        </Style>
+
+        <!-- Zones de saisies -->
+        <Style x:Key="StyleZoneSaisie" TargetType="{x:Type Control}" BasedOn="{StaticResource StyleTexte}">
+            <Style.Triggers>
+                <Trigger Property="IsFocused" Value="True">
+                    <Setter Property="BorderBrush" Value="{Binding BorderBrush, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Border}, AncestorLevel=2}}" />
+                    <Setter Property="BorderThickness" Value="2" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </Application.Resources>
 </Application>

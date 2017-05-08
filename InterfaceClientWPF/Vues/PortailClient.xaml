@@ -6,7 +6,50 @@
              xmlns:local="clr-namespace:InterfaceClientWPF.Vues"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+
+    <UserControl.Resources>
+
+        <!-- Data Template pour la liste des rendez-vous -->
+        <DataTemplate x:Key="ListeRDV_DataTemplate">
+            <Grid Margin="0,0,10,0">
+                <Grid.Resources>
+                    <Style TargetType="{x:Type Label}" BasedOn="{StaticResource StyleTexte}">
+                        <Setter Property="FontSize" Value="16"/>
+                    </Style>
+                </Grid.Resources>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Column="0" HorizontalContentAlignment="Center">
+                    <Label.Content>
+                        <TextBlock>
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="De {0:HH:mm} à {1:HH:mm}">
+                                    <Binding Path="debut_rdv" />
+                                    <Binding Path="fin_rdv" />
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </Label.Content>
+                </Label>
+                <Separator VerticalContentAlignment="Bottom" VerticalAlignment="Bottom" Grid.Column="0"/>
+
+                <Label Content="{Binding id_employe_rdv}" ContentStringFormat="Employe #{0}" Grid.Column="1"/>
+                <Separator VerticalContentAlignment="Bottom" VerticalAlignment="Bottom" Grid.Column="1"/>
+
+            </Grid>
+        </DataTemplate>
+
+    </UserControl.Resources>
+
     <Grid>
-            
+        <Label x:Name="label" Content="Label" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+        <ScrollViewer HorizontalAlignment="Left" Height="219" Margin="10,41,0,0" VerticalAlignment="Top" Width="280">
+            <ItemsControl ItemsSource="{Binding ListeRendezvous}" ItemTemplate="{StaticResource ListeRDV_DataTemplate}"/>
+        </ScrollViewer>
+        <Button x:Name="button" Content="Consulter les horaires" Command="{Binding Path=ConsulterDisposCommand}" HorizontalAlignment="Left" Margin="123,269,0,0" VerticalAlignment="Top" Width="167" Height="21"/>
+
     </Grid>
 </UserControl>

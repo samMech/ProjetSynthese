@@ -4,9 +4,113 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CalendrierRDV"
-             mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-            
-    </Grid>
+             xmlns:gl="clr-namespace:System.Globalization;assembly=mscorlib"
+             mc:Ignorable="d"
+             x:Name="This"
+             d:DesignHeight="300" d:DesignWidth="900">
+
+    <UserControl.Resources>
+        <local:DateToDayTitleConverter x:Key="DateToDayTitle" />
+        <local:ColumnIsJourCourantConverter x:Key="ColumnIsJourCourant" />
+        <local:IsSemaineCouranteConverter x:Key="IsSemaineCourante" />
+    </UserControl.Resources>
+    
+    <Border CornerRadius="5" BorderThickness="5" BorderBrush="#FF3B8BFF" Padding="5" >
+        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" CanContentScroll="True" Margin="0,0,5,0">
+            <Grid x:Name="gHoraire" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" UseLayoutRounding="False" ScrollViewer.CanContentScroll="True">
+                <Grid.Resources>
+                    <Style x:Key="StyleBordure" TargetType="{x:Type Border}">
+                        <Setter Property="BorderBrush" Value="#FF3B8BFF" />
+                        <Setter Property="BorderThickness" Value="2" />
+                        <Setter Property="CornerRadius" Value="5" />
+                        <Setter Property="Margin" Value="2" />
+                    </Style>
+                    <Style TargetType="{x:Type Border}" BasedOn="{StaticResource StyleBordure}"/>
+                    <Style x:Key="StyleColonne" TargetType="{x:Type Border}" BasedOn="{StaticResource StyleBordure}">
+                        <Style.Triggers>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding Path=Name, RelativeSource={RelativeSource Self},
+                                        Converter={StaticResource ColumnIsJourCourant}}" Value="True"/>
+                                    <Condition Binding="{Binding Path=DateDebut, ElementName=This, Converter={StaticResource IsSemaineCourante}}" Value="True" />
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="BorderBrush" Value="Green"/>
+                            </MultiDataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                    
+                    <Style TargetType="{x:Type Label}">
+                        <Setter Property="HorizontalAlignment" Value="Center" />
+                        <Setter Property="VerticalAlignment" Value="Center" />
+                        <Setter Property="VerticalContentAlignment" Value="Center" />
+                        <Setter Property="FontWeight" Value="Bold" />
+                        <Setter Property="FontSize" Value="12" />
+                    </Style>
+                    <Style TargetType="{x:Type local:CelluleRDV}">
+                        <Setter Property="Margin" Value="0" />
+                    </Style>
+                    <Style TargetType="{x:Type Separator}">
+                        <Setter Property="Margin" Value="0,0,0,-5" />
+                        <Setter Property="VerticalAlignment" Value="Bottom" />
+                    </Style>
+                    <Style TargetType="{x:Type RowDefinition}">
+                        <Setter Property="MinHeight" Value="5" />
+                        <Setter Property="MaxHeight" Value="40" />
+                    </Style>
+                    <Style TargetType="{x:Type ColumnDefinition}">
+                        <Setter Property="MinWidth" Value="100" />
+                        <Setter Property="MaxWidth" Value="300" />
+                    </Style>
+                </Grid.Resources>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Titres -->
+                <Label x:Name="lblTitreSemaine" Content="{Binding Path=DateDebut, ElementName=This}" ContentStringFormat="Semaine du {0:dd MMMM yyyy}" FontSize="16" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8"/>
+                <Label x:Name="lblLundi" Content="{Binding Path=DateDebut, ElementName=This, Converter={StaticResource DateToDayTitle}, ConverterParameter=0}" Grid.Row="1" Grid.Column="1"/>
+                <Label x:Name="lblMardi" Content="{Binding Path=DateDebut, ElementName=This, Converter={StaticResource DateToDayTitle}, ConverterParameter=1}" Grid.Row="1" Grid.Column="2"/>
+                <Label x:Name="lblMercredi" Content="{Binding Path=DateDebut, ElementName=This, Converter={StaticResource DateToDayTitle}, ConverterParameter=2}" Grid.Row="1" Grid.Column="3"/>
+                <Label x:Name="lblJeudi" Content="{Binding Path=DateDebut, ElementName=This, Converter={StaticResource DateToDayTitle}, ConverterParameter=3}" Grid.Row="1" Grid.Column="4"/>
+                <Label x:Name="lblVendredi" Content="{Binding Path=DateDebut, ElementName=This, Converter={StaticResource DateToDayTitle}, ConverterParameter=4}" Grid.Row="1" Grid.Column="5"/>
+                <Label x:Name="lblSamedi" Content="{Binding Path=DateDebut, ElementName=This, Converter={StaticResource DateToDayTitle}, ConverterParameter=5}" Grid.Row="1" Grid.Column="6"/>
+                <Label x:Name="lblDimanche" Content="{Binding Path=DateDebut, ElementName=This, Converter={StaticResource DateToDayTitle}, ConverterParameter=6}" Grid.Row="1" Grid.Column="7"/>
+
+                <!-- Bordures pour les cases de titre -->
+                <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8"/>                
+                <Border Grid.Row="1" Grid.Column="0"/>
+                <Border Grid.Row="1" Grid.Column="1"/>
+                <Border Grid.Row="1" Grid.Column="2"/>
+                <Border Grid.Row="1" Grid.Column="3"/>
+                <Border Grid.Row="1" Grid.Column="4"/>
+                <Border Grid.Row="1" Grid.Column="5"/>
+                <Border Grid.Row="1" Grid.Column="6"/>
+                <Border Grid.Row="1" Grid.Column="7"/>
+
+                <!-- Bordures pour les colonnes de la grille -->
+                <Border x:Name="C0" Grid.Row="2" Grid.Column="0" Grid.RowSpan="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=RowDefinitions.Count, Mode=OneWay}" Style="{StaticResource StyleColonne}"/>
+                <Border x:Name="C1" Grid.Row="2" Grid.Column="1" Grid.RowSpan="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=RowDefinitions.Count, Mode=OneWay}" Style="{StaticResource StyleColonne}"/>
+                <Border x:Name="C2" Grid.Row="2" Grid.Column="2" Grid.RowSpan="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=RowDefinitions.Count, Mode=OneWay}" Style="{StaticResource StyleColonne}"/>
+                <Border x:Name="C3" Grid.Row="2" Grid.Column="3" Grid.RowSpan="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=RowDefinitions.Count, Mode=OneWay}" Style="{StaticResource StyleColonne}"/>
+                <Border x:Name="C4" Grid.Row="2" Grid.Column="4" Grid.RowSpan="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=RowDefinitions.Count, Mode=OneWay}" Style="{StaticResource StyleColonne}"/>
+                <Border x:Name="C5" Grid.Row="2" Grid.Column="5" Grid.RowSpan="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=RowDefinitions.Count, Mode=OneWay}" Style="{StaticResource StyleColonne}"/>
+                <Border x:Name="C6" Grid.Row="2" Grid.Column="6" Grid.RowSpan="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=RowDefinitions.Count, Mode=OneWay}" Style="{StaticResource StyleColonne}"/>
+                <Border x:Name="C7" Grid.Row="2" Grid.Column="7" Grid.RowSpan="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=RowDefinitions.Count, Mode=OneWay}" Style="{StaticResource StyleColonne}"/>
+               
+            </Grid>
+        </ScrollViewer>
+    </Border>
+    
 </UserControl>

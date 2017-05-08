@@ -64,12 +64,15 @@
     <Compile Include="CelluleRDV.xaml.vb">
       <DependentUpon>CelluleRDV.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utils\ColumnIsJourCourantConverter.vb" />
+    <Compile Include="Utils\DateToDayTitleConverter.vb" />
+    <Compile Include="Utils\IsSemaineCouranteConverter.vb" />
     <Compile Include="Utils\Utilitaire.vb" />
     <Page Include="CalendrierRDV.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="ICalendrierRDV.vb" />
+    <Compile Include="IRendezVous.vb" />
     <Compile Include="CalendrierRDV.xaml.vb">
       <DependentUpon>CalendrierRDV.xaml</DependentUpon>
       <SubType>Code</SubType>

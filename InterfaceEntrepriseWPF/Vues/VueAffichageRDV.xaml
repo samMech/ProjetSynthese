@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:InterfaceEntrepriseWPF.Vues"
-             mc:Ignorable="d" d:DesignWidth="1400" d:DesignHeight="750" >
+             mc:Ignorable="d" Width="1600" Height="880">
 
     <!-- Ressources locales -->
     <UserControl.Resources>
@@ -17,35 +17,29 @@
     <!-- Contenu -->
 
     <DockPanel LastChildFill="True">
+
+        <DockPanel DockPanel.Dock="Left" LastChildFill="True" Width="350">
         
-        <!-- La barre latérale -->
-        <Grid DockPanel.Dock="Left">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="6*"/>
-                <RowDefinition Height="1*"/>
-            </Grid.RowDefinitions>
-
-            <!-- Zone de sélection -->
-            <GroupBox Margin="5" Grid.Row="0">
-                <StackPanel Margin="5,0">                
-                    <!-- Date -->
-                    <Label Content="Choissisez une date"/>
-                    <Calendar x:Name="CalendrierSelection"/>                                
-                </StackPanel>
-            </GroupBox>
-
             <!-- Navigation -->
-            <StackPanel Grid.Row="1" Margin="5,0" VerticalAlignment="Bottom">
+            <StackPanel DockPanel.Dock="Bottom" Margin="5">
                 <Button Content="Accueil" Command="{Binding Path=PageAccueilCommand}"/>
                 <Button Content="Gérer les disponibilités" Command="{Binding Path=GererDisposCommand}"/>
             </StackPanel>
-        </Grid>
+
+            <!-- Zone de sélection -->
+            <GroupBox>
+                <StackPanel Margin="5,0">                
+                    <!-- Date -->
+                    <Label Content="Choissisez une date"/>
+                    <Calendar SelectedDate="{Binding Path=DateJour}"/>
+                </StackPanel>
+            </GroupBox>
+   
+        </DockPanel>
 
         <!-- Composant graphique -->
         <Border BorderThickness="2" Margin="5,15,5,0">
-            <ScrollViewer>
-                
-            </ScrollViewer>
+            <CalendrierRDV:CalendrierRDV ListeIRDV="{Binding Path=ListeRendezVous}" DateCourante="{Binding Path=DateJour}" CouleurStatut="{Binding Path=CouleurStatuts}"/>
         </Border>
 
     </DockPanel>

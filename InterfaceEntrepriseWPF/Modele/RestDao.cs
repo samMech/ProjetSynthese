@@ -35,6 +35,25 @@ namespace InterfaceEntrepriseWPF.Modele
         }
 
         /// <summary>
+        /// Méthode pour récupérer la liste des disponibilités de l'employé
+        /// </summary>
+        /// <param name="id_employe">L'identifiant de l'employé</param>
+        /// <returns>La liste des disponibilités de l'employé</returns>
+        public static List<Rendezvous> GetDisposEmploye(int id_employe)
+        {
+            // Création du client rest
+            RestClient rc = new RestClient("http://localhost:2057/Controle/ServiceRDV247.svc/GetDisposEmploye", HttpVerb.GET);
+
+            // Ajout des paramètres GET
+            rc.RestURL += String.Format("/{0}", id_employe);
+            rc.RestURL += String.Format("/{0}", DateTime.Today.ToString("yyyyMMdd"));
+
+            // Récupération de la réponse
+            string response = rc.MakeRequest();
+            return JsonUtil.DeserialiserListeJson<Rendezvous>(response, "GetDisposEmployeResult");
+        }
+
+        /// <summary>
         /// Méthode pour récupérer la liste des rendez-vous de l'employé
         /// </summary>
         /// <param name="id_employe">L'identifiant de l'employé</param>

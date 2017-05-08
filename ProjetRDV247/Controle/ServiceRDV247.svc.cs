@@ -45,7 +45,7 @@ namespace ProjetRDV247.Controle
         /// <param name="idEmploye">L'identifiant de l'employé</param>
         /// <param name="date">La date d'un jour dans la semaine en format 'yyyyMMdd'</param>
         /// <returns>La liste de toutes les disponibilités de l'employé pour cette semaine</returns>
-        public List<Rendezvous> GetDispoEmploye(string idEmploye, string date)
+        public List<Rendezvous> GetDisposEmploye(string idEmploye, string date)
         {
             // Validation des paramètres
             if (Utilitaire.ValiderEntier(idEmploye) == false || Utilitaire.ValiderDate(date) == false)         
@@ -58,7 +58,34 @@ namespace ProjetRDV247.Controle
             DateTime dateDebut = Utilitaire.TrouverLundiPrecedent(DateTime.ParseExact(date, "yyyyMMdd", CultureInfo.InvariantCulture));
 
             // On retourne les disponibilités de l'employé pour la semaine
-            return dao.GetDisposEmploye(Convert.ToInt32(idEmploye), dateDebut, dateDebut.AddDays(7));
+            //return dao.GetDisposEmploye(Convert.ToInt32(idEmploye), dateDebut, dateDebut.AddDays(7));
+            List<Rendezvous> resultats = new List<Rendezvous>();
+
+            Rendezvous rv = new Rendezvous();
+            rv.id_rdv = 1;
+            rv.debut_rdv = DateTime.Today.AddHours(8);
+            rv.fin_rdv = DateTime.Today.AddHours(9);
+            rv.id_client_rdv = 1;
+            rv.statut_rdv = "annule";
+            resultats.Add(rv);
+
+            rv = new Rendezvous();
+            rv.id_rdv = 2;
+            rv.debut_rdv = DateTime.Today.AddHours(9);
+            rv.fin_rdv = DateTime.Today.AddHours(10);
+            rv.id_client_rdv = 2;
+            rv.statut_rdv = "dispos";
+            resultats.Add(rv);
+
+            rv = new Rendezvous();
+            rv.id_rdv = 3;
+            rv.debut_rdv = DateTime.Today.AddHours(11);
+            rv.fin_rdv = DateTime.Today.AddHours(12);
+            rv.id_client_rdv = 3;
+            rv.statut_rdv = "rv";
+            resultats.Add(rv);
+
+            return resultats;
         }
         
         /// <summary>
@@ -97,25 +124,32 @@ namespace ProjetRDV247.Controle
             DateTime dateJour = DateTime.ParseExact(date, "yyyyMMdd", CultureInfo.InvariantCulture).Date;
 
             // On retourne les rendez-vous de l'employé pour cette journée
-            List<Rendezvous> resultats = new List<Rendezvous>();//dao.GetDisposEmploye(Convert.ToInt32(idEmploye), dateJour, dateJour.AddDays(1));
+            //List<Rendezvous> resultats = dao.GetDisposEmploye(Convert.ToInt32(idEmploye), dateJour, dateJour.AddDays(1));
             //return resultats.Where(r => r.statut_rdv.Equals("LIBRE") == false).ToList();
+            List<Rendezvous> resultats = new List<Rendezvous>();
 
             Rendezvous rv = new Rendezvous();
+            rv.id_rdv = 1;
             rv.debut_rdv = DateTime.Today.AddHours(8);
             rv.fin_rdv = DateTime.Today.AddHours(9);
             rv.id_client_rdv = 1;
+            rv.statut_rdv = "annule";
             resultats.Add(rv);
 
             rv = new Rendezvous();
+            rv.id_rdv = 2;
             rv.debut_rdv = DateTime.Today.AddHours(9);
             rv.fin_rdv = DateTime.Today.AddHours(10);
             rv.id_client_rdv = 2;
+            rv.statut_rdv = "dispos";
             resultats.Add(rv);
 
             rv = new Rendezvous();
+            rv.id_rdv = 3;
             rv.debut_rdv = DateTime.Today.AddHours(11);
             rv.fin_rdv = DateTime.Today.AddHours(12);
             rv.id_client_rdv = 3;
+            rv.statut_rdv = "rv";
             resultats.Add(rv);
 
             return resultats;

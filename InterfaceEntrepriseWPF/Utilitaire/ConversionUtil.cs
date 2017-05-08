@@ -1,5 +1,8 @@
-﻿using System;
+﻿using InterfaceEntrepriseWPF.Modele;
+using ProjetRDV247.Modele;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security;
@@ -16,8 +19,8 @@ namespace InterfaceEntrepriseWPF.Utilitaire
         /// <summary>
         /// Méthode pour convertir un SecureString en String
         /// </summary>
-        /// <param name="secureString"></param>
-        /// <returns></returns>
+        /// <param name="secureString">La chaîne sécurisée à convertir</param>
+        /// <returns>La châine non sécurisée correspondante</returns>
         public static string SecureStringToString(SecureString secureString)
         {
             if (secureString == null)
@@ -35,6 +38,36 @@ namespace InterfaceEntrepriseWPF.Utilitaire
             {
                 Marshal.ZeroFreeGlobalAllocUnicode(unmanagedString);
             }
+        }
+
+        /// <summary>
+        /// Méthode pour adapter une liste de Rendezvous en collection observable de IRendezvous
+        /// </summary>
+        /// <param name="listeRDV">La liste de Rendezvous</param>
+        /// <returns>La collection observable de IRendezVous</returns>
+        public static ObservableCollection<CalendrierRDV.IRendezVous> ConvertirRDVToIRDV(List<Rendezvous> listeRDV)
+        {
+            ObservableCollection<CalendrierRDV.IRendezVous> listeIRDV = new ObservableCollection<CalendrierRDV.IRendezVous>();
+            foreach (Rendezvous rdv in listeRDV)
+            {
+                listeIRDV.Add(new RendezVousAdapter(rdv));
+            }
+            return listeIRDV;
+        }
+
+        /// <summary>
+        /// Méthode pour reconvertir une liste de RendezVousAdapter en liste de Rendezvous
+        /// </summary>
+        /// <param name="listeIRDV">La liste des RendezVousAdapter de type IRendezvous</param>
+        /// <returns>La liste des rendez-vous originaux</returns>
+        public static List<Rendezvous> ConvertirIRDVToRDV(ObservableCollection<CalendrierRDV.IRendezVous> listeIRDV)
+        {
+            List<Rendezvous> listeRDV = new List<Rendezvous>();
+            foreach (CalendrierRDV.IRendezVous irdv in listeIRDV)
+            {
+                listeRDV.Add(((RendezVousAdapter)irdv).RDV);
+            }
+            return listeRDV;
         }
 
     }

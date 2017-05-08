@@ -37,8 +37,8 @@ namespace ProjetRDV247.Controle
         [WebInvoke(Method = "GET",
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
-            UriTemplate = "GetDispoEmploye/{idEmploye}/{date}")]
-        List<Rendezvous> GetDispoEmploye(string idEmploye, string date);
+            UriTemplate = "GetDisposEmploye/{idEmploye}/{date}")]
+        List<Rendezvous> GetDisposEmploye(string idEmploye, string date);
 
         [OperationContract]
         [WebInvoke(Method = "GET",

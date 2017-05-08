@@ -1,23 +1,34 @@
-﻿using System;
+﻿using InterfaceEntrepriseWPF.Modele;
+using InterfaceEntrepriseWPF.Utilitaire;
+using ProjetRDV247.Modele;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace InterfaceEntrepriseWPF.Vues_Modeles
 {
     class GestionDisposVueModele : VueModele
     {
+        // Constantes
+        private static readonly List<int> DUREES_RDV = new List<int>(new int[]{10, 15, 20, 30, 45, 60, 90, 120});
+        private static readonly Dictionary<string, Color> COULEURS_STATUT = new Dictionary<string, Color>();
+
         // Attributs
-        private static readonly List<int> _dureesRDV = new List<int>(new int[]{10, 15, 20, 30, 45, 60, 90, 120});
         private DateTime _dateJour;
         private DateTime _debutPlageAjout;
         private DateTime _finPlageAjout;
         private int _dureeRDV;
         private string _raison;
+
+        // La liste des disponibilités pour le composant graphique
+        private ObservableCollection<CalendrierRDV.IRendezVous> _listeDisponibilites;
 
         // Commandes
         private ICommand _consulterRDVCommand;
@@ -28,6 +39,17 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         // Pour les erreurs
         private bool _erreurDebutPlage;
         private bool _erreurFinPlage;
+
+        /// <summary>
+        /// Constructeur statique pour initialiser les constantes
+        /// </summary>
+        static GestionDisposVueModele()
+        {
+            // TODO (prendre la liste du service web pour les status)
+            COULEURS_STATUT.Add("rv", Colors.Lavender);
+            COULEURS_STATUT.Add("dispo", Colors.GhostWhite);
+            COULEURS_STATUT.Add("annule", Colors.LightPink);
+        }
 
         /// <summary>
         /// Constructeur par défaut
@@ -42,6 +64,7 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
             DureeRDV = DureesRDV.First();
             DebutPlageAjout = DateTime.Now.AddMinutes(DureeRDV - DateTime.Now.Minute % DureeRDV);
             FinPlageAjout = DebutPlageAjout.AddMinutes(DureeRDV);
+            ListeDisponibilites = new ObservableCollection<CalendrierRDV.IRendezVous>();
         }
 
         //============//
@@ -53,7 +76,15 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         /// </summary>
         public List<int> DureesRDV
         {
-            get { return _dureesRDV; }            
+            get { return DUREES_RDV; }            
+        }
+
+        /// <summary>
+        /// Les couleurs pour les différents statuts
+        /// </summary>
+        public Dictionary<string, Color> CouleurStatuts
+        {
+            get { return COULEURS_STATUT; }
         }
 
         /// <summary>
@@ -160,6 +191,19 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         }
 
         /// <summary>
+        /// La liste des disponibilités pour le composant graphique
+        /// </summary>
+        public ObservableCollection<CalendrierRDV.IRendezVous> ListeDisponibilites
+        {
+            get { return _listeDisponibilites; }
+            set
+            {
+                _listeDisponibilites = (value == null) ? new ObservableCollection<CalendrierRDV.IRendezVous>() : value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
         /// Commande pour le bouton pour l'ajout de disponibilités
         /// </summary>
         public ICommand AjouterDisposCommand
@@ -227,11 +271,36 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         // Méthodes //
         //==========//
 
+        /// <summary>
+        /// Mise à jour des données
+        /// </summary>
+        public override void UpdateData()
+        {
+            // Récupération des disponibilités et mise à jour
+            Employe emp = ApplicationVueModele.Instance.EmployeConnecte;
+            ListeDisponibilites = ConversionUtil.ConvertirRDVToIRDV(RestDao.GetDisposEmploye(emp.id_employe));
+        }
+
+        // Méthode pour ajouter des disponibilités
+        private void AjouterDispos(object obj)
+        {
+            //=======================================
+            // TEST TEST TEST
+
+            //=======================================
+        }
+
+        // Méthode pour savoir si on peut ajouter des disponibilités
+        private bool CanAjouterDispos(object obj)
+        {
+            return DateJour >= DateTime.Today && ValiderDebutPlage() && ValiderFinPlage();
+        }
+        
         // Méthode pour valider le début de la plage d'ajout
         private bool ValiderDebutPlage()
         {
             ErreurDebutPlage = DebutPlageAjout.TimeOfDay < DateTime.Now.TimeOfDay;
-            return !ErreurDebutPlage; 
+            return !ErreurDebutPlage;
         }
 
         // Méthode pour valider la fin de la plage d'ajout
@@ -239,18 +308,6 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         {
             ErreurFinPlage = FinPlageAjout.TimeOfDay < DebutPlageAjout.AddMinutes(DureeRDV).TimeOfDay;
             return !ErreurFinPlage;
-        }
-
-        // Méthode pour ajouter des disponibilités
-        private void AjouterDispos(object obj)
-        {
-
-        }
-
-        // Méthode pour savoir si on peut ajouter des disponibilités
-        private bool CanAjouterDispos(object obj)
-        {
-            return DateJour >= DateTime.Today && ValiderDebutPlage() && ValiderFinPlage();
         }
 
         // Méthode pour modifier une disponibilité

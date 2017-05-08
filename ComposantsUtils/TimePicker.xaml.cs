@@ -20,7 +20,7 @@ namespace ComposantsUtils
     /// <summary>
     /// Logique d'interaction pour TimePicker.xaml
     /// </summary>
-    public partial class TimePicker : UserControl, INotifyPropertyChanged
+    public partial class TimePicker : UserControl
     { 
         /// <summary>
         /// Constructeur par défaut
@@ -29,19 +29,7 @@ namespace ComposantsUtils
         {
             InitializeComponent();
         }
-
-        // Événement pour les notifications
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        /// <summary>
-        /// Méthode pour déclencher l'événement de notification du changement d'un propriété
-        /// </summary>
-        /// <param name="nomPropriete">Le nom de la propriété qui a changée</param>
-        protected virtual void OnPropertyChanged([CallerMemberName] string nomPropriete = null)
-        {
-            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nomPropriete));
-        }
-
+        
         //============//
         // Propriétés //
         //============//

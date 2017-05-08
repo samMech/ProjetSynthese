@@ -37,16 +37,6 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nomPropriete));
         }
 
-        /// <summary>
-        /// Méthode pour déclencher l'événement de notification du changement d'un propriété
-        /// </summary>
-        /// <param name="nomPropriete">Le nom de la propriété qui a changée</param>
-        protected virtual void OnPropertyChanged(object sender, [CallerMemberName] string nomPropriete = null)
-        {
-            // Si l'événement n'est pas null
-            this.PropertyChanged?.Invoke(sender, new PropertyChangedEventArgs(nomPropriete));
-        }
-
         //============//
         // Propriétés //
         //============//

@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:InterfaceEntrepriseWPF.Vues"
-             mc:Ignorable="d" d:DesignWidth="1400" Height="800" >
+             mc:Ignorable="d" Width="1600" Height="860">
 
     <!-- Ressources locales -->
     <UserControl.Resources>
@@ -14,14 +14,14 @@
         <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource StyleTexte}"/>
 
         <!-- Style pour la zone de commentaire -->
-        <Style x:Key="StyleTextBoxRaison" TargetType="{x:Type TextBox}" BasedOn="{StaticResource StyleTexte}">
+        <Style x:Key="StyleTextBoxRaison" TargetType="{x:Type TextBox}" BasedOn="{StaticResource StyleZoneSaisie}">
             <Setter Property="Margin" Value="10"/>
             <Setter Property="BorderBrush" Value="Black"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="TextWrapping" Value="Wrap"/>
             <Setter Property="AcceptsReturn" Value="True"/>
-            <Setter Property="MinLines" Value="5"/>
-            <Setter Property="MaxLines" Value="5"/>
+            <Setter Property="MinLines" Value="4"/>
+            <Setter Property="MaxLines" Value="4"/>
             <Setter Property="MaxLength" Value="200"/>
             <Setter Property="UndoLimit" Value="200"/>
             <Setter Property="SpellCheck.IsEnabled" Value="True"/>            
@@ -30,7 +30,7 @@
         <!-- Style pour les erreurs de saisies dans la plage horaire -->
         <Style x:Key="ErreurDebutPlage" TargetType="{x:Type ComposantsUtils:TimePicker}">
             <Style.Resources>
-                <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource StyleTexte}">                    
+                <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource StyleZoneSaisie}">                    
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding Path=ErreurDebutPlage}" Value="True">
                             <Setter Property="Foreground" Value="Red"/>
@@ -41,7 +41,7 @@
         </Style>
         <Style x:Key="ErreurFinPlage" TargetType="{x:Type ComposantsUtils:TimePicker}">
             <Style.Resources>
-                <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource StyleTexte}">
+                <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource StyleZoneSaisie}">
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding Path=ErreurFinPlage}" Value="True">
                             <Setter Property="Foreground" Value="Red"/>
@@ -57,7 +57,7 @@
     <DockPanel LastChildFill="True">
 
         <!-- Barre latérale -->
-        <DockPanel DockPanel.Dock="Left">
+        <DockPanel DockPanel.Dock="Left" LastChildFill="True" Width="350">
 
             <!-- Navigation -->
             <StackPanel DockPanel.Dock="Bottom">
@@ -65,18 +65,18 @@
                 <Button Content="Consulter les rendez-vous" Command="{Binding Path=ConsulterRDVCommand}"/>
             </StackPanel>
 
-            <StackPanel Margin="5">
+            <StackPanel>
                 <!-- Zone d'ajout -->
                 <GroupBox Header="Ajout de disponibilités" Style="{StaticResource StyleTitre}">
-                    <StackPanel Margin="5">
+                    <StackPanel Margin="5,0">
 
                         <!-- Date -->
                         <Label Content="1) Choisir une date"/>
-                        <Calendar x:Name="CalendrierSelection" SelectedDate="{Binding Path=DateJour}"/>
+                        <Calendar SelectedDate="{Binding Path=DateJour}"/>
 
                         <!-- Durée -->
                         <Label Content="2) Choisir la durée d'un rendez-vous"/>
-                        <ComboBox Margin="10" ItemsSource="{Binding Path=DureesRDV}" SelectedValue="{Binding Path=DureeRDV}">
+                        <ComboBox Margin="10,0" ItemsSource="{Binding Path=DureesRDV}" SelectedValue="{Binding Path=DureeRDV}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <Label Content="{Binding}" ContentStringFormat="{}{0} minutes" Style="{StaticResource StyleTexte}" Padding="0"/>
@@ -89,9 +89,9 @@
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="4*"/>
+                                <ColumnDefinition Width="3*"/>
                                 <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="4*"/>
+                                <ColumnDefinition Width="3*" />
                             </Grid.ColumnDefinitions>
                             
                             <Label Content="De" Grid.Column="0"/>
@@ -108,9 +108,9 @@
                 <!-- Zone de modification -->
                 <GroupBox Header="Modification / Suppression" Style="{StaticResource StyleTitre}">
                     <StackPanel Margin="5,0">
-                        <Button Content="Modifier la disponibilité" Command="{Binding Path=ModifierDispoCommand}"/>
-                        <Button Content="Supprimer les disponibilités" Command="{Binding Path=SupprimerDisposCommand}"/>
                         <TextBox Text="Raison..." Style="{StaticResource StyleTextBoxRaison}"/>
+                        <Button Content="Modifier la disponibilité" Command="{Binding Path=ModifierDispoCommand}"/>
+                        <Button Content="Supprimer les disponibilités" Command="{Binding Path=SupprimerDisposCommand}"/>                        
                     </StackPanel>
                 </GroupBox>
 
@@ -118,16 +118,11 @@
             
         </DockPanel>
         
-        <!-- Avertissement -->
-        <Label DockPanel.Dock="Bottom" Content="Attention la/les disponibilités sélectionnées contiennent des rendez-vous ! Veuillez fournir une raison." VerticalContentAlignment="Center" Grid.Row="0" Grid.ColumnSpan="3" HorizontalContentAlignment="Center"/>
-
         <!-- Composant graphique -->
         <Border BorderThickness="2" Margin="5,15,5,0">
-            <ScrollViewer>
-                
-            </ScrollViewer>
+            <CalendrierRDV:CalendrierRDV ListeIRDV="{Binding Path=ListeDisponibilites}" DateCourante="{Binding Path=DateJour}" CouleurStatut="{Binding Path=CouleurStatuts}"/>
         </Border>
-
+        
     </DockPanel>
 
 </UserControl>

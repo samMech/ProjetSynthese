@@ -50,5 +50,12 @@ namespace InterfaceClientWPF.Model
             string response = rc.MakeRequest();
             return JsonUtil.DeserialiserJson<bool>(response, "CreerClientResult");
         }
+
+        public static List<Employe> GetEmployes()
+        {
+            RestClient rc = new RestClient("http://localhost:2057/Controle/ServiceRDV247.svc/GetEmployes", HttpVerb.GET);
+            string response = rc.MakeRequest();
+            return JsonUtil.DeserialiserListeJson<Employe>(response, "GetEmployesResult");
+        }
     }
 }

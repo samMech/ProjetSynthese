@@ -19,7 +19,7 @@ namespace ComposantsUtils.Utilitaire
         // Conversion Date --> Heure
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            DateTime time = (DateTime)value;
+            time = (DateTime)value;
             return time.Hour;
         }
 

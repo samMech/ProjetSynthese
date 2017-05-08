@@ -28,7 +28,7 @@ namespace ComposantsUtils.Utilitaire
         {
             int minutes;
             if (Int32.TryParse(value.ToString(), out minutes))
-            {   
+            {
                 // Ajustement des minutes seulement sur le temps original
                 time = time.AddMinutes(minutes - time.Minute);                
             }

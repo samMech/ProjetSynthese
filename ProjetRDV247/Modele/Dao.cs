@@ -11,7 +11,7 @@ namespace ProjetRDV247.Modele
         {
             using (RDV247Entities bd = new RDV247Entities())
             {                
-                return bd.Employe.Find(idEmployeValue);                
+                return bd.Employe.Include(x => x.Typerdv).SingleOrDefault(x => x.id_employe == idEmployeValue);                
             }
         }
 
@@ -70,7 +70,7 @@ namespace ProjetRDV247.Modele
         {
             using (RDV247Entities bd = new RDV247Entities())
             {
-                List<Rendezvous> dispos = (from r in bd.Rendezvous
+                List<Rendezvous> dispos = (from r in bd.Rendezvous//.Include(x => x.Client)
                                            where r.id_employe_rdv == idEmploye
                                             && r.debut_rdv >= DbFunctions.TruncateTime(dateDebut)
                                             && r.fin_rdv <= DbFunctions.TruncateTime(DbFunctions.AddDays(dateFin,1))

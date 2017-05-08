@@ -75,14 +75,27 @@
                         <Calendar SelectedDate="{Binding Path=DateJour}"/>
 
                         <!-- Durée -->
-                        <Label Content="2) Choisir la durée d'un rendez-vous"/>
-                        <ComboBox Margin="10,0" ItemsSource="{Binding Path=DureesRDV}" SelectedValue="{Binding Path=DureeRDV}">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <Label Content="{Binding}" ContentStringFormat="{}{0} minutes" Style="{StaticResource StyleTexte}" Padding="0"/>
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
+                        <Label Content="2) Choisir la durée et le type des rendez-vous"/>
+                        <Grid Margin="10,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <ComboBox Grid.Column="0" ItemsSource="{Binding Path=DureesRDV}" SelectedValue="{Binding Path=DureeRDV}" Margin="0,0,5,0">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Label  Content="{Binding}" ContentStringFormat="{}{0} minutes" Style="{StaticResource StyleTexte}" Padding="0"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                            <ComboBox Grid.Column="1" ItemsSource="{Binding Path=ListeTypesRDV}" SelectedValue="{Binding Path=TypeRDV}" Margin="5,0,0,0">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Label  Content="{Binding Path=nom_typerdv}" Style="{StaticResource StyleTexte}" Padding="0"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </Grid>
 
                         <!-- Plage horaire -->
                         <Label Content="3) Choisir une plage horaire"/>

@@ -25,10 +25,14 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         private DateTime _debutPlageAjout;
         private DateTime _finPlageAjout;
         private int _dureeRDV;
-        private string _raison;
+        private Typerdv _typeRDV;
+        private string _raison = "";
 
         // La liste des disponibilités pour le composant graphique
         private ObservableCollection<CalendrierRDV.IRendezVous> _listeDisponibilites;
+
+        // La liste des types de rendez-vous pour l'employé courant
+        private List<Typerdv> _listeTypeRDV;
 
         // Commandes
         private ICommand _consulterRDVCommand;
@@ -88,7 +92,7 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         }
 
         /// <summary>
-        /// La durée d'un rendez-vous
+        /// La durée des rendez-vous à ajouter
         /// </summary>
         public int DureeRDV
         {
@@ -100,6 +104,19 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
                     _dureeRDV = value;
                     OnPropertyChanged();
                 }
+            }
+        }
+
+        /// <summary>
+        /// Le type des rendez-vous à ajouter
+        /// </summary>
+        public Typerdv TypeRDV
+        {
+            get { return _typeRDV; }
+            set
+            {
+                _typeRDV = value;
+                OnPropertyChanged();
             }
         }
 
@@ -204,6 +221,22 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         }
 
         /// <summary>
+        /// La liste des types de rendez-vous de l'employé
+        /// </summary>
+        public List<Typerdv> ListeTypesRDV
+        {
+            get { return _listeTypeRDV; }
+            set
+            {
+                if (value != null)
+                {
+                    _listeTypeRDV = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        /// <summary>
         /// Commande pour le bouton pour l'ajout de disponibilités
         /// </summary>
         public ICommand AjouterDisposCommand
@@ -279,15 +312,36 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
             // Récupération des disponibilités et mise à jour
             Employe emp = ApplicationVueModele.Instance.EmployeConnecte;
             ListeDisponibilites = ConversionUtil.ConvertirRDVToIRDV(RestDao.GetDisposEmploye(emp.id_employe));
+            ListeTypesRDV = emp.Typerdv.ToList();
+            TypeRDV = ListeTypesRDV[0];
         }
 
         // Méthode pour ajouter des disponibilités
         private void AjouterDispos(object obj)
         {
-            //=======================================
-            // TEST TEST TEST
+            try
+            {
+                // Calcul de la date de début et de fin et de la durée
+                DateTime dateDebut = DateJour.Date + DebutPlageAjout.TimeOfDay;
+                DateTime dateFin = dateDebut + (FinPlageAjout - DebutPlageAjout);
 
-            //=======================================
+                // Insertion
+                Employe emp = ApplicationVueModele.Instance.EmployeConnecte;
+                List<Rendezvous> disposAjoutees = RestDao.AjouterDispos(emp.id_employe, dateDebut, dateFin, DureeRDV, TypeRDV.id_typerdv);
+
+                Console.WriteLine("Nb ajouts: {0}", disposAjoutees.Count);
+
+                // Mise à jour de la liste locales
+                foreach (Rendezvous d in disposAjoutees)
+                {
+                    ListeDisponibilites.Add(new RendezVousAdapter(d));
+                }
+            }
+            catch (Exception)
+            {
+                // TODO
+                throw;
+            }
         }
 
         // Méthode pour savoir si on peut ajouter des disponibilités
@@ -299,7 +353,7 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         // Méthode pour valider le début de la plage d'ajout
         private bool ValiderDebutPlage()
         {
-            ErreurDebutPlage = DebutPlageAjout.TimeOfDay < DateTime.Now.TimeOfDay;
+            ErreurDebutPlage = (DateJour == DateTime.Today) && (DebutPlageAjout.TimeOfDay < DateTime.Now.TimeOfDay);
             return !ErreurDebutPlage;
         }
 

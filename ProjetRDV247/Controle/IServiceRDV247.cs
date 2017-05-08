@@ -78,8 +78,8 @@ namespace ProjetRDV247.Controle
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
-            UriTemplate = "AjouterDispo")]
-        List<Rendezvous> AjouterDispo(int idEmploye, DateTime debut, DateTime fin, TimeSpan dureeDispo, int idType);
+            UriTemplate = "AjouterDispos")]
+        List<Rendezvous> AjouterDispos(int idEmploye, DateTime dateDebut, DateTime dateFin, int dureeMinutesDispo, int idType);
 
         [OperationContract]
         [WebInvoke(Method = "POST",

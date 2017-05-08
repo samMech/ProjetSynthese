@@ -243,8 +243,8 @@ namespace ProjetRDV247.Controle
         /// <param name="dureeDispo">La durée d'une disponibilité</param>
         /// <param name="idType">Le id du type de disponibilité</param>
         /// <returns>La liste des disponibilités ajoutées (celles qui n'étaient pas en conflit)</returns>
-        public List<Rendezvous> AjouterDispo(int idEmploye, DateTime dateDebut, DateTime dateFin, TimeSpan dureeDispo, int idType)
-        {
+        public List<Rendezvous> AjouterDispos(int idEmploye, DateTime dateDebut, DateTime dateFin, int dureeMinutesDispo, int idType)
+        {   
             // Création de l'objet d'accès aux données
             dao = new Dao();
             
@@ -261,6 +261,7 @@ namespace ProjetRDV247.Controle
             List<Rendezvous> dispoExistantes = dao.GetDisposEmploye(idEmploye, dateDebut.Date, dateFin.Date);
 
             // Création des disponibilités (TODO: prendre le statut prédéfini dans la BD ???)
+            TimeSpan dureeDispo = new TimeSpan(0, dureeMinutesDispo, 0);
             dispoAjoutees = HoraireUtil.CreerDispos(dateDebut, dateFin, dureeDispo, dispoExistantes, idEmploye, idType, "LIBRE");
 
             // Sauvegarde des nouvelles disponibilités

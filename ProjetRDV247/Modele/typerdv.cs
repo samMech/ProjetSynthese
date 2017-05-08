@@ -11,7 +11,8 @@ namespace ProjetRDV247.Modele
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.Runtime.Serialization;
+
     public partial class Typerdv
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -23,7 +24,8 @@ namespace ProjetRDV247.Modele
         public int id_typerdv { get; set; }
         public string nom_typerdv { get; set; }
         public int id_employe_typerdv { get; set; }
-    
+
+        [IgnoreDataMember]
         public virtual Employe Employe { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Rendezvous> Rendezvous { get; set; }

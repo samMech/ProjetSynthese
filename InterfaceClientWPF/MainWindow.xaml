@@ -17,6 +17,15 @@
         <DataTemplate DataType="{x:Type localVuesModeles:PortailClientViewModel}">
             <vues:PortailClient />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type localVuesModeles:CreerCompteViewModel}">
+            <vues:CreerCompte/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type localVuesModeles:ConsulterHoraireViewModel}">
+            <vues:ConsulterHoraire/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type localVuesModeles:ConsulterHoraireViewModel}">
+            <vues:ConsulterHoraire/>
+        </DataTemplate>
     </Window.Resources>
 
     <Border BorderThickness="5" HorizontalAlignment="Center" VerticalAlignment="Center">

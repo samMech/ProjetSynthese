@@ -20,14 +20,14 @@ namespace ProjetRDV247.Controle
             return "Hello World !";
         }
 
-        public bool CreerClient(Client c)
+        public bool CreerClient(string nom_client, string prenom_client, string telephone_client, string courriel_client, string password_client)
         {
             using (RDV247Entities bd = new RDV247Entities())
             {
                 ObjectParameter responseMessage = new ObjectParameter("responseMessage", typeof(string));
                 ObjectParameter responseCode = new ObjectParameter("responseCode", typeof(int));
 
-                bd.ajouterClient(c.nom_client, c.prenom_client, c.telephone_client, c.courriel_client, c.password_client,
+                bd.ajouterClient(nom_client, prenom_client, telephone_client, courriel_client, password_client,
                     responseMessage, responseCode);
 
                 return (int)responseCode.Value==1;

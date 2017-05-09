@@ -11,8 +11,11 @@ Public Class IsSemaineCouranteConverter
         'Récupération du premier jour affiché
         Dim premierJour As DateTime = (CType(value, DateTime))
 
+        'Calcul du premier jour de la semaine courante
+        Dim premierJourCourant As DateTime = Utilitaire.TrouverLundiPrecedent(DateTime.Today)
+
         'Comparaison
-        Return DateTime.Today <= premierJour AndAlso (premierJour.Date - DateTime.Today).Days < 7
+        Return Math.Abs((premierJour.Date - premierJourCourant).Days) < 7
 
     End Function
 

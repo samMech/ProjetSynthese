@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:InterfaceEntrepriseWPF.Vues"
-             mc:Ignorable="d" Width="1600" Height="880">
+             mc:Ignorable="d" MaxHeight="750">
 
     <!-- Ressources locales -->
     <UserControl.Resources>
@@ -27,20 +27,20 @@
             </StackPanel>
 
             <!-- Zone de sélection -->
-            <GroupBox>
-                <StackPanel Margin="5,0">                
-                    <!-- Date -->
-                    <Label Content="Choissisez une date"/>
-                    <Calendar SelectedDate="{Binding Path=DateJour}"/>
-                </StackPanel>
-            </GroupBox>
+            <TabControl Margin="10" Style="{StaticResource TabTemplateStyle}">
+                <TabItem Header="Sélection">
+                    <StackPanel Margin="5,0">
+                        <!-- Date -->
+                        <Label Content="Choissisez une date"/>
+                        <Calendar SelectedDate="{Binding Path=DateJour}"/>
+                    </StackPanel>
+                </TabItem>
+            </TabControl>
    
         </DockPanel>
 
         <!-- Composant graphique -->
-        <Border BorderThickness="2" Margin="5,15,5,0">
-            <CalendrierRDV:CalendrierRDV ListeIRDV="{Binding Path=ListeRendezVous}" DateCourante="{Binding Path=DateJour}" CouleurStatut="{Binding Path=CouleurStatuts}"/>
-        </Border>
+        <CalendrierRDV:CalendrierRDV Margin="0" ListeIRDV="{Binding Path=ListeRendezVous}" DateCourante="{Binding Path=DateJour}" CouleurStatut="{Binding Path=CouleurStatuts}"/>
 
     </DockPanel>
 </UserControl>

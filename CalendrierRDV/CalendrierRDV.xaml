@@ -16,8 +16,8 @@
     </UserControl.Resources>
     
     <Border CornerRadius="5" BorderThickness="5" BorderBrush="#FF3B8BFF" Padding="5" >
-        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" CanContentScroll="True" Margin="0,0,5,0">
-            <Grid x:Name="gHoraire" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" UseLayoutRounding="False" ScrollViewer.CanContentScroll="True">
+        <ScrollViewer HorizontalScrollBarVisibility="auto" VerticalScrollBarVisibility="auto" CanContentScroll="True">
+            <Grid x:Name="gHoraire" Margin="0,0,5,0">
                 <Grid.Resources>
                     <Style x:Key="StyleBordure" TargetType="{x:Type Border}">
                         <Setter Property="BorderBrush" Value="#FF3B8BFF" />

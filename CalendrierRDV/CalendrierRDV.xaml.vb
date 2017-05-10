@@ -342,8 +342,8 @@ Public Class CalendrierRDV
             End If
 
             'Création du composant pour afficher le rendez-vous
-            Dim couleurRV As Color = If(rv.Statut IsNot Nothing AndAlso CouleurStatut IsNot Nothing AndAlso CouleurStatut.ContainsKey(rv.Statut), CouleurStatut(rv.Statut), Colors.Transparent)
-            Dim celluleRV = New CelluleRDV(New SolidColorBrush(couleurRV), infos)
+            Dim couleurRV As Color = rv.CouleurRDV
+            Dim celluleRV = New CelluleRDV(New SolidColorBrush(rv.CouleurRDV), infos)
             celluleRV.Name = String.Format("rvcell{0}", rv.ID)
 
             'Ajout du composant dans la grille

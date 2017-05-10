@@ -311,7 +311,7 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         {
             // Récupération des disponibilités et types
             Employe emp = ApplicationVueModele.Instance.EmployeConnecte;
-            ListeDisponibilites = ConversionUtil.ConvertirRDVToIRDV(RestDao.GetDisposEmploye(emp.id_employe));
+            ListeDisponibilites = ConversionUtil.ConvertirRDVToIRDV(RestDao.GetDisposEmploye(emp.id_employe), COULEURS_STATUT);
             ListeTypesRDV = emp.Typerdv.ToList();
             TypeRDV = ListeTypesRDV[0];
         }
@@ -334,7 +334,7 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
                 // Mise à jour de la liste locales
                 foreach (Rendezvous d in disposAjoutees)
                 {
-                    ListeDisponibilites.Add(new RendezVousAdapter(d));
+                    ListeDisponibilites.Add(new RendezVousAdapter(d, COULEURS_STATUT));
                 }
             }
             catch (Exception)
@@ -382,7 +382,7 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
             rv.statut_rdv = "RDV";
             rv.Employe = ApplicationVueModele.Instance.EmployeConnecte;
 
-            ListeDisponibilites.Add(new RendezVousAdapter(rv));
+            ListeDisponibilites.Add(new RendezVousAdapter(rv, COULEURS_STATUT));
             Console.WriteLine("Nb Dispos: {0}", ListeDisponibilites.Count);
 
             //==================================

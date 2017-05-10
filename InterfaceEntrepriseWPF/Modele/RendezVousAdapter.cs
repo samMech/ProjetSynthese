@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace InterfaceEntrepriseWPF.Modele
 {
@@ -13,17 +14,31 @@ namespace InterfaceEntrepriseWPF.Modele
     /// </summary>
     public class RendezVousAdapter: CalendrierRDV.IRendezVous
     {
-        // Le rendez
+        // Attributs
         private Rendezvous _rdv;
+        private Boolean _isSelectionne;
+        private Dictionary<string, Color> _couleursStatut;
         
         /// <summary>
         /// Constructeur par défaut
         /// </summary>
         public RendezVousAdapter(Rendezvous rdv)
         {
-            RDV = rdv;
+            this.RDV = rdv;
+            this.IsSelectionne = false;
+            this.CouleursStatut = new Dictionary<string, Color>();
         }
-                
+
+        /// <summary>
+        /// Constructeur avec paramètres
+        /// </summary>
+        public RendezVousAdapter(Rendezvous rdv, Dictionary<string, Color> couleursStatus)
+        {
+            this.RDV = rdv;
+            this.IsSelectionne = false;
+            this.CouleursStatut = couleursStatus;
+        }
+
         // Propriété pour changer le rendez-vous
         public Rendezvous RDV
         {
@@ -34,6 +49,19 @@ namespace InterfaceEntrepriseWPF.Modele
                     throw new ArgumentNullException();
                 
                 _rdv = value;
+            }
+        }
+
+        // Propriété pour la liste des couleurs
+        public Dictionary<string, Color> CouleursStatut
+        {
+            get { return _couleursStatut; }
+            set
+            {
+                if (value != null)
+                {
+                    _couleursStatut = value;
+                }
             }
         }
 
@@ -69,6 +97,27 @@ namespace InterfaceEntrepriseWPF.Modele
         public string Type
         {
             get { return (_rdv.Typerdv == null) ? null : _rdv.Typerdv.nom_typerdv; }
+        }
+
+        public Color CouleurRDV
+        {
+            get
+            {
+                if (CouleursStatut.ContainsKey(RDV.statut_rdv))
+                {
+                    return CouleursStatut[RDV.statut_rdv];
+                }
+                else
+                {
+                    return Colors.Transparent;
+                }
+            }
+        }
+
+        public bool IsSelectionne
+        {
+            get { return _isSelectionne; }
+            set { _isSelectionne = value; }
         }
     }
 }

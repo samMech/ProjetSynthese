@@ -11,4 +11,7 @@ Public Interface IRendezVous
     ReadOnly Property Statut() As String
     ReadOnly Property NomClient() As String
 
+    ReadOnly Property CouleurRDV() As Color
+    Property IsSelectionne() As Boolean
+
 End Interface

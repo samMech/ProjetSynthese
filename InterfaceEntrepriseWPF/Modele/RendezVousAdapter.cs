@@ -2,7 +2,9 @@
 using ProjetRDV247.Modele;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
@@ -12,7 +14,7 @@ namespace InterfaceEntrepriseWPF.Modele
     /// <summary>
     /// Adapter pour utiliser un rendez-vous avec l'interface IRendezVous
     /// </summary>
-    public class RendezVousAdapter: CalendrierRDV.IRendezVous
+    public class RendezVousAdapter: CalendrierRDV.IRendezVous, INotifyPropertyChanged
     {
         // Attributs
         private Rendezvous _rdv;
@@ -64,24 +66,31 @@ namespace InterfaceEntrepriseWPF.Modele
                 }
             }
         }
+        
+        // Événement pour notifier la vue quand une propriété change
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged([CallerMemberName] string nomPropriete = null)
+        {
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nomPropriete));
+        }
 
         //===============================//
         // Implémentation de l'interface //
         //===============================//
-
-        public TimeSpan Duree
-        {
-            get { return _rdv.fin_rdv - _rdv.debut_rdv; }
-        }
 
         public int ID
         {
             get { return _rdv.id_rdv; }
         }
 
-        public DateTime JourHeure
+        public DateTime Debut
         {
             get { return _rdv.debut_rdv; }
+        }
+
+        public DateTime Fin
+        {
+            get { return _rdv.fin_rdv; }
         }
 
         public string NomClient
@@ -99,25 +108,29 @@ namespace InterfaceEntrepriseWPF.Modele
             get { return (_rdv.Typerdv == null) ? null : _rdv.Typerdv.nom_typerdv; }
         }
 
-        public Color CouleurRDV
+        public SolidColorBrush CouleurRDV
         {
             get
             {
                 if (CouleursStatut.ContainsKey(RDV.statut_rdv))
                 {
-                    return CouleursStatut[RDV.statut_rdv];
+                    return new SolidColorBrush(CouleursStatut[RDV.statut_rdv]);
                 }
                 else
                 {
-                    return Colors.Transparent;
+                    return new SolidColorBrush(Colors.Transparent);
                 }
             }
         }
-
+        
         public bool IsSelectionne
         {
             get { return _isSelectionne; }
-            set { _isSelectionne = value; }
+            set
+            {
+                _isSelectionne = value;
+                OnPropertyChanged();
+            }
         }
     }
 }

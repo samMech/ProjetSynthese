@@ -203,12 +203,22 @@ Public Class CalendrierRDV
         'Choix selon l'action
         Select Case e.Action
             Case NotifyCollectionChangedAction.Add
+                'On affiche les nouveaux rendez-vous
                 For Each r As IRendezVous In e.NewItems
                     AfficherRV(r)
                 Next
             Case NotifyCollectionChangedAction.Remove
-                AfficherListeRV()
+                'On enlève les rendez-vous affichés
+                Dim elem As CelluleRDV
+                For Each r As IRendezVous In e.NewItems
+                    elem = gHoraire.Children.OfType(Of CelluleRDV).Where(Function(x) x.Name.StartsWith("rvcell" + r.ID.ToString())).SingleOrDefault()
+                    If elem IsNot Nothing Then
+                        gHoraire.Children.Remove(elem)
+                    End If
+                Next
             Case NotifyCollectionChangedAction.Replace
+                'On réaffiche la liste
+                AfficherListeRV()
             Case NotifyCollectionChangedAction.Move
             Case Else
         End Select
@@ -246,68 +256,10 @@ Public Class CalendrierRDV
     ' Méthodes '
     '=========='
 
-    ''' <summary>
-    ''' Fonction pour retourner la liste des rendez-vous présentement sélectionnés
-    ''' </summary>
-    ''' <returns></returns>
-    Public Function GetSelectedRV() As ObservableCollection(Of IRendezVous)
-        Dim id As Integer
-        Dim liste As ObservableCollection(Of IRendezVous) = New ObservableCollection(Of IRendezVous)
-        For Each rvCell As CelluleRDV In gHoraire.Children.OfType(Of FrameworkElement).Where(Function(x) x.Name.StartsWith("rvcell")).ToList()
-            If rvCell.IsSelectionne Then
-                id = Convert.ToInt32(rvCell.Name.Replace("rvcell", ""))
-                liste.Add((From r In ListeIRDV Where r.ID = id Select r).First())
-            End If
-        Next
-        Return liste
-    End Function
-
-    ''' <summary>
-    ''' Méthode pour ajouter un rendez-vous à la liste
-    ''' </summary>
-    ''' <param name="rv">Le rendez-vous à ajouter</param>
-    Public Sub AjouterRV(rv As IRendezVous)
-        If (From r In ListeIRDV Where r.ID = rv.ID Select r).FirstOrDefault() Is Nothing Then
-            ListeIRDV.Add(rv)
-            AfficherRV(rv)
-        End If
-    End Sub
-
-    ''' <summary>
-    ''' Méthode pour supprimer un rendez-vous de la liste
-    ''' </summary>
-    ''' <param name="rvID">Le id du rendez-vous à supprimer</param>
-    Public Sub SupprimerRV(rvID As Integer)
-        Dim rv = (From r In ListeIRDV Where r.ID = rvID Select r).FirstOrDefault
-        If rv IsNot Nothing Then
-            ListeIRDV.Remove(rv)
-            Dim rvCell = gHoraire.Children.OfType(Of FrameworkElement).Where(Function(x) x.Name.Equals("rvcell" + rvID.ToString)).First()
-            gHoraire.Children.Remove(rvCell)
-        End If
-    End Sub
-
-    ''' <summary>
-    ''' Méthode pour modifier un rendez-vous existant ou l'ajout
-    ''' </summary>
-    ''' <param name="rv2">Le rendez-vous modifié</param>
-    Public Sub ModifierRV(rv2 As IRendezVous)
-
-        'Suppression du rendez-vous existant
-        Dim rv = (From r In ListeIRDV Where r.ID = rv2.ID Select r).FirstOrDefault
-        If rv IsNot Nothing Then
-            ListeIRDV.Remove(rv)
-            Dim rvCell = gHoraire.Children.OfType(Of FrameworkElement).Where(Function(x) x.Name.Equals("rvcell" + rv2.ID.ToString)).First()
-            gHoraire.Children.Remove(rvCell)
-        End If
-
-        'Ajout du rendez-vous modifié
-        AjouterRV(rv2)
-    End Sub
-
     'Méthode pour afficher la liste des rendez-vous actuelle
     Private Sub AfficherListeRV()
         'Réinitialisation des rendez-vous affichés
-        For Each elem In gHoraire.Children.OfType(Of FrameworkElement).Where(Function(x) x.Name.StartsWith("rvcell")).ToList()
+        For Each elem As CelluleRDV In gHoraire.Children.OfType(Of CelluleRDV).Where(Function(x) x.Name.StartsWith("rvcell")).ToList()
             gHoraire.Children.Remove(elem)
         Next
 
@@ -323,27 +275,16 @@ Public Class CalendrierRDV
     'Méthode pour afficher un rendez-vous
     Private Sub AfficherRV(rv As IRendezVous)
         'On vérifie d'abord si le rendez-vous est valide pour la vue courante
-        If rv.JourHeure >= DateDebut + HeureDebut.TimeOfDay AndAlso rv.JourHeure + rv.Duree < DateDebut.AddDays(6) + HeureFin.TimeOfDay Then
+        If rv.Debut >= DateDebut + HeureDebut.TimeOfDay AndAlso rv.Fin < DateDebut.AddDays(6) + HeureFin.TimeOfDay Then
 
             'Calcul de la position et de la hauteur du RV
             Dim heureBase As DateTime = New DateTime(HeureDebut.Year, HeureDebut.Month, HeureDebut.Day, HeureDebut.Hour, 0, 0)
-            Dim colonneRV = 1 + (rv.JourHeure - DateDebut).Days
-            Dim ligneRV = 2 + (rv.JourHeure.TimeOfDay - heureBase.TimeOfDay).TotalMinutes / IntervalleTempsMin.TotalMinutes
-            Dim nbLignesRV = (rv.Duree.TotalMinutes / IntervalleTempsMin.TotalMinutes)
-
-            'Préparation des infos à afficher dans la cellule
-            Dim infos = New List(Of String)
-            infos.Add(rv.JourHeure.TimeOfDay.ToString("hh\:mm") + " à " + rv.JourHeure.TimeOfDay.Add(rv.Duree).ToString("hh\:mm"))
-            If (rv.Type IsNot Nothing) AndAlso (rv.Type.Length <> 0) Then
-                infos.Add(rv.Type)
-            End If
-            If (rv.NomClient IsNot Nothing) AndAlso (rv.NomClient.Length <> 0) Then
-                infos.Add(rv.NomClient)
-            End If
+            Dim colonneRV = 1 + (rv.Debut - DateDebut).Days
+            Dim ligneRV = 2 + (rv.Debut.TimeOfDay - heureBase.TimeOfDay).TotalMinutes / IntervalleTempsMin.TotalMinutes
+            Dim nbLignesRV = (rv.Fin - rv.Debut).TotalMinutes / IntervalleTempsMin.TotalMinutes
 
             'Création du composant pour afficher le rendez-vous
-            Dim couleurRV As Color = rv.CouleurRDV
-            Dim celluleRV = New CelluleRDV(New SolidColorBrush(rv.CouleurRDV), infos)
+            Dim celluleRV = New CelluleRDV(rv)
             celluleRV.Name = String.Format("rvcell{0}", rv.ID)
 
             'Ajout du composant dans la grille
@@ -366,7 +307,7 @@ Public Class CalendrierRDV
 
             'On efface la grille et les labels pour les heures
             gHoraire.RowDefinitions.Clear()
-            For Each elem In gHoraire.Children.OfType(Of FrameworkElement).Where(Function(x) x.Name.StartsWith("lblTemps")).ToList()
+            For Each elem As FrameworkElement In gHoraire.Children.OfType(Of FrameworkElement).Where(Function(x) x.Name.StartsWith("lblTemps")).ToList()
                 gHoraire.Children.Remove(elem)
             Next
 

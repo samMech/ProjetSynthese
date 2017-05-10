@@ -5,9 +5,7 @@ Public Class CelluleRDV
     Implements INotifyPropertyChanged
 
     'Attributs
-    Private _couleurRV As SolidColorBrush = New SolidColorBrush(Colors.Transparent)
-    Private _infoRV As List(Of String) = New List(Of String)
-    Private _isSelectionne As Boolean
+    Private _irdv As IRendezVous
 
     '==============='
     ' Constructeurs '
@@ -17,25 +15,19 @@ Public Class CelluleRDV
     ''' Constructeur par défaut
     ''' </summary>
     Public Sub New()
-
         'Cet appel est requis par le concepteur.
         InitializeComponent()
-
-        'Ajoutez une initialisation quelconque après l'appel InitializeComponent().
-        IsSelectionne = False
     End Sub
 
     ''' <summary>
     ''' Constructeur avec paramètres
     ''' </summary>
-    ''' <param name="couleur">La couleur de fond</param>
-    ''' <param name="infos">La liste des informations à afficher</param>
-    Public Sub New(couleur As SolidColorBrush, infos As List(Of String))
+    ''' <param name="irdv">L'objet de type IRendezVous à afficher</param>
+    Public Sub New(irdv As IRendezVous)
         Me.New()
 
         'Initialisation des propriétés
-        Me.CouleurRV = couleur
-        Me.InfoRV = infos
+        Me.IRDV = irdv
     End Sub
 
     '============'
@@ -54,42 +46,17 @@ Public Class CelluleRDV
     End Sub
 
     ''' <summary>
-    ''' La couleur de la cellule
+    ''' L'objet de type IRendezVous à afficher
     ''' </summary>
-    Public Property CouleurRV As SolidColorBrush
+    Public Property IRDV As IRendezVous
         Get
-            Return _couleurRV
+            Return _irdv
         End Get
-        Set(value As SolidColorBrush)
+        Set(value As IRendezVous)
             If value IsNot Nothing Then
-                Me._couleurRV = value
+                Me._irdv = value
                 NotifyPropertyChanged()
             End If
-        End Set
-    End Property
-
-    Public Property InfoRV As List(Of String)
-        Get
-            Return _infoRV
-        End Get
-        Set(value As List(Of String))
-            If value IsNot Nothing Then
-                Me._infoRV = value
-                NotifyPropertyChanged()
-            End If
-        End Set
-    End Property
-
-    ''' <summary>
-    ''' Est-ce que le rendez-vous est sélectionné
-    ''' </summary>
-    Public Property IsSelectionne As Boolean
-        Get
-            Return _isSelectionne
-        End Get
-        Set(value As Boolean)
-            Me._isSelectionne = value
-            NotifyPropertyChanged()
         End Set
     End Property
 
@@ -98,9 +65,9 @@ Public Class CelluleRDV
     '=========='
 
     'Listener pour quand on clique sur le rendez-vous
-    Private Sub MaGrille_MouseLeftButtonDown(sender As Object, e As System.Windows.Input.MouseButtonEventArgs)
+    Private Sub RDVPanel_MouseLeftButtonDown(sender As Object, e As MouseButtonEventArgs)
         'On inverse le statut de sélection
-        IsSelectionne = Not IsSelectionne
+        IRDV.IsSelectionne = Not IRDV.IsSelectionne
     End Sub
 
 End Class

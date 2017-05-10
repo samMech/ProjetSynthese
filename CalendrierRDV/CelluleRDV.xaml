@@ -6,53 +6,72 @@
              xmlns:local="clr-namespace:CalendrierRDV"
              mc:Ignorable="d" 
              x:Name="This"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="300"
+             DataContext="{Binding IRDV, ElementName=This}">
 
     <UserControl.Resources>
         
         <!-- Bordure -->
         <Style x:Key="StyleBordure" TargetType="{x:Type Border}">
-            <Setter Property="Border.BorderBrush" Value="#FF3B8BFF" />
+            <Setter Property="BorderBrush" Value="#FF3B8BFF" />
             <Style.Triggers>
-                <DataTrigger Binding="{Binding ElementName=MaGrille, Path=IsMouseOver}" Value="true">
-                    <Setter Property="Border.BorderBrush" Value="#FF007A59" />
+                <DataTrigger Binding="{Binding ElementName=RDVPanel, Path=IsMouseOver}" Value="true">
+                    <Setter Property="BorderBrush" Value="#FF007A59" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=IsSelectionne}" Value="True">
+                    <Setter Property="BorderBrush" Value="#FF007A59" />
                 </DataTrigger>
             </Style.Triggers>
         </Style>
         
         <!-- Cellule -->
-        <Style x:Key="StyleCellule" TargetType="{x:Type Grid}">
+        <Style x:Key="StyleCellule" TargetType="{x:Type StackPanel}">
             <Style.Triggers>
-                <Trigger Property="Grid.IsMouseOver" Value="true">
-                    <Setter Property="Grid.Opacity" Value="0.9" />
-                    <Setter Property="Grid.Cursor" Value="Hand"/>
-                </Trigger>
+                <Trigger Property="StackPanel.IsMouseOver" Value="true">
+                    <Setter Property="StackPanel.Opacity" Value="0.9" />
+                    <Setter Property="StackPanel.Cursor" Value="Hand"/>
+                </Trigger>                
             </Style.Triggers>
         </Style>
+
+        <!-- Labels -->
+        <Style x:Key="StyleInfo" TargetType="{x:Type Label}">
+            <Setter Property="FontWeight" Value="Bold" />
+            <Style.Triggers>
+                <Trigger Property="Content" Value="">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </Trigger>
+                <DataTrigger Binding="{Binding Path=IsSelectionne}" Value="True">
+                    <Setter Property="Foreground" Value="Green" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
     </UserControl.Resources>
     
     <Border BorderThickness="3" Margin="10,0" CornerRadius="5" Style="{StaticResource StyleBordure}">
-        <Grid Name="MaGrille" Background="{Binding Path=CouleurRV, ElementName=This}" UIElement.MouseLeftButtonDown="MaGrille_MouseLeftButtonDown" Style="{StaticResource StyleCellule}">
-            <ItemsControl ItemsSource="{Binding Path=InfoRV, ElementName=This}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Label Content="{Binding}" HorizontalAlignment="Left">
-                            <Label.Style>
-                                <Style>
-                                    <Setter Property="Label.FontWeight" Value="Bold" />
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsSelectionne, RelativeSource={RelativeSource Mode=FindAncestor,
-                                                                                                      AncestorType={x:Type UserControl}}}" Value="True">
-                                            <Setter Property="Label.Foreground" Value="Green" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Label.Style>
-                        </Label>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+        <StackPanel x:Name="RDVPanel" Background="{Binding Path=CouleurRDV}" UIElement.MouseLeftButtonDown="RDVPanel_MouseLeftButtonDown" Style="{StaticResource StyleCellule}">
             
-        </Grid>
+            <!-- Heure -->
+            <Label Style="{StaticResource StyleInfo}">
+                <Label.Content>
+                    <TextBlock>
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat = "{}{0:HH:mm} à {1:HH:mm}" >
+                                <Binding Path="Debut"/>
+                                <Binding Path="Fin" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                </Label.Content>                
+            </Label>
+            
+            <!-- Type de Rendez-vous -->
+            <Label Content="{Binding Path=Type}" Style="{StaticResource StyleInfo}"/>
+
+            <!-- Client -->
+            <Label Content="{Binding Path=NomClient}" Style="{StaticResource StyleInfo}"/>
+            
+        </StackPanel>
     </Border>
 </UserControl>

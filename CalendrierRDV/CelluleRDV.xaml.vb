@@ -4,26 +4,14 @@ Imports System.Runtime.CompilerServices
 Public Class CelluleRDV
     Implements INotifyPropertyChanged
 
-    '============'
-    ' Propriétés '
-    '============'
-
-    Public Property CouleurRV As SolidColorBrush
-    Public Property InfoRV As List(Of String)
-
-    'Événement pour notifier des changements de propriétés
-    Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
-
+    'Attributs
+    Private _couleurRV As SolidColorBrush = New SolidColorBrush(Colors.Transparent)
+    Private _infoRV As List(Of String) = New List(Of String)
     Private _isSelectionne As Boolean
-    Public Property IsSelectionne As Boolean
-        Get
-            Return _isSelectionne
-        End Get
-        Set(value As Boolean)
-            Me._isSelectionne = value
-            NotifyPropertyChanged()
-        End Set
-    End Property
+
+    '==============='
+    ' Constructeurs '
+    '==============='
 
     ''' <summary>
     ''' Constructeur par défaut
@@ -35,7 +23,6 @@ Public Class CelluleRDV
 
         'Ajoutez une initialisation quelconque après l'appel InitializeComponent().
         IsSelectionne = False
-        Me.DataContext = Me
     End Sub
 
     ''' <summary>
@@ -51,6 +38,13 @@ Public Class CelluleRDV
         Me.InfoRV = infos
     End Sub
 
+    '============'
+    ' Propriétés '
+    '============'
+
+    'Événement pour notifier des changements de propriétés
+    Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
+
     ''' <summary>
     ''' Méthode pour déclencher l'événement qui notifie le changement de propriété
     ''' </summary>
@@ -58,6 +52,50 @@ Public Class CelluleRDV
     Protected Sub NotifyPropertyChanged(<CallerMemberName()> Optional ByVal propertyName As String = Nothing)
         RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
     End Sub
+
+    ''' <summary>
+    ''' La couleur de la cellule
+    ''' </summary>
+    Public Property CouleurRV As SolidColorBrush
+        Get
+            Return _couleurRV
+        End Get
+        Set(value As SolidColorBrush)
+            If value IsNot Nothing Then
+                Me._couleurRV = value
+                NotifyPropertyChanged()
+            End If
+        End Set
+    End Property
+
+    Public Property InfoRV As List(Of String)
+        Get
+            Return _infoRV
+        End Get
+        Set(value As List(Of String))
+            If value IsNot Nothing Then
+                Me._infoRV = value
+                NotifyPropertyChanged()
+            End If
+        End Set
+    End Property
+
+    ''' <summary>
+    ''' Est-ce que le rendez-vous est sélectionné
+    ''' </summary>
+    Public Property IsSelectionne As Boolean
+        Get
+            Return _isSelectionne
+        End Get
+        Set(value As Boolean)
+            Me._isSelectionne = value
+            NotifyPropertyChanged()
+        End Set
+    End Property
+
+    '=========='
+    ' Méthodes '
+    '=========='
 
     'Listener pour quand on clique sur le rendez-vous
     Private Sub MaGrille_MouseLeftButtonDown(sender As Object, e As System.Windows.Input.MouseButtonEventArgs)

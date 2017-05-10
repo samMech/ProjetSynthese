@@ -309,7 +309,7 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         /// </summary>
         public override void UpdateData()
         {
-            // Récupération des disponibilités et mise à jour
+            // Récupération des disponibilités et types
             Employe emp = ApplicationVueModele.Instance.EmployeConnecte;
             ListeDisponibilites = ConversionUtil.ConvertirRDVToIRDV(RestDao.GetDisposEmploye(emp.id_employe));
             ListeTypesRDV = emp.Typerdv.ToList();
@@ -367,7 +367,26 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         // Méthode pour modifier une disponibilité
         private void ModifierDispo(object obj)
         {
+            //==================================
+            // TEST TEST TEST
 
+            Client client = new Client();
+            client.nom_client = "Flouflou";
+            client.prenom_client = "Alain";
+
+            Rendezvous rv = new Rendezvous();
+            rv.debut_rdv = DateJour.AddHours(10).AddMinutes(30);
+            rv.fin_rdv = DateJour.AddHours(11).AddMinutes(30);
+            rv.Client = client;
+            rv.Typerdv = TypeRDV;
+            rv.statut_rdv = "RDV";
+            rv.Employe = ApplicationVueModele.Instance.EmployeConnecte;
+
+            ListeDisponibilites.Add(new RendezVousAdapter(rv));
+            Console.WriteLine("Nb Dispos: {0}", ListeDisponibilites.Count);
+
+            //==================================
+            //CollectionViewSource.GetDefaultView(ListeDisponibilites).Refresh();
         }
 
         // Méthode pour savoir si on peut modifier une disponibilité

@@ -5,30 +5,35 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CalendrierRDV"
              mc:Ignorable="d" 
-               d:DesignHeight="300" d:DesignWidth="300">
-    <Border BorderThickness="3" Margin="10,0" CornerRadius="5">
-        <Border.Style>
-            <Style>
-                <Setter Property="Border.BorderBrush" Value="#FF3B8BFF" />
-                <Style.Triggers>
-                    <DataTrigger Binding="{Binding ElementName=MaGrille, Path=IsMouseOver}" Value="true">
-                        <Setter Property="Border.BorderBrush" Value="#FF007A59" />
-                    </DataTrigger>
-                </Style.Triggers>
-            </Style>
-        </Border.Style>
-        <Grid Name="MaGrille" Background="{Binding CouleurRV}" UIElement.MouseLeftButtonDown="MaGrille_MouseLeftButtonDown">
-            <Grid.Style>
-                <Style>
-                    <Style.Triggers>
-                        <Trigger Property="Grid.IsMouseOver" Value="true">
-                            <Setter Property="Grid.Opacity" Value="0.9" />
-                            <Setter Property="Grid.Cursor" Value="Hand"/>
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </Grid.Style>
-            <ItemsControl ItemsSource="{Binding InfoRV}">
+             x:Name="This"
+             d:DesignHeight="300" d:DesignWidth="300">
+
+    <UserControl.Resources>
+        
+        <!-- Bordure -->
+        <Style x:Key="StyleBordure" TargetType="{x:Type Border}">
+            <Setter Property="Border.BorderBrush" Value="#FF3B8BFF" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ElementName=MaGrille, Path=IsMouseOver}" Value="true">
+                    <Setter Property="Border.BorderBrush" Value="#FF007A59" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        
+        <!-- Cellule -->
+        <Style x:Key="StyleCellule" TargetType="{x:Type Grid}">
+            <Style.Triggers>
+                <Trigger Property="Grid.IsMouseOver" Value="true">
+                    <Setter Property="Grid.Opacity" Value="0.9" />
+                    <Setter Property="Grid.Cursor" Value="Hand"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+    
+    <Border BorderThickness="3" Margin="10,0" CornerRadius="5" Style="{StaticResource StyleBordure}">
+        <Grid Name="MaGrille" Background="{Binding Path=CouleurRV, ElementName=This}" UIElement.MouseLeftButtonDown="MaGrille_MouseLeftButtonDown" Style="{StaticResource StyleCellule}">
+            <ItemsControl ItemsSource="{Binding Path=InfoRV, ElementName=This}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Label Content="{Binding}" HorizontalAlignment="Left">
@@ -47,6 +52,7 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
+            
         </Grid>
     </Border>
 </UserControl>

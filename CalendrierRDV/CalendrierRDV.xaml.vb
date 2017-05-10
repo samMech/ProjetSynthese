@@ -1,4 +1,5 @@
 ﻿Imports System.Collections.ObjectModel
+Imports System.Collections.Specialized
 Imports System.ComponentModel
 Imports System.Runtime.CompilerServices
 Imports System.Threading
@@ -36,7 +37,6 @@ Public Class CalendrierRDV
 
     'Propriétés
     Private _dateDebut As Date
-    Private _dateCourante As Date
     Private _heureMin As DateTime = HEURE_MIN_DEFAULT
     Private _heureMax As DateTime = HEURE_MAX_DEFAULT
     Private _deltaTimeMin As TimeSpan = DELTA_TIME_MIN_DEFAULT
@@ -49,14 +49,15 @@ Public Class CalendrierRDV
     ''' Constructeur par défaut
     ''' </summary>
     Public Sub New()
-        ' Cet appel est requis par le concepteur.
+        'Cet appel est requis par le concepteur.
         InitializeComponent()
 
-        ' Ajustement de la culture
+        'Ajustement de la culture
         Me.Language = System.Windows.Markup.XmlLanguage.GetLanguage(Thread.CurrentThread.CurrentCulture.IetfLanguageTag)
 
-        ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
+        'Ajoutez une initialisation quelconque après l'appel InitializeComponent().
         DateCourante = DateTime.Now
+        ListeIRDV = New ObservableCollection(Of IRendezVous)
         ReconstruireGrilleHoraire()
     End Sub
 
@@ -110,10 +111,9 @@ Public Class CalendrierRDV
     Private Shared Sub OnDateCourantePropertyChanged(source As DependencyObject, e As DependencyPropertyChangedEventArgs)
         Dim cal As CalendrierRDV = TryCast(source, CalendrierRDV)
         If Not IsNothing(cal) Then
+            cal.DateDebut = Utilitaire.TrouverLundiPrecedent(cal.DateCourante)
             cal.AfficherListeRV()
         End If
-        cal.DateDebut = Utilitaire.TrouverLundiPrecedent(cal.DateCourante)
-        cal.AfficherListeRV()
     End Sub
     '==================================================================================
 
@@ -180,9 +180,40 @@ Public Class CalendrierRDV
     Private Shared Sub OnListeIRDVPropertyChanged(source As DependencyObject, e As DependencyPropertyChangedEventArgs)
         Dim cal As CalendrierRDV = TryCast(source, CalendrierRDV)
         If Not IsNothing(cal) Then
+
+            'Suppression du listener sur la vielle collection
+            If e.OldValue IsNot Nothing Then
+                Dim collection = CType(e.OldValue, INotifyCollectionChanged)
+                RemoveHandler collection.CollectionChanged, AddressOf cal.OnListeIRDVCollectionChanged
+            End If
+
+            'Ajout d'un listener pour intercepter les changements sur la liste de IRendezVous
+            If e.NewValue IsNot Nothing Then
+                Dim collection = CType(e.NewValue, ObservableCollection(Of IRendezVous))
+                AddHandler collection.CollectionChanged, AddressOf cal.OnListeIRDVCollectionChanged
+            End If
+
+            'Mise à jour de l'affichage
             cal.AfficherListeRV()
         End If
     End Sub
+
+    'Méthode pour mettre à jour l'affichage quand la liste des rendez-vous change
+    Private Sub OnListeIRDVCollectionChanged(sender As Object, e As NotifyCollectionChangedEventArgs)
+        'Choix selon l'action
+        Select Case e.Action
+            Case NotifyCollectionChangedAction.Add
+                For Each r As IRendezVous In e.NewItems
+                    AfficherRV(r)
+                Next
+            Case NotifyCollectionChangedAction.Remove
+                AfficherListeRV()
+            Case NotifyCollectionChangedAction.Replace
+            Case NotifyCollectionChangedAction.Move
+            Case Else
+        End Select
+    End Sub
+
     '==================================================================================
 
     '==================================================================================
@@ -205,7 +236,7 @@ Public Class CalendrierRDV
     'Méthode pour signaler le changement au composant
     Private Shared Sub OnCouleurStatutPropertyChanged(source As DependencyObject, e As DependencyPropertyChangedEventArgs)
         Dim cal As CalendrierRDV = TryCast(source, CalendrierRDV)
-        If Not IsNothing(cal) Then
+        If cal IsNot Nothing Then
             cal.AfficherListeRV()
         End If
     End Sub

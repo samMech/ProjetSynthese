@@ -132,7 +132,7 @@
         </DockPanel>
         
         <!-- Composant graphique -->
-        <CalendrierRDV:CalendrierRDV Margin="0,0,10,0" ListeIRDV="{Binding Path=ListeDisponibilites}" DateCourante="{Binding Path=DateJour}" CouleurStatut="{Binding Path=CouleurStatuts}" MinWidth="600" MinHeight="400"/>
+        <CalendrierRDV:CalendrierRDV Margin="0,0,10,0" ListeIRDV="{Binding Path=ListeDisponibilites}" DateCourante="{Binding Path=DateJour}" MinWidth="600" MinHeight="400"/>
         
     </DockPanel>
 

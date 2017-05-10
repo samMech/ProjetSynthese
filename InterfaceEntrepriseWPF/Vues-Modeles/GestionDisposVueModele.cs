@@ -99,7 +99,7 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
             get { return _dureeRDV; }
             set
             {
-                if (DureesRDV.Contains(value))
+                if (DureesRDV.Contains(value) && value != _dureeRDV)
                 {
                     _dureeRDV = value;
                     OnPropertyChanged();
@@ -115,8 +115,11 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
             get { return _typeRDV; }
             set
             {
-                _typeRDV = value;
-                OnPropertyChanged();
+                if (value != null && value.Equals(_typeRDV) == false)
+                {
+                    _typeRDV = value;
+                    OnPropertyChanged();
+                }                
             }
         }
 
@@ -128,11 +131,11 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
             get { return _dateJour; }
             set
             {
-                if (_dateJour != null)
+                if(value != null && value.Equals(_dateJour) == false)
                 {
                     _dateJour = value;
                     OnPropertyChanged();
-                }
+                }                
             }
         }
 
@@ -144,7 +147,7 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
             get { return _debutPlageAjout; }
             set
             {
-                if (_debutPlageAjout != null)
+                if (value != null && value.Equals(_debutPlageAjout) == false)
                 {
                     _debutPlageAjout = value;
                     OnPropertyChanged();
@@ -173,7 +176,7 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
             get { return _finPlageAjout; }
             set
             {
-                if (_finPlageAjout != null)
+                if (value != null && value.Equals(_finPlageAjout) == false)
                 {
                     _finPlageAjout = value;
                     OnPropertyChanged();
@@ -202,8 +205,11 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
             get { return _raison; }
             set
             {
-                _raison = value;
-                OnPropertyChanged();
+                if (value != null && value.Equals(_raison) == false)
+                {
+                    _raison = value;
+                    OnPropertyChanged();
+                }                
             }
         }
 
@@ -215,8 +221,11 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
             get { return _listeDisponibilites; }
             set
             {
-                _listeDisponibilites = (value == null) ? new ObservableCollection<CalendrierRDV.IRendezVous>() : value;
-                OnPropertyChanged();
+                if (value != null && value.Equals(_listeDisponibilites) == false)
+                {
+                    _listeDisponibilites = value;
+                    OnPropertyChanged();
+                }                
             }
         }
 
@@ -228,7 +237,7 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
             get { return _listeTypeRDV; }
             set
             {
-                if (value != null)
+                if (value != null && value.Equals(_listeTypeRDV) == false)
                 {
                     _listeTypeRDV = value;
                     OnPropertyChanged();
@@ -367,6 +376,7 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         // Méthode pour modifier une disponibilité
         private void ModifierDispo(object obj)
         {
+            // TODO
             //==================================
             // TEST TEST TEST
 
@@ -392,19 +402,41 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         // Méthode pour savoir si on peut modifier une disponibilité
         private bool CanModifierDispo(object obj)
         {
-            return true;
+            // On vérifie qu'une seule disponibilité est sélectionnée
+            int nbDisposSelectionnees = 0;
+            foreach (CalendrierRDV.IRendezVous irdv in ListeDisponibilites)
+            {
+                if (irdv.IsSelectionne)
+                {
+                    nbDisposSelectionnees++;
+                    if (nbDisposSelectionnees > 1)
+                    {
+                        return false;
+                    }
+                }               
+            }
+
+            return nbDisposSelectionnees == 1;
         }
 
         // Méthode pour supprimer des disponibilités
         private void SupprimerDispos(object obj)
         {
-
+            // TODO
         }
 
         // Méthode pour savoir si on peut supprimer des disponibilités
         private bool CanSupprimerDispos(object obj)
         {
-            return true;
+            // On vérifie qu'au moins une disponibilité est sélectionnée
+            foreach (CalendrierRDV.IRendezVous irdv in ListeDisponibilites)
+            {
+                if (irdv.IsSelectionne)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         // Méthode pour aller à la page d'affichage des rendez-vous

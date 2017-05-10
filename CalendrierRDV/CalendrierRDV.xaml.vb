@@ -85,8 +85,10 @@ Public Class CalendrierRDV
             Return _dateDebut
         End Get
         Set(ByVal value As DateTime)
-            Me._dateDebut = value
-            NotifyPropertyChanged()
+            If value <> _dateDebut Then
+                Me._dateDebut = value
+                NotifyPropertyChanged()
+            End If
         End Set
     End Property
 
@@ -110,7 +112,7 @@ Public Class CalendrierRDV
     'Méthode pour signaler le changement au composant
     Private Shared Sub OnDateCourantePropertyChanged(source As DependencyObject, e As DependencyPropertyChangedEventArgs)
         Dim cal As CalendrierRDV = TryCast(source, CalendrierRDV)
-        If Not IsNothing(cal) Then
+        If cal IsNot Nothing Then
             cal.DateDebut = Utilitaire.TrouverLundiPrecedent(cal.DateCourante)
             cal.AfficherListeRV()
         End If
@@ -123,7 +125,7 @@ Public Class CalendrierRDV
             Return _heureMin
         End Get
         Set(ByVal value As DateTime)
-            If value.TimeOfDay < HeureFin.TimeOfDay Then
+            If value <> _heureMin AndAlso value.TimeOfDay < HeureFin.TimeOfDay Then
                 Me._heureMin = value
                 ReconstruireGrilleHoraire()
                 NotifyPropertyChanged()
@@ -137,7 +139,7 @@ Public Class CalendrierRDV
             Return _heureMax
         End Get
         Set(ByVal value As DateTime)
-            If value.TimeOfDay > HeureDebut.TimeOfDay Then
+            If value <> _heureMax AndAlso value.TimeOfDay > HeureDebut.TimeOfDay Then
                 Me._heureMax = value
                 ReconstruireGrilleHoraire()
                 NotifyPropertyChanged()
@@ -151,7 +153,7 @@ Public Class CalendrierRDV
             Return _deltaTimeMin
         End Get
         Set(ByVal value As TimeSpan)
-            If value.TotalMinutes > 1 AndAlso value.TotalMinutes <= 60 AndAlso 60 Mod value.TotalMinutes = 0 Then
+            If value <> _deltaTimeMin AndAlso value.TotalMinutes > 1 AndAlso value.TotalMinutes <= 60 AndAlso 60 Mod value.TotalMinutes = 0 Then
                 Me._deltaTimeMin = value
                 ReconstruireGrilleHoraire()
                 NotifyPropertyChanged()
@@ -226,32 +228,6 @@ Public Class CalendrierRDV
 
     '==================================================================================
 
-    '==================================================================================
-    'Propriété de dépendance pour la liste couleurs de statut
-    Public Shared ReadOnly Property CouleurStatutProperty As DependencyProperty =
-        DependencyProperty.Register("CouleurStatut",
-        GetType(Dictionary(Of String, Color)), GetType(CalendrierRDV),
-        New FrameworkPropertyMetadata(Nothing, AddressOf OnCouleurStatutPropertyChanged))
-
-    'Encapsulation (interne: NE PAS TOUCHER !)
-    Public Property CouleurStatut() As Dictionary(Of String, Color)
-        Get
-            Return CType(GetValue(CouleurStatutProperty), Dictionary(Of String, Color))
-        End Get
-        Set(value As Dictionary(Of String, Color))
-            SetValue(CouleurStatutProperty, value)
-        End Set
-    End Property
-
-    'Méthode pour signaler le changement au composant
-    Private Shared Sub OnCouleurStatutPropertyChanged(source As DependencyObject, e As DependencyPropertyChangedEventArgs)
-        Dim cal As CalendrierRDV = TryCast(source, CalendrierRDV)
-        If cal IsNot Nothing Then
-            cal.AfficherListeRV()
-        End If
-    End Sub
-    '==================================================================================
-
     '=========='
     ' Méthodes '
     '=========='
@@ -302,8 +278,8 @@ Public Class CalendrierRDV
         'Vérification au cas où pour ne pas avoir de boucle infinie
         If _heureMax.TimeOfDay > HeureDebut.TimeOfDay AndAlso _deltaTimeMin.Minutes > 0 Then
             'Récupération des deux premières lignes
-            Dim l0 As RowDefinition = gHoraire.RowDefinitions.ElementAt(0)
-            Dim l1 As RowDefinition = gHoraire.RowDefinitions.ElementAt(1)
+            Dim r0 As RowDefinition = gHoraire.RowDefinitions.ElementAt(0)
+            Dim r1 As RowDefinition = gHoraire.RowDefinitions.ElementAt(1)
 
             'On efface la grille et les labels pour les heures
             gHoraire.RowDefinitions.Clear()
@@ -312,8 +288,8 @@ Public Class CalendrierRDV
             Next
 
             'On remet les lignes d'entêtes en place
-            gHoraire.RowDefinitions.Add(l0)
-            gHoraire.RowDefinitions.Add(l1)
+            gHoraire.RowDefinitions.Add(r0)
+            gHoraire.RowDefinitions.Add(r1)
 
             'Calcul du nombre de lignes par heure
             Dim nbLignesHeure As Integer = 60 / _deltaTimeMin.Minutes
@@ -361,6 +337,9 @@ Public Class CalendrierRDV
                 End If
                 tempsCourant += _deltaTimeMin
             Next
+
+            'On réaffiche les rendez-vous
+            AfficherListeRV()
 
         End If
     End Sub

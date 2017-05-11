@@ -72,20 +72,5 @@ namespace InterfaceEntrepriseWPF.Utilitaire
             return listeIRDV;
         }
 
-        /// <summary>
-        /// Méthode pour reconvertir une liste de RendezVousAdapter en liste de Rendezvous
-        /// </summary>
-        /// <param name="listeIRDV">La liste des RendezVousAdapter de type IRendezvous</param>
-        /// <returns>La liste des rendez-vous originaux</returns>
-        public static List<Rendezvous> ConvertirIRDVToRDV(ObservableCollection<CalendrierRDV.IRendezVous> listeIRDV)
-        {
-            List<Rendezvous> listeRDV = new List<Rendezvous>();
-            foreach (CalendrierRDV.IRendezVous irdv in listeIRDV)
-            {
-                listeRDV.Add(((RendezVousAdapter)irdv).RDV);
-            }
-            return listeRDV;
-        }
-
     }
 }

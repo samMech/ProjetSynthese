@@ -19,11 +19,6 @@ namespace ProjetRDV247.Controle
         // Le data entity
         private Dao dao;
         
-        public string TestREST()
-        {
-            return "Hello World !";
-        }
-
         // GET
         //============================================================================================================================
 
@@ -262,15 +257,10 @@ namespace ProjetRDV247.Controle
                     dispoModifiee.id_typerdv_rdv = idType;
 
                     // On vérifie si un client a pris rendez-vous pour cette disponibilité                                
-                    if (!dispoModifiee.statut_rdv.Equals("LIBRE") && dispoModifiee.id_client_rdv != null)
+                    if (!dispo.statut_rdv.Equals("LIBRE") && dispo.id_client_rdv != null)
                     {
-                        // On récupère le client et l'employé
-                        // TODO: vérifier si nécessaire ou si ils sont déjà chargé avec le rdv !!!!!!!!!!!!!!!!!
-                        Client client = dao.GetClientById(dispoModifiee.id_client_rdv.Value);
-                        Employe employe = dao.GetEmployeById(dispoModifiee.id_employe_rdv);
-
                         // On notifie le client de l'annulation de son rendez-vous
-                        CommunicationUtil.NotifierChangementRDV(client, dispo, dispoModifiee, employe, raison);
+                        CommunicationUtil.NotifierChangementRDV(dispo.Client, dispo, dispoModifiee, dispo.Employe, raison);
                     }
 
                     // Sauvegarde des modifications
@@ -309,13 +299,8 @@ namespace ProjetRDV247.Controle
                 // On vérifie si un client a pris rendez-vous pour cette disponibilité                                
                 if (!dispo.statut_rdv.Equals("LIBRE") && dispo.id_client_rdv != null)
                 {
-                    // On récupère le client et l'employé
-                    // TODO: vérifier si nécessaire ou si ils sont déjà chargé avec le rdv !!!!!!!!!!!!!!!!!
-                    Client client = dao.GetClientById(dispo.id_client_rdv.Value);
-                    Employe employe = dao.GetEmployeById(dispo.id_employe_rdv);
-
                     // On notifie le client de l'annulation de son rendez-vous
-                    CommunicationUtil.NotifierAnnulationRDV(client, dispo, employe, raison);
+                    CommunicationUtil.NotifierAnnulationRDV(dispo.Client, dispo, dispo.Employe, raison);
                 }
 
                 // Suppression de la disponibilité

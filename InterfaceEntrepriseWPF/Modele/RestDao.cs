@@ -79,10 +79,10 @@ namespace InterfaceEntrepriseWPF.Modele
         /// <summary>
         /// Méthode pour ajouter des disponibilités pour un employé
         /// </summary>
-        /// <param name="dateJour">La date du jour de l'ajout</param>
-        /// <param name="debutPlageAjout">Le début de la plage d'ajout</param>
-        /// <param name="finPlageAjout">La fin de la plage d'ajout</param>
-        /// <param name="dureeRDV">La durée de chaque rendez-vous en minutes</param>
+        /// <param name="idEmp">L'identifiant de l'employé concerné</param>
+        /// <param name="pdateDebut">Le début de la plage d'ajout</param>
+        /// <param name="pdateFin">La fin de la plage d'ajout</param>
+        /// <param name="dureeMinutesRDV">La durée de chaque rendez-vous en minutes</param>
         /// <param name="idTypeRDV">Le type de chaque rendez-vous</param>
         /// <returns>La liste des disponibilités ajoutées</returns>
         public static List<Rendezvous> AjouterDispos(int idEmp, DateTime pdateDebut, DateTime pdateFin, int dureeMinutesRDV, int idTypeRDV)
@@ -99,6 +99,29 @@ namespace InterfaceEntrepriseWPF.Modele
             // Récupération de la réponse
             string response = rc.MakeRequest();
             return JsonUtil.DeserialiserListeJson<Rendezvous>(response, "AjouterDisposResult");
+        }
+
+        /// <summary>
+        /// Méthode pour supprimer des disponibilités pour un employé
+        /// </summary>
+        /// <param name="idEmp">L'identifiant de l'employé concerné</param>
+        /// <param name="idDispos">La liste des id des disponibilités à supprimer</param>
+        /// <param name="raison">La raison du changement s'il y a lieu</param>
+        public static void SupprimerDispos(int idEmp, List<int> listeIdDispos, string sraison)
+        {
+            // Création du client rest
+            RestClient rc = new RestClient("http://localhost:2057/Controle/ServiceRDV247.svc/SupprimerDispos", HttpVerb.POST);
+
+            // Ajout des paramètres POST
+            rc.PostData = JsonConvert.SerializeObject(new
+            {
+                idEmploye = idEmp,
+                idDispos = listeIdDispos,
+                raison = sraison
+            });
+                        
+            // On lance la requête
+            rc.MakeRequest();
         }
     }
 }

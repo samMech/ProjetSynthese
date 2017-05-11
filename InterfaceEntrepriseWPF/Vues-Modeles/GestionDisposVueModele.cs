@@ -26,7 +26,8 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         private DateTime _finPlageAjout;
         private int _dureeRDV;
         private Typerdv _typeRDV;
-        private string _raison = "";
+        private string _raison;
+        private bool _isDispoConflitClient;
 
         // La liste des disponibilités pour le composant graphique
         private ObservableCollection<CalendrierRDV.IRendezVous> _listeDisponibilites;
@@ -63,12 +64,14 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
             // Ajustement du titre de la fenêtre
             TitrePage = "Gestion des disponibilités";
 
-            // Initialisation des valeurs
+            // Initialisation des valeurs                        
             DateJour = DateTime.Today;
             DureeRDV = DureesRDV.First();
             DebutPlageAjout = DateTime.Now.AddMinutes(DureeRDV - DateTime.Now.Minute % DureeRDV);
             FinPlageAjout = DebutPlageAjout.AddMinutes(DureeRDV);
             ListeDisponibilites = new ObservableCollection<CalendrierRDV.IRendezVous>();
+            Raison = "";
+            IsDispoConflitClient = false;
         }
 
         //============//
@@ -210,6 +213,19 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
                     _raison = value;
                     OnPropertyChanged();
                 }                
+            }
+        }
+
+        /// <summary>
+        /// Est-ce qu'une disponibilité sélectionnée est déjà réservée pour un client
+        /// </summary>
+        public bool IsDispoConflitClient
+        {
+            get { return _isDispoConflitClient; }
+            set
+            {
+                _isDispoConflitClient = value;
+                OnPropertyChanged();
             }
         }
 
@@ -372,7 +388,7 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
             ErreurFinPlage = FinPlageAjout.TimeOfDay < DebutPlageAjout.AddMinutes(DureeRDV).TimeOfDay;
             return !ErreurFinPlage;
         }
-
+        
         // Méthode pour modifier une disponibilité
         private void ModifierDispo(object obj)
         {
@@ -402,39 +418,49 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         // Méthode pour savoir si on peut modifier une disponibilité
         private bool CanModifierDispo(object obj)
         {
-            // On vérifie qu'une seule disponibilité est sélectionnée
-            int nbDisposSelectionnees = 0;
-            foreach (CalendrierRDV.IRendezVous irdv in ListeDisponibilites)
-            {
-                if (irdv.IsSelectionne)
-                {
-                    nbDisposSelectionnees++;
-                    if (nbDisposSelectionnees > 1)
-                    {
-                        return false;
-                    }
-                }               
-            }
+            // Ré-initialisation
+            IsDispoConflitClient = false;
 
-            return nbDisposSelectionnees == 1;
+            // On vérifie qu'une seule disponibilité est sélectionnée
+            List<CalendrierRDV.IRendezVous> dispos = ListeDisponibilites.Where(x => x.IsSelectionne).ToList();
+            if (dispos.Count == 1)
+            {
+                // On vérifie si une des disponibilités est déjà réservée
+                IsDispoConflitClient = (dispos.FirstOrDefault(x => x.NomClient != null) != null);
+                return !IsDispoConflitClient;
+            }
+            return false;            
         }
 
         // Méthode pour supprimer des disponibilités
         private void SupprimerDispos(object obj)
         {
-            // TODO
+            // Récupération des id des disponibilités à supprimer
+            List<int> listeIdDispos = ListeDisponibilites.Where(x => x.IsSelectionne).Select(x => x.ID).ToList();
+            if (listeIdDispos.Count > 0)
+            {
+                // Suppression
+                Employe emp = ApplicationVueModele.Instance.EmployeConnecte;
+                RestDao.SupprimerDispos(emp.id_employe, listeIdDispos, Raison);
+
+                // Mise à jour des données
+                UpdateData();
+            }
         }
 
         // Méthode pour savoir si on peut supprimer des disponibilités
         private bool CanSupprimerDispos(object obj)
         {
+            // Ré-initialisation
+            IsDispoConflitClient = false;
+
             // On vérifie qu'au moins une disponibilité est sélectionnée
-            foreach (CalendrierRDV.IRendezVous irdv in ListeDisponibilites)
+            List<CalendrierRDV.IRendezVous> dispos = ListeDisponibilites.Where(x => x.IsSelectionne).ToList();
+            if (dispos.Count > 0)
             {
-                if (irdv.IsSelectionne)
-                {
-                    return true;
-                }
+                // On vérifie si une des disponibilités est déjà réservée
+                IsDispoConflitClient = (dispos.FirstOrDefault(x => x.NomClient != null) != null);
+                return !IsDispoConflitClient;
             }
             return false;
         }

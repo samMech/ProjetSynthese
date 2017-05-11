@@ -73,7 +73,7 @@
 
                         <!-- Date -->
                         <Label Content="1) Choisir une date"/>
-                        <Calendar SelectedDate="{Binding Path=DateJour}"/>
+                        <Calendar SelectedDate="{Binding Path=DateJour}" SelectionMode="SingleDate"/>
 
                         <!-- Durée -->
                         <Label Content="2) Choisir la durée et le type des rendez-vous"/>
@@ -122,8 +122,15 @@
                 <!-- Zone de modification -->
                 <TabItem Header="Modifier">
                     <StackPanel Margin="5,0">
-                        <TextBox Text="Raison..." Style="{StaticResource StyleTextBoxRaison}"/>
+                        <Label Style="{StaticResource StyleErreur}" HorizontalContentAlignment="Center" IsEnabled="{Binding Path=IsDispoConflitClient}">
+                            <Label.Content>
+                                <TextBlock TextWrapping="Wrap" Text="Avant de valider, veuillez fournir la raison du changement pour aviser les clients concernés !"/>
+                            </Label.Content>
+                        </Label>
+                        <TextBox Style="{StaticResource StyleTextBoxRaison}" IsEnabled="{Binding Path=IsDispoConflitClient}"/>
+                                                    
                         <Button Content="Modifier la disponibilité" Command="{Binding Path=ModifierDispoCommand}"/>
+                                                
                         <Button Content="Supprimer les disponibilités" Command="{Binding Path=SupprimerDisposCommand}"/>
                     </StackPanel>
                 </TabItem>

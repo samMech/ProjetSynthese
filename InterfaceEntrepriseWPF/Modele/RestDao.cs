@@ -22,16 +22,16 @@ namespace InterfaceEntrepriseWPF.Modele
         /// <summary>
         /// Méthode pour authentifier un employe auprès du service web
         /// </summary>
-        /// <param name="login">Le login de l'employé</param>
-        /// <param name="password">Le mot de passe de l'employé</param>
+        /// <param name="loginParam">Le login de l'employé</param>
+        /// <param name="passwordParam">Le mot de passe de l'employé</param>
         /// <returns>L'employé connecté ou null si inexistant</returns>
-        public static Employe ConnexionEmploye(string sLogin, string sPassword)
+        public static Employe ConnexionEmploye(string loginParam, string passwordParam)
         {
             // Création du client rest
             RestClient rc = new RestClient("http://localhost:2057/Controle/ServiceConnexion.svc/AuthentifierEmp", HttpVerb.POST);
 
             // Ajout des paramètres POST
-            rc.PostData = JsonConvert.SerializeObject(new { login = sLogin, password = sPassword });
+            rc.PostData = JsonConvert.SerializeObject(new { login = loginParam, password = passwordParam });
 
             // Récupération de la réponse
             string response = rc.MakeRequest();
@@ -58,7 +58,7 @@ namespace InterfaceEntrepriseWPF.Modele
         }
 
         /// <summary>
-        /// Méthode pour récupérer la liste des rendez-vous de l'employé
+        /// Méthode pour récupérer la liste des rendez-vous de l'employé pour les 7 prochains jours incluant aujourd'hui
         /// </summary>
         /// <param name="id_employe">L'identifiant de l'employé</param>
         /// <returns>La liste des rendez-vous de l'employé</returns>
@@ -80,21 +80,25 @@ namespace InterfaceEntrepriseWPF.Modele
         /// Méthode pour ajouter des disponibilités pour un employé
         /// </summary>
         /// <param name="idEmp">L'identifiant de l'employé concerné</param>
-        /// <param name="pdateDebut">Le début de la plage d'ajout</param>
-        /// <param name="pdateFin">La fin de la plage d'ajout</param>
-        /// <param name="dureeMinutesRDV">La durée de chaque rendez-vous en minutes</param>
-        /// <param name="idTypeRDV">Le type de chaque rendez-vous</param>
+        /// <param name="dateDebutParam">Le début de la plage d'ajout</param>
+        /// <param name="dateFinParam">La fin de la plage d'ajout</param>
+        /// <param name="dureeMinutesDispoParam">La durée de chaque rendez-vous en minutes</param>
+        /// <param name="idTypeParam">Le type de chaque rendez-vous</param>
         /// <returns>La liste des disponibilités ajoutées</returns>
-        public static List<Rendezvous> AjouterDispos(int idEmp, DateTime pdateDebut, DateTime pdateFin, int dureeMinutesRDV, int idTypeRDV)
+        public static List<Rendezvous> AjouterDispos(int idEmp, DateTime dateDebutParam, DateTime dateFinParam, int dureeMinutesDispoParam, int idTypeParam)
         {
             // Création du client rest
             RestClient rc = new RestClient("http://localhost:2057/Controle/ServiceRDV247.svc/AjouterDispos", HttpVerb.POST);
             
             // Ajout des paramètres POST
-            rc.PostData = JsonConvert.SerializeObject(new { idEmploye = idEmp,
-                dateDebut = pdateDebut, dateFin = pdateFin,
-                dureeMinutesDispo = dureeMinutesRDV, idType = idTypeRDV },
-                new JsonSerializerSettings() { DateFormatHandling = DateFormatHandling.MicrosoftDateFormat });
+            rc.PostData = JsonConvert.SerializeObject(new
+            {
+                idEmploye = idEmp,
+                dateDebut = dateDebutParam,
+                dateFin = dateFinParam,
+                dureeMinutesDispo = dureeMinutesDispoParam,
+                idType = idTypeParam
+            }, new JsonSerializerSettings() { DateFormatHandling = DateFormatHandling.MicrosoftDateFormat });
             
             // Récupération de la réponse
             string response = rc.MakeRequest();
@@ -105,9 +109,9 @@ namespace InterfaceEntrepriseWPF.Modele
         /// Méthode pour supprimer des disponibilités pour un employé
         /// </summary>
         /// <param name="idEmp">L'identifiant de l'employé concerné</param>
-        /// <param name="idDispos">La liste des id des disponibilités à supprimer</param>
-        /// <param name="raison">La raison du changement s'il y a lieu</param>
-        public static void SupprimerDispos(int idEmp, List<int> listeIdDispos, string sraison)
+        /// <param name="idDisposParam">La liste des id des disponibilités à supprimer</param>
+        /// <param name="raisonParam">La raison du changement s'il y a lieu</param>
+        public static void SupprimerDispos(int idEmp, List<int> idDisposParam, string raisonParam)
         {
             // Création du client rest
             RestClient rc = new RestClient("http://localhost:2057/Controle/ServiceRDV247.svc/SupprimerDispos", HttpVerb.POST);
@@ -116,12 +120,43 @@ namespace InterfaceEntrepriseWPF.Modele
             rc.PostData = JsonConvert.SerializeObject(new
             {
                 idEmploye = idEmp,
-                idDispos = listeIdDispos,
-                raison = sraison
+                idDispos = idDisposParam,
+                raison = raisonParam
             });
                         
             // On lance la requête
             rc.MakeRequest();
+        }
+
+        /// <summary>
+        /// Méthode pour modifier une disponibilité
+        /// </summary>
+        /// <param name="idEmp">L'identifiant de l'employé concerné</param>
+        /// <param name="idDispoParam">L'identifiant de la disponibilité concernée</param>
+        /// <param name="newDateDebut">La nouvelle heure de début</param>
+        /// <param name="newDateFin">La nouvelle heure de fin</param>
+        /// <param name="newIdType">Le nouveau type de rendez-vous</param>
+        /// <param name="raisonParam">La raison du changement s'il y a lieu</param>
+        /// <returns>La disponibilité modifiée ou null en cas de conflit</returns>
+        public static Rendezvous ModifierDispo(int idEmp, int idDispoParam, DateTime newDateDebut, DateTime newDateFin, int newIdType, string raisonParam)
+        {
+            // Création du client rest
+            RestClient rc = new RestClient("http://localhost:2057/Controle/ServiceRDV247.svc/AjouterDispos", HttpVerb.POST);
+
+            // Ajout des paramètres POST
+            rc.PostData = JsonConvert.SerializeObject(new
+            {
+                idEmploye = idEmp,
+                idDispo = idDispoParam,
+                newDebut = newDateDebut,
+                newFin = newDateFin,
+                idType = newIdType,
+                raison = raisonParam
+            }, new JsonSerializerSettings() { DateFormatHandling = DateFormatHandling.MicrosoftDateFormat });
+
+            // Récupération de la réponse
+            string response = rc.MakeRequest();
+            return JsonUtil.DeserialiserJson<Rendezvous>(response, "ModifierDispoResult");
         }
     }
 }

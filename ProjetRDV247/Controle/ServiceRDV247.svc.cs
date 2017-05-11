@@ -53,7 +53,7 @@ namespace ProjetRDV247.Controle
             DateTime dateDebut = Utilitaire.TrouverLundiPrecedent(DateTime.ParseExact(date, "yyyyMMdd", CultureInfo.InvariantCulture));
 
             // On retourne les disponibilités de l'employé pour la semaine
-            return dao.GetDisposEmploye(Convert.ToInt32(idEmploye), dateDebut, dateDebut.AddDays(7));
+            return dao.GetDisposEmploye(Convert.ToInt32(idEmploye), dateDebut, dateDebut.AddDays(6));
         }
         
         /// <summary>
@@ -74,7 +74,7 @@ namespace ProjetRDV247.Controle
         }
 
         /// <summary>
-        /// Retourne tous les rendez-vous de l'employé pour la date fournie
+        /// Retourne tous les rendez-vous de l'employé pour la semaine commençant à la date fournie
         /// </summary>
         /// <param name="idEmploye">L'identifiant de l'employé</param>
         /// <param name="date">La date en format 'yyyyMMdd'</param>
@@ -92,8 +92,8 @@ namespace ProjetRDV247.Controle
             DateTime dateJour = DateTime.ParseExact(date, "yyyyMMdd", CultureInfo.InvariantCulture).Date;
 
             // On retourne les rendez-vous de l'employé pour cette journée
-            List<Rendezvous> resultats = dao.GetDisposEmploye(Convert.ToInt32(idEmploye), dateJour, dateJour.AddDays(1));
-            return resultats.Where(r => r.statut_rdv.Equals("LIBRE") == false).ToList();            
+            List<Rendezvous> resultats = dao.GetDisposEmploye(Convert.ToInt32(idEmploye), dateJour, dateJour.AddDays(6));
+            return resultats.Where(r => r.id_client_rdv != null).ToList();            
         }
 
         // POST

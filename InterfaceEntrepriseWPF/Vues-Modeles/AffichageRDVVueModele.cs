@@ -114,9 +114,10 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         /// </summary>
         public override void UpdateData()
         {
-            // Récupération des rendez-vous
+            // Récupération des rendez-vous pour la journée actuelle
             Employe emp = ApplicationVueModele.Instance.EmployeConnecte;
-            ListeRendezVous = ConversionUtil.ConvertirRDVToIRDV(RestDao.GetRendezVousEmploye(emp.id_employe));
+            List<Rendezvous> rdvsAujourdhui = RestDao.GetRendezVousEmploye(emp.id_employe).Where(x => x.debut_rdv.Date.Equals(DateTime.Today.Date)).ToList();
+            ListeRendezVous = ConversionUtil.ConvertirRDVToIRDV(rdvsAujourdhui);
         }
 
         // Méthode pour aller à la page de gestion des disponibilités

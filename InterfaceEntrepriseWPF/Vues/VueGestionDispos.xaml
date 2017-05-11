@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:InterfaceEntrepriseWPF.Vues"
+             xmlns:util="clr-namespace:InterfaceEntrepriseWPF.Utilitaire"
              mc:Ignorable="d" MaxHeight="750">
 
     <!-- Ressources locales -->
@@ -51,6 +52,14 @@
             </Style.Resources>
         </Style>
 
+        <!-- Templates -->
+        <DataTemplate x:Key="TemplateComboBoxDuree">
+            <Label  Content="{Binding}" ContentStringFormat="{}{0} minutes" Style="{StaticResource StyleTexte}" Padding="0"/>
+        </DataTemplate>
+        <DataTemplate x:Key="TemplateComboBoxTypeRDV">
+            <Label  Content="{Binding Path=nom_typerdv}" Style="{StaticResource StyleTexte}" Padding="0"/>
+        </DataTemplate>
+
     </UserControl.Resources>
 
     <!-- Contenu -->
@@ -75,27 +84,15 @@
                         <Label Content="1) Choisir une date"/>
                         <Calendar SelectedDate="{Binding Path=DateJour}" SelectionMode="SingleDate"/>
 
-                        <!-- Durée -->
+                        <!-- Durée et type -->
                         <Label Content="2) Choisir la durée et le type des rendez-vous"/>
                         <Grid Margin="10,0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <ComboBox Grid.Column="0" ItemsSource="{Binding Path=DureesRDV}" SelectedValue="{Binding Path=DureeRDV}" Margin="0,0,5,0">
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <Label  Content="{Binding}" ContentStringFormat="{}{0} minutes" Style="{StaticResource StyleTexte}" Padding="0"/>
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
-                            </ComboBox>
-                            <ComboBox Grid.Column="1" ItemsSource="{Binding Path=ListeTypesRDV}" SelectedValue="{Binding Path=TypeRDV}" Margin="5,0,0,0">
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <Label  Content="{Binding Path=nom_typerdv}" Style="{StaticResource StyleTexte}" Padding="0"/>
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
-                            </ComboBox>
+                            </Grid.ColumnDefinitions>                            
+                            <ComboBox Grid.Column="0" ItemsSource="{Binding Path=DureesRDV}" SelectedValue="{Binding Path=DureeRDV}" ItemTemplate="{StaticResource TemplateComboBoxDuree}" Margin="0,0,5,0"/>
+                            <ComboBox Grid.Column="1" ItemsSource="{Binding Path=ListeTypesRDV}" SelectedValue="{Binding Path=TypeRDV}" ItemTemplate="{StaticResource TemplateComboBoxTypeRDV}" Margin="5,0,0,0" />
                         </Grid>
 
                         <!-- Plage horaire -->
@@ -122,15 +119,38 @@
                 <!-- Zone de modification -->
                 <TabItem Header="Modifier">
                     <StackPanel Margin="5,0">
+
+                        <GroupBox Header="Modification" Margin="10" IsEnabled="{Binding ElementName=btnModifier, Path=IsEnabled}">
+                            <Grid Margin="5">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                
+                                <DatePicker Grid.Row="0" Grid.ColumnSpan="2" SelectedDate="{Binding DispoSelectionnee.debut_rdv}" Margin="0,10"/>
+                                <Label Grid.Row="1" Grid.Column="0" Content="Durée"/>
+                                <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Path=DureesRDV}" SelectedValue="{Binding Path=DureeRDVModifiee}" ItemTemplate="{StaticResource TemplateComboBoxDuree}" Margin="5"/>
+                                <Label Grid.Row="2" Grid.Column="0" Content="Type"/>
+                                <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Path=ListeTypesRDV}" SelectedValue="{Binding Path=DispoSelectionnee.Typerdv}" ItemTemplate="{StaticResource TemplateComboBoxTypeRDV}" Margin="5"/>
+
+                                <Button Grid.Row="3" Grid.ColumnSpan="2" x:Name="btnModifier" Content="Modifier la disponibilité" Command="{Binding Path=ModifierDispoCommand}" Margin="5,10"/>
+
+                            </Grid>                            
+                        </GroupBox>
+
                         <Label Style="{StaticResource StyleErreur}" HorizontalContentAlignment="Center" IsEnabled="{Binding Path=IsDispoConflitClient}">
                             <Label.Content>
                                 <TextBlock TextWrapping="Wrap" Text="Avant de valider, veuillez fournir la raison du changement pour aviser les clients concernés !"/>
                             </Label.Content>
                         </Label>
                         <TextBox Style="{StaticResource StyleTextBoxRaison}" IsEnabled="{Binding Path=IsDispoConflitClient}"/>
-                                                    
-                        <Button Content="Modifier la disponibilité" Command="{Binding Path=ModifierDispoCommand}"/>
-                                                
+
                         <Button Content="Supprimer les disponibilités" Command="{Binding Path=SupprimerDisposCommand}"/>
                     </StackPanel>
                 </TabItem>

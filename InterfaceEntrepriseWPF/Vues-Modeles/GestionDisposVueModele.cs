@@ -29,7 +29,10 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         private string _raison;
         private bool _isDispoConflitClient;
         private Rendezvous _dispoSelectionnee;
-        private int _dureeRDVModifiee;
+        private int _dureeDispoModifiee;
+        private bool _isBoutonModifieActif;
+        private Typerdv _typeDispoModifie;
+        private DateTime _debutDispoModifie;
 
         // La liste des disponibilités pour le composant graphique
         private ObservableCollection<CalendrierRDV.IRendezVous> _listeDisponibilites;
@@ -124,16 +127,16 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         }
 
         /// <summary>
-        /// La durée modifiée du rendez-vous
+        /// La durée modifiée de la disponibilité sélectionnée
         /// </summary>
-        public int DureeRDVModifiee
+        public int DureeDispoModifiee
         {
-            get { return _dureeRDVModifiee; }
+            get { return _dureeDispoModifiee; }
             set
             {
-                if (DureesRDV.Contains(value) && value != _dureeRDVModifiee)
+                if (DureesRDV.Contains(value) && value != _dureeDispoModifiee)
                 {
-                    _dureeRDVModifiee = value;
+                    _dureeDispoModifiee = value;
                     OnPropertyChanged();
                 }
             }
@@ -152,6 +155,22 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
                     _typeRDV = value;
                     OnPropertyChanged();
                 }                
+            }
+        }
+
+        /// <summary>
+        /// Le type modifié de la disponibilité sélectionnée
+        /// </summary>
+        public Typerdv TypeDispoModifie
+        {
+            get { return _typeDispoModifie; }
+            set
+            {
+                if (value != null && value.Equals(_typeDispoModifie) == false)
+                {
+                    _typeDispoModifie = ListeTypesRDV.Where(x => x.id_typerdv == value.id_typerdv).Single();
+                    OnPropertyChanged();                    
+                }
             }
         }
 
@@ -175,6 +194,22 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
                     _dateJour = value;
                     OnPropertyChanged();
                 }                
+            }
+        }
+
+        /// <summary>
+        /// La date de début modifiée de la disponibilité sélectionnée
+        /// </summary>
+        public DateTime DebutDispoModifie
+        {
+            get { return _debutDispoModifie; }
+            set
+            {
+                if (value != null && value.Equals(_debutDispoModifie) == false)
+                {
+                    _debutDispoModifie = value;
+                    OnPropertyChanged();
+                }
             }
         }
 
@@ -278,8 +313,10 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
                     _dispoSelectionnee = value;                    
                     OnPropertyChanged();
 
-                    // Ajustement de la valeur dans le combobox
-                    DureeRDVModifiee = (int)(_dispoSelectionnee.fin_rdv - _dispoSelectionnee.debut_rdv).TotalMinutes;
+                    // Ajustement des valeurs modifiées
+                    DureeDispoModifiee = (int)(_dispoSelectionnee.fin_rdv - _dispoSelectionnee.debut_rdv).TotalMinutes;
+                    TypeDispoModifie = _dispoSelectionnee.Typerdv;
+                    DebutDispoModifie = _dispoSelectionnee.debut_rdv;
                 }
             }
         }
@@ -313,6 +350,19 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
                     _listeTypeRDV = value;
                     OnPropertyChanged();
                 }
+            }
+        }
+        
+        /// <summary>
+        /// Est-ce que le bouton de modification est activé
+        /// </summary>
+        public bool IsBoutonModifierActif
+        {
+            get { return _isBoutonModifieActif; }
+            set
+            {
+                _isBoutonModifieActif = value;
+                OnPropertyChanged();
             }
         }
 
@@ -407,13 +457,8 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
                 Employe emp = ApplicationVueModele.Instance.EmployeConnecte;
                 List<Rendezvous> disposAjoutees = RestDao.AjouterDispos(emp.id_employe, dateDebut, dateFin, DureeRDV, TypeRDV.id_typerdv);
 
-                Console.WriteLine("Nb ajouts: {0}", disposAjoutees.Count);
-
-                // Mise à jour de la liste locales
-                foreach (Rendezvous d in disposAjoutees)
-                {
-                    ListeDisponibilites.Add(new RendezVousAdapter(d, COULEURS_STATUT));
-                }
+                // Mise à jour des données
+                UpdateData();
             }
             catch (Exception)
             {
@@ -447,11 +492,23 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         {
             try
             {
-                // Récupération du rendez-vous sélectionné
+                // Récupération de l'empoyé courant
+                Employe emp = ApplicationVueModele.Instance.EmployeConnecte;
 
-                // 
+                // Modification
+                Rendezvous dispoModifiee = RestDao.ModifierDispo(emp.id_employe, DispoSelectionnee.id_rdv,
+                    DebutDispoModifie, DebutDispoModifie.AddMinutes(DureeDispoModifiee), TypeDispoModifie.id_typerdv, Raison);
 
-
+                // Vérification
+                if (dispoModifiee != null)
+                {
+                    ListeDisponibilites.Remove(ListeDisponibilites.Where(x => x.IsSelectionne).Single());
+                    ListeDisponibilites.Add(new RendezVousAdapter(dispoModifiee));
+                }
+                else
+                {
+                    // TODO
+                }
             }
             catch (Exception)
             {
@@ -465,11 +522,15 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         {
             // Ré-initialisation
             IsDispoConflitClient = false;
+            IsBoutonModifierActif = false;
 
             // On vérifie qu'une seule disponibilité est sélectionnée
             List<CalendrierRDV.IRendezVous> dispos = ListeDisponibilites.Where(x => x.IsSelectionne).ToList();
             if (dispos.Count == 1)
             {
+                // On signale l'activation
+                IsBoutonModifierActif = true;
+
                 // On met à jour la disponibilité sélectionnée
                 DispoSelectionnee = ((RendezVousAdapter)dispos[0]).RDV;
 

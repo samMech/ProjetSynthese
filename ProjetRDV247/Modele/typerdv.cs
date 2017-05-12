@@ -11,6 +11,7 @@ namespace ProjetRDV247.Modele
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations.Schema;
     using System.Runtime.Serialization;
 
     public partial class Typerdv
@@ -28,6 +29,8 @@ namespace ProjetRDV247.Modele
         [IgnoreDataMember]
         public virtual Employe Employe { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [NotMapped]
+        [IgnoreDataMember]        
         public virtual ICollection<Rendezvous> Rendezvous { get; set; }
     }
 }

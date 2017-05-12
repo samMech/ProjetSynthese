@@ -19,11 +19,6 @@ namespace ProjetRDV247.Controle
         // Le data entity
         private Dao dao;
         
-        public string TestREST()
-        {
-            return "Hello World !";
-        }
-
         // GET
         //============================================================================================================================
 
@@ -58,7 +53,7 @@ namespace ProjetRDV247.Controle
             DateTime dateDebut = Utilitaire.TrouverLundiPrecedent(DateTime.ParseExact(date, "yyyyMMdd", CultureInfo.InvariantCulture));
 
             // On retourne les disponibilités de l'employé pour la semaine
-            return dao.GetDisposEmploye(Convert.ToInt32(idEmploye), dateDebut, dateDebut.AddDays(7));
+            return dao.GetDisposEmploye(Convert.ToInt32(idEmploye), dateDebut, dateDebut.AddDays(6));
         }
         
         /// <summary>
@@ -79,7 +74,7 @@ namespace ProjetRDV247.Controle
         }
 
         /// <summary>
-        /// Retourne tous les rendez-vous de l'employé pour la date fournie
+        /// Retourne tous les rendez-vous de l'employé pour la semaine commençant à la date fournie
         /// </summary>
         /// <param name="idEmploye">L'identifiant de l'employé</param>
         /// <param name="date">La date en format 'yyyyMMdd'</param>
@@ -97,8 +92,8 @@ namespace ProjetRDV247.Controle
             DateTime dateJour = DateTime.ParseExact(date, "yyyyMMdd", CultureInfo.InvariantCulture).Date;
 
             // On retourne les rendez-vous de l'employé pour cette journée
-            List<Rendezvous> resultats = dao.GetDisposEmploye(Convert.ToInt32(idEmploye), dateJour, dateJour.AddDays(1));
-            return resultats.Where(r => r.statut_rdv.Equals("LIBRE") == false).ToList();            
+            List<Rendezvous> resultats = dao.GetDisposEmploye(Convert.ToInt32(idEmploye), dateJour, dateJour.AddDays(6));
+            return resultats.Where(r => r.id_client_rdv != null).ToList();            
         }
 
         // POST
@@ -262,15 +257,10 @@ namespace ProjetRDV247.Controle
                     dispoModifiee.id_typerdv_rdv = idType;
 
                     // On vérifie si un client a pris rendez-vous pour cette disponibilité                                
-                    if (!dispoModifiee.statut_rdv.Equals("LIBRE") && dispoModifiee.id_client_rdv != null)
+                    if (!dispo.statut_rdv.Equals("LIBRE") && dispo.id_client_rdv != null)
                     {
-                        // On récupère le client et l'employé
-                        // TODO: vérifier si nécessaire ou si ils sont déjà chargé avec le rdv !!!!!!!!!!!!!!!!!
-                        Client client = dao.GetClientById(dispoModifiee.id_client_rdv.Value);
-                        Employe employe = dao.GetEmployeById(dispoModifiee.id_employe_rdv);
-
                         // On notifie le client de l'annulation de son rendez-vous
-                        CommunicationUtil.NotifierChangementRDV(client, dispo, dispoModifiee, employe, raison);
+                        CommunicationUtil.NotifierChangementRDV(dispo.Client, dispo, dispoModifiee, dispo.Employe, raison);
                     }
 
                     // Sauvegarde des modifications
@@ -309,13 +299,8 @@ namespace ProjetRDV247.Controle
                 // On vérifie si un client a pris rendez-vous pour cette disponibilité                                
                 if (!dispo.statut_rdv.Equals("LIBRE") && dispo.id_client_rdv != null)
                 {
-                    // On récupère le client et l'employé
-                    // TODO: vérifier si nécessaire ou si ils sont déjà chargé avec le rdv !!!!!!!!!!!!!!!!!
-                    Client client = dao.GetClientById(dispo.id_client_rdv.Value);
-                    Employe employe = dao.GetEmployeById(dispo.id_employe_rdv);
-
                     // On notifie le client de l'annulation de son rendez-vous
-                    CommunicationUtil.NotifierAnnulationRDV(client, dispo, employe, raison);
+                    CommunicationUtil.NotifierAnnulationRDV(dispo.Client, dispo, dispo.Employe, raison);
                 }
 
                 // Suppression de la disponibilité

@@ -33,18 +33,22 @@ namespace InterfaceEntrepriseWPF
             this.DataContext = ApplicationVueModele.Instance;
         }
 
-        // Listener pour garder la fenêtre centrée
+        
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             if (e.PreviousSize != e.NewSize)
             {
                 // Récupération des dimensions de l'écran
-                double width = SystemParameters.PrimaryScreenWidth;
-                double height = SystemParameters.PrimaryScreenHeight;
+                double width = SystemParameters.WorkArea.Width;
+                double height = SystemParameters.WorkArea.Height;
+
+                // Ajustement des dimmensions pour rester dans l'écran
+                double newWidth = e.NewSize.Width > width ? width : e.NewSize.Width;
+                double newHeight = e.NewSize.Height > height ? height : e.NewSize.Height;
 
                 // Recentrage de la fenêtre
-                this.Left = (width - e.NewSize.Width) / 2;
-                this.Top = (height - e.NewSize.Height) / 2;
+                this.Left = (width - newWidth) / 2;
+                this.Top = (height - newHeight) / 2;
             }
         }
     }

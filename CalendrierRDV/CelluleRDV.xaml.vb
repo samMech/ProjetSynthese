@@ -4,52 +4,38 @@ Imports System.Runtime.CompilerServices
 Public Class CelluleRDV
     Implements INotifyPropertyChanged
 
-    '============'
-    ' Propriétés '
-    '============'
+    'Attributs
+    Private _irdv As IRendezVous
 
-    Public Property CouleurRV As SolidColorBrush
-    Public Property InfoRV As List(Of String)
-
-    'Événement pour notifier des changements de propriétés
-    Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
-
-    Private _isSelectionne As Boolean
-    Public Property IsSelectionne As Boolean
-        Get
-            Return _isSelectionne
-        End Get
-        Set(value As Boolean)
-            Me._isSelectionne = value
-            NotifyPropertyChanged()
-        End Set
-    End Property
+    '==============='
+    ' Constructeurs '
+    '==============='
 
     ''' <summary>
     ''' Constructeur par défaut
     ''' </summary>
     Public Sub New()
-
         'Cet appel est requis par le concepteur.
         InitializeComponent()
-
-        'Ajoutez une initialisation quelconque après l'appel InitializeComponent().
-        IsSelectionne = False
-        Me.DataContext = Me
     End Sub
 
     ''' <summary>
     ''' Constructeur avec paramètres
     ''' </summary>
-    ''' <param name="couleur">La couleur de fond</param>
-    ''' <param name="infos">La liste des informations à afficher</param>
-    Public Sub New(couleur As SolidColorBrush, infos As List(Of String))
+    ''' <param name="irdv">L'objet de type IRendezVous à afficher</param>
+    Public Sub New(irdv As IRendezVous)
         Me.New()
 
         'Initialisation des propriétés
-        Me.CouleurRV = couleur
-        Me.InfoRV = infos
+        Me.IRDV = irdv
     End Sub
+
+    '============'
+    ' Propriétés '
+    '============'
+
+    'Événement pour notifier des changements de propriétés
+    Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
 
     ''' <summary>
     ''' Méthode pour déclencher l'événement qui notifie le changement de propriété
@@ -59,10 +45,29 @@ Public Class CelluleRDV
         RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
     End Sub
 
+    ''' <summary>
+    ''' L'objet de type IRendezVous à afficher
+    ''' </summary>
+    Public Property IRDV As IRendezVous
+        Get
+            Return _irdv
+        End Get
+        Set(value As IRendezVous)
+            If value IsNot Nothing Then
+                Me._irdv = value
+                NotifyPropertyChanged()
+            End If
+        End Set
+    End Property
+
+    '=========='
+    ' Méthodes '
+    '=========='
+
     'Listener pour quand on clique sur le rendez-vous
-    Private Sub MaGrille_MouseLeftButtonDown(sender As Object, e As System.Windows.Input.MouseButtonEventArgs)
+    Private Sub RDVPanel_MouseLeftButtonDown(sender As Object, e As MouseButtonEventArgs)
         'On inverse le statut de sélection
-        IsSelectionne = Not IsSelectionne
+        IRDV.IsSelectionne = Not IRDV.IsSelectionne
     End Sub
 
 End Class

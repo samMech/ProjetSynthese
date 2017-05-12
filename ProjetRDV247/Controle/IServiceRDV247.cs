@@ -13,16 +13,6 @@ namespace ProjetRDV247.Controle
     [ServiceContract]
     public interface IServiceRDV247
     {
-        // TEST
-        //=============================================================
-
-        [OperationContract]
-        [WebInvoke(Method = "GET",
-            ResponseFormat = WebMessageFormat.Json,
-            BodyStyle = WebMessageBodyStyle.Wrapped,
-            UriTemplate = "TestREST")]
-         string TestREST();
-
         // GET
         //=============================================================
 

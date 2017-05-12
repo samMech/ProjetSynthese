@@ -4,7 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:InterfaceEntrepriseWPF.Vues"
-             mc:Ignorable="d" Width="1600" Height="860">
+             xmlns:util="clr-namespace:InterfaceEntrepriseWPF.Utilitaire"
+             mc:Ignorable="d" MaxHeight="750">
 
     <!-- Ressources locales -->
     <UserControl.Resources>
@@ -51,6 +52,14 @@
             </Style.Resources>
         </Style>
 
+        <!-- Templates -->
+        <DataTemplate x:Key="TemplateComboBoxDuree">
+            <Label  Content="{Binding}" ContentStringFormat="{}{0} minutes" Style="{StaticResource StyleTexte}" Padding="0"/>
+        </DataTemplate>
+        <DataTemplate x:Key="TemplateComboBoxTypeRDV">
+            <Label  Content="{Binding Path=nom_typerdv}" Style="{StaticResource StyleTexte}" Padding="0"/>
+        </DataTemplate>
+
     </UserControl.Resources>
 
     <!-- Contenu -->
@@ -65,36 +74,25 @@
                 <Button Content="Consulter les rendez-vous" Command="{Binding Path=ConsulterRDVCommand}"/>
             </StackPanel>
 
-            <StackPanel>
+            <TabControl Margin="10" Style="{StaticResource TabTemplateStyle}">
+
                 <!-- Zone d'ajout -->
-                <GroupBox Header="Ajout de disponibilités" Style="{StaticResource StyleTitre}">
+                <TabItem Header="Ajouter">
                     <StackPanel Margin="5,0">
 
                         <!-- Date -->
                         <Label Content="1) Choisir une date"/>
-                        <Calendar SelectedDate="{Binding Path=DateJour}"/>
+                        <Calendar SelectedDate="{Binding Path=DateJour}" SelectionMode="SingleDate"/>
 
-                        <!-- Durée -->
+                        <!-- Durée et type -->
                         <Label Content="2) Choisir la durée et le type des rendez-vous"/>
                         <Grid Margin="10,0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <ComboBox Grid.Column="0" ItemsSource="{Binding Path=DureesRDV}" SelectedValue="{Binding Path=DureeRDV}" Margin="0,0,5,0">
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <Label  Content="{Binding}" ContentStringFormat="{}{0} minutes" Style="{StaticResource StyleTexte}" Padding="0"/>
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
-                            </ComboBox>
-                            <ComboBox Grid.Column="1" ItemsSource="{Binding Path=ListeTypesRDV}" SelectedValue="{Binding Path=TypeRDV}" Margin="5,0,0,0">
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <Label  Content="{Binding Path=nom_typerdv}" Style="{StaticResource StyleTexte}" Padding="0"/>
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
-                            </ComboBox>
+                            </Grid.ColumnDefinitions>                            
+                            <ComboBox Grid.Column="0" ItemsSource="{Binding Path=DureesRDV}" SelectedValue="{Binding Path=DureeRDV}" ItemTemplate="{StaticResource TemplateComboBoxDuree}" Margin="0,0,5,0"/>
+                            <ComboBox Grid.Column="1" ItemsSource="{Binding Path=ListeTypesRDV}" SelectedValue="{Binding Path=TypeRDV}" ItemTemplate="{StaticResource TemplateComboBoxTypeRDV}" Margin="5,0,0,0" />
                         </Grid>
 
                         <!-- Plage horaire -->
@@ -106,7 +104,7 @@
                                 <ColumnDefinition Width="1*"/>
                                 <ColumnDefinition Width="3*" />
                             </Grid.ColumnDefinitions>
-                            
+
                             <Label Content="De" Grid.Column="0"/>
                             <ComposantsUtils:TimePicker Grid.Column="1" HeureJour="{Binding Path=DebutPlageAjout}" Style="{StaticResource ErreurDebutPlage}"/>
                             <Label Content="à" Grid.Column="2"/>
@@ -116,25 +114,52 @@
                         <Button Content="Ajouter les disponibilités" Command="{Binding Path=AjouterDisposCommand}"/>
 
                     </StackPanel>
-                </GroupBox>
+                </TabItem>
 
                 <!-- Zone de modification -->
-                <GroupBox Header="Modification / Suppression" Style="{StaticResource StyleTitre}">
+                <TabItem Header="Modifier">
                     <StackPanel Margin="5,0">
-                        <TextBox Text="Raison..." Style="{StaticResource StyleTextBoxRaison}"/>
-                        <Button Content="Modifier la disponibilité" Command="{Binding Path=ModifierDispoCommand}"/>
-                        <Button Content="Supprimer les disponibilités" Command="{Binding Path=SupprimerDisposCommand}"/>                        
-                    </StackPanel>
-                </GroupBox>
 
-            </StackPanel>            
-            
+                        <GroupBox Header="Modification" Margin="10" IsEnabled="{Binding ElementName=btnModifier, Path=IsEnabled}">
+                            <Grid Margin="5">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                
+                                <DatePicker Grid.Row="0" Grid.ColumnSpan="2" SelectedDate="{Binding DispoSelectionnee.debut_rdv}" Margin="0,10"/>
+                                <Label Grid.Row="1" Grid.Column="0" Content="Durée"/>
+                                <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Path=DureesRDV}" SelectedValue="{Binding Path=DureeRDVModifiee}" ItemTemplate="{StaticResource TemplateComboBoxDuree}" Margin="5"/>
+                                <Label Grid.Row="2" Grid.Column="0" Content="Type"/>
+                                <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Path=ListeTypesRDV}" SelectedValue="{Binding Path=DispoSelectionnee.Typerdv}" ItemTemplate="{StaticResource TemplateComboBoxTypeRDV}" Margin="5"/>
+
+                                <Button Grid.Row="3" Grid.ColumnSpan="2" x:Name="btnModifier" Content="Modifier la disponibilité" Command="{Binding Path=ModifierDispoCommand}" Margin="5,10"/>
+
+                            </Grid>                            
+                        </GroupBox>
+
+                        <Label Style="{StaticResource StyleErreur}" HorizontalContentAlignment="Center" IsEnabled="{Binding Path=IsDispoConflitClient}">
+                            <Label.Content>
+                                <TextBlock TextWrapping="Wrap" Text="Avant de valider, veuillez fournir la raison du changement pour aviser les clients concernés !"/>
+                            </Label.Content>
+                        </Label>
+                        <TextBox Style="{StaticResource StyleTextBoxRaison}" IsEnabled="{Binding Path=IsDispoConflitClient}"/>
+
+                        <Button Content="Supprimer les disponibilités" Command="{Binding Path=SupprimerDisposCommand}"/>
+                    </StackPanel>
+                </TabItem>
+            </TabControl>
+                        
         </DockPanel>
         
         <!-- Composant graphique -->
-        <Border BorderThickness="2" Margin="5,15,5,0">
-            <CalendrierRDV:CalendrierRDV ListeIRDV="{Binding Path=ListeDisponibilites}" DateCourante="{Binding Path=DateJour}" CouleurStatut="{Binding Path=CouleurStatuts}"/>
-        </Border>
+        <CalendrierRDV:CalendrierRDV Margin="0,0,10,0" ListeIRDV="{Binding Path=ListeDisponibilites}" DateCourante="{Binding Path=DateJour}" MinWidth="600" MinHeight="400"/>
         
     </DockPanel>
 

@@ -26,7 +26,10 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         private DateTime _finPlageAjout;
         private int _dureeRDV;
         private Typerdv _typeRDV;
-        private string _raison = "";
+        private string _raison;
+        private bool _isDispoConflitClient;
+        private Rendezvous _dispoSelectionnee;
+        private int _dureeRDVModifiee;
 
         // La liste des disponibilités pour le composant graphique
         private ObservableCollection<CalendrierRDV.IRendezVous> _listeDisponibilites;
@@ -43,6 +46,9 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         // Pour les erreurs
         private bool _erreurDebutPlage;
         private bool _erreurFinPlage;
+
+        // Booléen pour empêcher la mise à jour des valeurs plusieurs fois durant l'initialisation
+        private bool initTermine = false;
 
         /// <summary>
         /// Constructeur statique pour initialiser les constantes
@@ -63,12 +69,22 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
             // Ajustement du titre de la fenêtre
             TitrePage = "Gestion des disponibilités";
 
-            // Initialisation des valeurs
+            // Initialisation des valeurs                        
             DateJour = DateTime.Today;
             DureeRDV = DureesRDV.First();
             DebutPlageAjout = DateTime.Now.AddMinutes(DureeRDV - DateTime.Now.Minute % DureeRDV);
             FinPlageAjout = DebutPlageAjout.AddMinutes(DureeRDV);
             ListeDisponibilites = new ObservableCollection<CalendrierRDV.IRendezVous>();
+            Raison = "";
+            IsDispoConflitClient = false;
+
+            // Récupération de la liste des type de rendez-vous de l'employé
+            Employe emp = ApplicationVueModele.Instance.EmployeConnecte;
+            ListeTypesRDV = emp.Typerdv.ToList();
+            TypeRDV = ListeTypesRDV[0];
+
+            // Initialisation terminée
+            initTermine = true;
         }
 
         //============//
@@ -99,9 +115,25 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
             get { return _dureeRDV; }
             set
             {
-                if (DureesRDV.Contains(value))
+                if (DureesRDV.Contains(value) && value != _dureeRDV)
                 {
                     _dureeRDV = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        /// <summary>
+        /// La durée modifiée du rendez-vous
+        /// </summary>
+        public int DureeRDVModifiee
+        {
+            get { return _dureeRDVModifiee; }
+            set
+            {
+                if (DureesRDV.Contains(value) && value != _dureeRDVModifiee)
+                {
+                    _dureeRDVModifiee = value;
                     OnPropertyChanged();
                 }
             }
@@ -115,8 +147,11 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
             get { return _typeRDV; }
             set
             {
-                _typeRDV = value;
-                OnPropertyChanged();
+                if (value != null && value.Equals(_typeRDV) == false)
+                {
+                    _typeRDV = value;
+                    OnPropertyChanged();
+                }                
             }
         }
 
@@ -128,11 +163,18 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
             get { return _dateJour; }
             set
             {
-                if (_dateJour != null)
-                {
+                if(value != null && value.Equals(_dateJour) == false)
+                {   
+                    // Vérification pour savoir si on a changé de semaine
+                    if (initTermine && Math.Abs((value - CalendrierRDV.Utilitaire.TrouverLundiPrecedent(_dateJour)).Days) > 6)
+                    {
+                        // Mise à jour des données
+                        UpdateData();
+                    }
+                    
                     _dateJour = value;
                     OnPropertyChanged();
-                }
+                }                
             }
         }
 
@@ -144,7 +186,7 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
             get { return _debutPlageAjout; }
             set
             {
-                if (_debutPlageAjout != null)
+                if (value != null && value.Equals(_debutPlageAjout) == false)
                 {
                     _debutPlageAjout = value;
                     OnPropertyChanged();
@@ -173,7 +215,7 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
             get { return _finPlageAjout; }
             set
             {
-                if (_finPlageAjout != null)
+                if (value != null && value.Equals(_finPlageAjout) == false)
                 {
                     _finPlageAjout = value;
                     OnPropertyChanged();
@@ -202,8 +244,43 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
             get { return _raison; }
             set
             {
-                _raison = value;
+                if (value != null && value.Equals(_raison) == false)
+                {
+                    _raison = value;
+                    OnPropertyChanged();
+                }                
+            }
+        }
+
+        /// <summary>
+        /// Est-ce qu'une disponibilité sélectionnée est déjà réservée pour un client
+        /// </summary>
+        public bool IsDispoConflitClient
+        {
+            get { return _isDispoConflitClient; }
+            set
+            {
+                _isDispoConflitClient = value;
                 OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// La disponibilité sélectionnée pour modification
+        /// </summary>
+        public Rendezvous DispoSelectionnee
+        {
+            get { return _dispoSelectionnee; }
+            set
+            {
+                if (value != null && value.Equals(_dispoSelectionnee) == false)
+                {
+                    _dispoSelectionnee = value;                    
+                    OnPropertyChanged();
+
+                    // Ajustement de la valeur dans le combobox
+                    DureeRDVModifiee = (int)(_dispoSelectionnee.fin_rdv - _dispoSelectionnee.debut_rdv).TotalMinutes;
+                }
             }
         }
 
@@ -215,8 +292,11 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
             get { return _listeDisponibilites; }
             set
             {
-                _listeDisponibilites = (value == null) ? new ObservableCollection<CalendrierRDV.IRendezVous>() : value;
-                OnPropertyChanged();
+                if (value != null && value.Equals(_listeDisponibilites) == false)
+                {
+                    _listeDisponibilites = value;
+                    OnPropertyChanged();
+                }                
             }
         }
 
@@ -228,7 +308,7 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
             get { return _listeTypeRDV; }
             set
             {
-                if (value != null)
+                if (value != null && value.Equals(_listeTypeRDV) == false)
                 {
                     _listeTypeRDV = value;
                     OnPropertyChanged();
@@ -309,11 +389,9 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         /// </summary>
         public override void UpdateData()
         {
-            // Récupération des disponibilités et mise à jour
+            // Récupération des disponibilités pour la semaine courante
             Employe emp = ApplicationVueModele.Instance.EmployeConnecte;
-            ListeDisponibilites = ConversionUtil.ConvertirRDVToIRDV(RestDao.GetDisposEmploye(emp.id_employe));
-            ListeTypesRDV = emp.Typerdv.ToList();
-            TypeRDV = ListeTypesRDV[0];
+            ListeDisponibilites = ConversionUtil.ConvertirRDVToIRDV(RestDao.GetDisposEmploye(emp.id_employe), COULEURS_STATUT);
         }
 
         // Méthode pour ajouter des disponibilités
@@ -334,7 +412,7 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
                 // Mise à jour de la liste locales
                 foreach (Rendezvous d in disposAjoutees)
                 {
-                    ListeDisponibilites.Add(new RendezVousAdapter(d));
+                    ListeDisponibilites.Add(new RendezVousAdapter(d, COULEURS_STATUT));
                 }
             }
             catch (Exception)
@@ -363,29 +441,84 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
             ErreurFinPlage = FinPlageAjout.TimeOfDay < DebutPlageAjout.AddMinutes(DureeRDV).TimeOfDay;
             return !ErreurFinPlage;
         }
-
+        
         // Méthode pour modifier une disponibilité
         private void ModifierDispo(object obj)
         {
+            try
+            {
+                // Récupération du rendez-vous sélectionné
 
+                // 
+
+
+            }
+            catch (Exception)
+            {
+                // TODO
+                throw;
+            }
         }
 
         // Méthode pour savoir si on peut modifier une disponibilité
         private bool CanModifierDispo(object obj)
         {
-            return true;
+            // Ré-initialisation
+            IsDispoConflitClient = false;
+
+            // On vérifie qu'une seule disponibilité est sélectionnée
+            List<CalendrierRDV.IRendezVous> dispos = ListeDisponibilites.Where(x => x.IsSelectionne).ToList();
+            if (dispos.Count == 1)
+            {
+                // On met à jour la disponibilité sélectionnée
+                DispoSelectionnee = ((RendezVousAdapter)dispos[0]).RDV;
+
+                // On vérifie si la disponibilité est déjà réservée
+                IsDispoConflitClient = (DispoSelectionnee.Client != null);
+                return !IsDispoConflitClient;
+            }
+            return false;            
         }
 
         // Méthode pour supprimer des disponibilités
         private void SupprimerDispos(object obj)
         {
+            try
+            {
+                // Récupération des id des disponibilités à supprimer
+                List<int> listeIdDispos = ListeDisponibilites.Where(x => x.IsSelectionne).Select(x => x.ID).ToList();
+                if (listeIdDispos.Count > 0)
+                {
+                    // Suppression
+                    Employe emp = ApplicationVueModele.Instance.EmployeConnecte;
+                    RestDao.SupprimerDispos(emp.id_employe, listeIdDispos, Raison);
 
+                    // Mise à jour des données
+                    UpdateData();
+                }
+            }
+            catch (Exception)
+            {
+                // TODO
+                throw;
+            }
         }
 
         // Méthode pour savoir si on peut supprimer des disponibilités
         private bool CanSupprimerDispos(object obj)
         {
-            return true;
+            // Ré-initialisation
+            IsDispoConflitClient = false;
+
+            // On vérifie qu'au moins une disponibilité est sélectionnée
+            List<CalendrierRDV.IRendezVous> dispos = ListeDisponibilites.Where(x => x.IsSelectionne).ToList();
+            if (dispos.Count > 0)
+            {
+                // On vérifie si une des disponibilités est déjà réservée
+                IsDispoConflitClient = (dispos.FirstOrDefault(x => x.NomClient != null) != null);
+                return !IsDispoConflitClient;
+            }
+            return false;
         }
 
         // Méthode pour aller à la page d'affichage des rendez-vous

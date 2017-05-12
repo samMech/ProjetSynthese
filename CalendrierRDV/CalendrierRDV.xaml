@@ -16,8 +16,8 @@
     </UserControl.Resources>
     
     <Border CornerRadius="5" BorderThickness="5" BorderBrush="#FF3B8BFF" Padding="5" >
-        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" CanContentScroll="True" Margin="0,0,5,0">
-            <Grid x:Name="gHoraire" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" UseLayoutRounding="False" ScrollViewer.CanContentScroll="True">
+        <ScrollViewer HorizontalScrollBarVisibility="auto" VerticalScrollBarVisibility="auto" CanContentScroll="True">
+            <Grid x:Name="gHoraire" Margin="0,0,5,0">
                 <Grid.Resources>
                     <Style x:Key="StyleBordure" TargetType="{x:Type Border}">
                         <Setter Property="BorderBrush" Value="#FF3B8BFF" />
@@ -90,15 +90,15 @@
                 <Label x:Name="lblDimanche" Content="{Binding Path=DateDebut, ElementName=This, Converter={StaticResource DateToDayTitle}, ConverterParameter=6}" Grid.Row="1" Grid.Column="7"/>
 
                 <!-- Bordures pour les cases de titre -->
-                <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8"/>                
-                <Border Grid.Row="1" Grid.Column="0"/>
-                <Border Grid.Row="1" Grid.Column="1"/>
-                <Border Grid.Row="1" Grid.Column="2"/>
-                <Border Grid.Row="1" Grid.Column="3"/>
-                <Border Grid.Row="1" Grid.Column="4"/>
-                <Border Grid.Row="1" Grid.Column="5"/>
-                <Border Grid.Row="1" Grid.Column="6"/>
-                <Border Grid.Row="1" Grid.Column="7"/>
+                <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8"/>
+                <Border x:Name="T0" Grid.Row="1" Grid.Column="0" Style="{StaticResource StyleColonne}"/>
+                <Border x:Name="T1" Grid.Row="1" Grid.Column="1" Style="{StaticResource StyleColonne}"/>
+                <Border x:Name="T2" Grid.Row="1" Grid.Column="2" Style="{StaticResource StyleColonne}"/>
+                <Border x:Name="T3" Grid.Row="1" Grid.Column="3" Style="{StaticResource StyleColonne}"/>
+                <Border x:Name="T4" Grid.Row="1" Grid.Column="4" Style="{StaticResource StyleColonne}"/>
+                <Border x:Name="T5" Grid.Row="1" Grid.Column="5" Style="{StaticResource StyleColonne}"/>
+                <Border x:Name="T6" Grid.Row="1" Grid.Column="6" Style="{StaticResource StyleColonne}"/>
+                <Border x:Name="T7" Grid.Row="1" Grid.Column="7" Style="{StaticResource StyleColonne}"/>
 
                 <!-- Bordures pour les colonnes de la grille -->
                 <Border x:Name="C0" Grid.Row="2" Grid.Column="0" Grid.RowSpan="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=RowDefinitions.Count, Mode=OneWay}" Style="{StaticResource StyleColonne}"/>

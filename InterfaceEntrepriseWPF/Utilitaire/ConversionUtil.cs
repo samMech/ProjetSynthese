@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Security;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace InterfaceEntrepriseWPF.Utilitaire
 {
@@ -56,18 +57,19 @@ namespace InterfaceEntrepriseWPF.Utilitaire
         }
 
         /// <summary>
-        /// Méthode pour reconvertir une liste de RendezVousAdapter en liste de Rendezvous
+        /// Méthode pour adapter une liste de Rendezvous en collection observable de IRendezvous
         /// </summary>
-        /// <param name="listeIRDV">La liste des RendezVousAdapter de type IRendezvous</param>
-        /// <returns>La liste des rendez-vous originaux</returns>
-        public static List<Rendezvous> ConvertirIRDVToRDV(ObservableCollection<CalendrierRDV.IRendezVous> listeIRDV)
+        /// <param name="listeRDV">La liste de Rendezvous</param>
+        /// <param name="couleurs">La référence pour les couleurs des statuts</param>
+        /// <returns>La collection observable de IRendezVous</returns>
+        public static ObservableCollection<CalendrierRDV.IRendezVous> ConvertirRDVToIRDV(List<Rendezvous> listeRDV, Dictionary<string, Color> couleurs)
         {
-            List<Rendezvous> listeRDV = new List<Rendezvous>();
-            foreach (CalendrierRDV.IRendezVous irdv in listeIRDV)
+            ObservableCollection<CalendrierRDV.IRendezVous> listeIRDV = new ObservableCollection<CalendrierRDV.IRendezVous>();
+            foreach (Rendezvous rdv in listeRDV)
             {
-                listeRDV.Add(((RendezVousAdapter)irdv).RDV);
+                listeIRDV.Add(new RendezVousAdapter(rdv, couleurs));
             }
-            return listeRDV;
+            return listeIRDV;
         }
 
     }

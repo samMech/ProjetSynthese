@@ -154,7 +154,7 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         {
             // Si la page n'existe pas encore, on l'ajoute     
             if (! pages.ContainsKey(page))
-            {   
+            {                   
                 switch (page)
                 {
                     case Pages.CONNEXION:

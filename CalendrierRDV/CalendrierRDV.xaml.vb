@@ -1,4 +1,5 @@
 ﻿Imports System.Collections.ObjectModel
+Imports System.Collections.Specialized
 Imports System.ComponentModel
 Imports System.Runtime.CompilerServices
 Imports System.Threading
@@ -36,7 +37,6 @@ Public Class CalendrierRDV
 
     'Propriétés
     Private _dateDebut As Date
-    Private _dateCourante As Date
     Private _heureMin As DateTime = HEURE_MIN_DEFAULT
     Private _heureMax As DateTime = HEURE_MAX_DEFAULT
     Private _deltaTimeMin As TimeSpan = DELTA_TIME_MIN_DEFAULT
@@ -49,14 +49,15 @@ Public Class CalendrierRDV
     ''' Constructeur par défaut
     ''' </summary>
     Public Sub New()
-        ' Cet appel est requis par le concepteur.
+        'Cet appel est requis par le concepteur.
         InitializeComponent()
 
-        ' Ajustement de la culture
+        'Ajustement de la culture
         Me.Language = System.Windows.Markup.XmlLanguage.GetLanguage(Thread.CurrentThread.CurrentCulture.IetfLanguageTag)
 
-        ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
+        'Ajoutez une initialisation quelconque après l'appel InitializeComponent().
         DateCourante = DateTime.Now
+        ListeIRDV = New ObservableCollection(Of IRendezVous)
         ReconstruireGrilleHoraire()
     End Sub
 
@@ -84,8 +85,10 @@ Public Class CalendrierRDV
             Return _dateDebut
         End Get
         Set(ByVal value As DateTime)
-            Me._dateDebut = value
-            NotifyPropertyChanged()
+            If value <> _dateDebut Then
+                Me._dateDebut = value
+                NotifyPropertyChanged()
+            End If
         End Set
     End Property
 
@@ -109,11 +112,10 @@ Public Class CalendrierRDV
     'Méthode pour signaler le changement au composant
     Private Shared Sub OnDateCourantePropertyChanged(source As DependencyObject, e As DependencyPropertyChangedEventArgs)
         Dim cal As CalendrierRDV = TryCast(source, CalendrierRDV)
-        If Not IsNothing(cal) Then
+        If cal IsNot Nothing Then
+            cal.DateDebut = Utilitaire.TrouverLundiPrecedent(cal.DateCourante)
             cal.AfficherListeRV()
         End If
-        cal.DateDebut = Utilitaire.TrouverLundiPrecedent(cal.DateCourante)
-        cal.AfficherListeRV()
     End Sub
     '==================================================================================
 
@@ -123,7 +125,7 @@ Public Class CalendrierRDV
             Return _heureMin
         End Get
         Set(ByVal value As DateTime)
-            If value.TimeOfDay < HeureFin.TimeOfDay Then
+            If value <> _heureMin AndAlso value.TimeOfDay < HeureFin.TimeOfDay Then
                 Me._heureMin = value
                 ReconstruireGrilleHoraire()
                 NotifyPropertyChanged()
@@ -137,7 +139,7 @@ Public Class CalendrierRDV
             Return _heureMax
         End Get
         Set(ByVal value As DateTime)
-            If value.TimeOfDay > HeureDebut.TimeOfDay Then
+            If value <> _heureMax AndAlso value.TimeOfDay > HeureDebut.TimeOfDay Then
                 Me._heureMax = value
                 ReconstruireGrilleHoraire()
                 NotifyPropertyChanged()
@@ -151,7 +153,7 @@ Public Class CalendrierRDV
             Return _deltaTimeMin
         End Get
         Set(ByVal value As TimeSpan)
-            If value.TotalMinutes > 1 AndAlso value.TotalMinutes <= 60 AndAlso 60 Mod value.TotalMinutes = 0 Then
+            If value <> _deltaTimeMin AndAlso value.TotalMinutes > 1 AndAlso value.TotalMinutes <= 60 AndAlso 60 Mod value.TotalMinutes = 0 Then
                 Me._deltaTimeMin = value
                 ReconstruireGrilleHoraire()
                 NotifyPropertyChanged()
@@ -180,103 +182,60 @@ Public Class CalendrierRDV
     Private Shared Sub OnListeIRDVPropertyChanged(source As DependencyObject, e As DependencyPropertyChangedEventArgs)
         Dim cal As CalendrierRDV = TryCast(source, CalendrierRDV)
         If Not IsNothing(cal) Then
+
+            'Suppression du listener sur la vielle collection
+            If e.OldValue IsNot Nothing Then
+                Dim collection = CType(e.OldValue, INotifyCollectionChanged)
+                RemoveHandler collection.CollectionChanged, AddressOf cal.OnListeIRDVCollectionChanged
+            End If
+
+            'Ajout d'un listener pour intercepter les changements sur la liste de IRendezVous
+            If e.NewValue IsNot Nothing Then
+                Dim collection = CType(e.NewValue, ObservableCollection(Of IRendezVous))
+                AddHandler collection.CollectionChanged, AddressOf cal.OnListeIRDVCollectionChanged
+            End If
+
+            'Mise à jour de l'affichage
             cal.AfficherListeRV()
         End If
     End Sub
-    '==================================================================================
 
-    '==================================================================================
-    'Propriété de dépendance pour la liste couleurs de statut
-    Public Shared ReadOnly Property CouleurStatutProperty As DependencyProperty =
-        DependencyProperty.Register("CouleurStatut",
-        GetType(Dictionary(Of String, Color)), GetType(CalendrierRDV),
-        New FrameworkPropertyMetadata(Nothing, AddressOf OnCouleurStatutPropertyChanged))
-
-    'Encapsulation (interne: NE PAS TOUCHER !)
-    Public Property CouleurStatut() As Dictionary(Of String, Color)
-        Get
-            Return CType(GetValue(CouleurStatutProperty), Dictionary(Of String, Color))
-        End Get
-        Set(value As Dictionary(Of String, Color))
-            SetValue(CouleurStatutProperty, value)
-        End Set
-    End Property
-
-    'Méthode pour signaler le changement au composant
-    Private Shared Sub OnCouleurStatutPropertyChanged(source As DependencyObject, e As DependencyPropertyChangedEventArgs)
-        Dim cal As CalendrierRDV = TryCast(source, CalendrierRDV)
-        If Not IsNothing(cal) Then
-            cal.AfficherListeRV()
-        End If
+    'Méthode pour mettre à jour l'affichage quand la liste des rendez-vous change
+    Private Sub OnListeIRDVCollectionChanged(sender As Object, e As NotifyCollectionChangedEventArgs)
+        'Choix selon l'action
+        Select Case e.Action
+            Case NotifyCollectionChangedAction.Add
+                'On affiche les nouveaux rendez-vous
+                For Each r As IRendezVous In e.NewItems
+                    AfficherRV(r)
+                Next
+            Case NotifyCollectionChangedAction.Remove
+                'On enlève les rendez-vous affichés
+                Dim elem As CelluleRDV
+                For Each r As IRendezVous In e.NewItems
+                    elem = gHoraire.Children.OfType(Of CelluleRDV).Where(Function(x) x.Name.StartsWith("rvcell" + r.ID.ToString())).SingleOrDefault()
+                    If elem IsNot Nothing Then
+                        gHoraire.Children.Remove(elem)
+                    End If
+                Next
+            Case NotifyCollectionChangedAction.Replace
+                'On réaffiche la liste
+                AfficherListeRV()
+            Case NotifyCollectionChangedAction.Move
+            Case Else
+        End Select
     End Sub
+
     '==================================================================================
 
     '=========='
     ' Méthodes '
     '=========='
 
-    ''' <summary>
-    ''' Fonction pour retourner la liste des rendez-vous présentement sélectionnés
-    ''' </summary>
-    ''' <returns></returns>
-    Public Function GetSelectedRV() As ObservableCollection(Of IRendezVous)
-        Dim id As Integer
-        Dim liste As ObservableCollection(Of IRendezVous) = New ObservableCollection(Of IRendezVous)
-        For Each rvCell As CelluleRDV In gHoraire.Children.OfType(Of FrameworkElement).Where(Function(x) x.Name.StartsWith("rvcell")).ToList()
-            If rvCell.IsSelectionne Then
-                id = Convert.ToInt32(rvCell.Name.Replace("rvcell", ""))
-                liste.Add((From r In ListeIRDV Where r.ID = id Select r).First())
-            End If
-        Next
-        Return liste
-    End Function
-
-    ''' <summary>
-    ''' Méthode pour ajouter un rendez-vous à la liste
-    ''' </summary>
-    ''' <param name="rv">Le rendez-vous à ajouter</param>
-    Public Sub AjouterRV(rv As IRendezVous)
-        If (From r In ListeIRDV Where r.ID = rv.ID Select r).FirstOrDefault() Is Nothing Then
-            ListeIRDV.Add(rv)
-            AfficherRV(rv)
-        End If
-    End Sub
-
-    ''' <summary>
-    ''' Méthode pour supprimer un rendez-vous de la liste
-    ''' </summary>
-    ''' <param name="rvID">Le id du rendez-vous à supprimer</param>
-    Public Sub SupprimerRV(rvID As Integer)
-        Dim rv = (From r In ListeIRDV Where r.ID = rvID Select r).FirstOrDefault
-        If rv IsNot Nothing Then
-            ListeIRDV.Remove(rv)
-            Dim rvCell = gHoraire.Children.OfType(Of FrameworkElement).Where(Function(x) x.Name.Equals("rvcell" + rvID.ToString)).First()
-            gHoraire.Children.Remove(rvCell)
-        End If
-    End Sub
-
-    ''' <summary>
-    ''' Méthode pour modifier un rendez-vous existant ou l'ajout
-    ''' </summary>
-    ''' <param name="rv2">Le rendez-vous modifié</param>
-    Public Sub ModifierRV(rv2 As IRendezVous)
-
-        'Suppression du rendez-vous existant
-        Dim rv = (From r In ListeIRDV Where r.ID = rv2.ID Select r).FirstOrDefault
-        If rv IsNot Nothing Then
-            ListeIRDV.Remove(rv)
-            Dim rvCell = gHoraire.Children.OfType(Of FrameworkElement).Where(Function(x) x.Name.Equals("rvcell" + rv2.ID.ToString)).First()
-            gHoraire.Children.Remove(rvCell)
-        End If
-
-        'Ajout du rendez-vous modifié
-        AjouterRV(rv2)
-    End Sub
-
     'Méthode pour afficher la liste des rendez-vous actuelle
     Private Sub AfficherListeRV()
         'Réinitialisation des rendez-vous affichés
-        For Each elem In gHoraire.Children.OfType(Of FrameworkElement).Where(Function(x) x.Name.StartsWith("rvcell")).ToList()
+        For Each elem As CelluleRDV In gHoraire.Children.OfType(Of CelluleRDV).Where(Function(x) x.Name.StartsWith("rvcell")).ToList()
             gHoraire.Children.Remove(elem)
         Next
 
@@ -292,27 +251,16 @@ Public Class CalendrierRDV
     'Méthode pour afficher un rendez-vous
     Private Sub AfficherRV(rv As IRendezVous)
         'On vérifie d'abord si le rendez-vous est valide pour la vue courante
-        If rv.JourHeure >= DateDebut + HeureDebut.TimeOfDay AndAlso rv.JourHeure + rv.Duree < DateDebut.AddDays(6) + HeureFin.TimeOfDay Then
+        If rv.Debut >= DateDebut + HeureDebut.TimeOfDay AndAlso rv.Fin < DateDebut.AddDays(6) + HeureFin.TimeOfDay Then
 
             'Calcul de la position et de la hauteur du RV
             Dim heureBase As DateTime = New DateTime(HeureDebut.Year, HeureDebut.Month, HeureDebut.Day, HeureDebut.Hour, 0, 0)
-            Dim colonneRV = 1 + (rv.JourHeure - DateDebut).Days
-            Dim ligneRV = 2 + (rv.JourHeure.TimeOfDay - heureBase.TimeOfDay).TotalMinutes / IntervalleTempsMin.TotalMinutes
-            Dim nbLignesRV = (rv.Duree.TotalMinutes / IntervalleTempsMin.TotalMinutes)
-
-            'Préparation des infos à afficher dans la cellule
-            Dim infos = New List(Of String)
-            infos.Add(rv.JourHeure.TimeOfDay.ToString("hh\:mm") + " à " + rv.JourHeure.TimeOfDay.Add(rv.Duree).ToString("hh\:mm"))
-            If (rv.Type IsNot Nothing) AndAlso (rv.Type.Length <> 0) Then
-                infos.Add(rv.Type)
-            End If
-            If (rv.NomClient IsNot Nothing) AndAlso (rv.NomClient.Length <> 0) Then
-                infos.Add(rv.NomClient)
-            End If
+            Dim colonneRV = 1 + (rv.Debut - DateDebut).Days
+            Dim ligneRV = 2 + (rv.Debut.TimeOfDay - heureBase.TimeOfDay).TotalMinutes / IntervalleTempsMin.TotalMinutes
+            Dim nbLignesRV = (rv.Fin - rv.Debut).TotalMinutes / IntervalleTempsMin.TotalMinutes
 
             'Création du composant pour afficher le rendez-vous
-            Dim couleurRV As Color = If(rv.Statut IsNot Nothing AndAlso CouleurStatut IsNot Nothing AndAlso CouleurStatut.ContainsKey(rv.Statut), CouleurStatut(rv.Statut), Colors.Transparent)
-            Dim celluleRV = New CelluleRDV(New SolidColorBrush(couleurRV), infos)
+            Dim celluleRV = New CelluleRDV(rv)
             celluleRV.Name = String.Format("rvcell{0}", rv.ID)
 
             'Ajout du composant dans la grille
@@ -330,18 +278,18 @@ Public Class CalendrierRDV
         'Vérification au cas où pour ne pas avoir de boucle infinie
         If _heureMax.TimeOfDay > HeureDebut.TimeOfDay AndAlso _deltaTimeMin.Minutes > 0 Then
             'Récupération des deux premières lignes
-            Dim l0 As RowDefinition = gHoraire.RowDefinitions.ElementAt(0)
-            Dim l1 As RowDefinition = gHoraire.RowDefinitions.ElementAt(1)
+            Dim r0 As RowDefinition = gHoraire.RowDefinitions.ElementAt(0)
+            Dim r1 As RowDefinition = gHoraire.RowDefinitions.ElementAt(1)
 
             'On efface la grille et les labels pour les heures
             gHoraire.RowDefinitions.Clear()
-            For Each elem In gHoraire.Children.OfType(Of FrameworkElement).Where(Function(x) x.Name.StartsWith("lblTemps")).ToList()
+            For Each elem As FrameworkElement In gHoraire.Children.OfType(Of FrameworkElement).Where(Function(x) x.Name.StartsWith("lblTemps")).ToList()
                 gHoraire.Children.Remove(elem)
             Next
 
             'On remet les lignes d'entêtes en place
-            gHoraire.RowDefinitions.Add(l0)
-            gHoraire.RowDefinitions.Add(l1)
+            gHoraire.RowDefinitions.Add(r0)
+            gHoraire.RowDefinitions.Add(r1)
 
             'Calcul du nombre de lignes par heure
             Dim nbLignesHeure As Integer = 60 / _deltaTimeMin.Minutes
@@ -389,6 +337,9 @@ Public Class CalendrierRDV
                 End If
                 tempsCourant += _deltaTimeMin
             Next
+
+            'On réaffiche les rendez-vous
+            AfficherListeRV()
 
         End If
     End Sub

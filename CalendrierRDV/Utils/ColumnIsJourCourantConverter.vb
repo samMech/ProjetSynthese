@@ -10,7 +10,8 @@ Public Class ColumnIsJourCourantConverter
     Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
 
         'Récupération du no. de colonne
-        Dim noColonne As Integer = CType(value.ToString().Replace("C", ""), Integer) - 1
+        Dim nomColonne As String = value.ToString()
+        Dim noColonne As Integer = CType(nomColonne.Substring(nomColonne.Length - 1), Integer) - 1
 
         'Calcul du no. du jour courant
         Dim jourCourant As Integer = (CType(DateTime.Today.DayOfWeek, Integer) + 6) Mod 7

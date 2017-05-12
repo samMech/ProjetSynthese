@@ -6,8 +6,7 @@
         xmlns:localVues="clr-namespace:InterfaceEntrepriseWPF.Vues"
         xmlns:localVuesModeles="clr-namespace:InterfaceEntrepriseWPF.Vues_Modeles"
         mc:Ignorable="d"
-        Title="{Binding Path=TitrePage}" Height="300" Width="300"
-        SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" SizeChanged="Window_SizeChanged">
+        SizeToContent="WidthAndHeight" Title="{Binding Path=TitrePage}" WindowStartupLocation="CenterScreen" SizeChanged="Window_SizeChanged">
 
     <Window.Resources>
         <!-- Template mapping pour les différentes page -->
@@ -26,8 +25,8 @@
     </Window.Resources>
     
     <!-- Contenu-->
-    <Border BorderThickness="5" HorizontalAlignment="Center" VerticalAlignment="Center">
-        <ContentControl Content="{Binding PageCourante}"/>        
+    <Border BorderThickness="5">
+        <ContentControl Content="{Binding PageCourante}"/>
     </Border>
 
 </Window>

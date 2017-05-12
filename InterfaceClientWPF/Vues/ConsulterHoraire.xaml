@@ -1,35 +1,37 @@
-﻿<UserControl x:Class="InterfaceClientWPF.Vues.ConsulterHoraire"
+﻿<UserControl
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:InterfaceClientWPF.Vues"
+             xmlns:CalendrierRDV="clr-namespace:CalendrierRDV;assembly=CalendrierRDV" x:Class="InterfaceClientWPF.Vues.ConsulterHoraire"
              mc:Ignorable="d" 
              d:DesignHeight="400" d:DesignWidth="600">
-    
+
     <UserControl.Resources>
         <DataTemplate x:Key="ListeEmployes_DataTemplate">
-           <Label>
-               <Label.Content>
-                   <TextBlock>
-                       <TextBlock.Text>
-                           <MultiBinding StringFormat="{}{0} {1}">
-                               <Binding Path="prenom_employe"/>
-                               <Binding Path="nom_employe"/>
-                           </MultiBinding>
-                       </TextBlock.Text>
-                   </TextBlock>
-               </Label.Content>
-           </Label>
+            <Label>
+                <TextBlock>
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0} {1}">
+                            <Binding Path="prenom_employe"/>
+                            <Binding Path="nom_employe"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </Label>
         </DataTemplate>
     </UserControl.Resources>
-    
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="0*"/>
         </Grid.RowDefinitions>
-        <ComboBox ItemsSource="{Binding ListeEmployes}" ItemTemplate="{StaticResource ListeEmployes_DataTemplate}" x:Name="comboBox" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" Width="120"/>
+        <ComboBox ItemsSource="{Binding ListeEmployes}" ItemTemplate="{StaticResource ListeEmployes_DataTemplate}" x:Name="comboBox" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="179"/>
+        <Calendar HorizontalAlignment="Left" Margin="10,27,0,0" VerticalAlignment="Top"/>
+
+        <!-- <CalendrierRDV:CalendrierRDV ListeIRDV="{Binding Path=ListeDisponibilites}" DateCourante="{Binding Path=DateJour}" CouleurStatut="{Binding Path=CouleurStatuts}"/> -->
 
     </Grid>
 </UserControl>

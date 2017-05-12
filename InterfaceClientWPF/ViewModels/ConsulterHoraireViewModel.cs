@@ -5,18 +5,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Media;
 using CalendrierRDV;
 using InterfaceClientWPF.Model;
+using InterfaceClientWPF.Modele;
 using InterfaceClientWPF.Utilitaire;
 using ProjetRDV247.Modele;
+//using CalendrierRDV = CalendrierRDV.CalendrierRDV;
 
 namespace InterfaceClientWPF.ViewModels
 {
     class ConsulterHoraireViewModel:VueModele
     {
+
+        //constantes
+        private static readonly Dictionary<string, Color> COULEURS_STATUT = new Dictionary<string, Color>();
+
         //attributs
         private DateTime _dateJour;
-        private Rendezvous _dispoSelectionnee;
+        private Rendezvous _rdvSelectionnee;
         private ObservableCollection<CalendrierRDV.IRendezVous> _listeDisponibilites;
         private ObservableCollection<Employe> _listEmployes;
         private Employe _selectedEmploye;
@@ -32,6 +39,14 @@ namespace InterfaceClientWPF.ViewModels
             DateJour = DateTime.Today;
             ListeEmployes = new ObservableCollection<Employe>(RestDao.GetEmployes());
             ListeDisponibilites = new ObservableCollection<IRendezVous>();
+        }
+
+        static ConsulterHoraireViewModel()
+        {
+            // TODO (prendre la liste du service web pour les status)
+            COULEURS_STATUT.Add("rv", Colors.Lavender);
+            COULEURS_STATUT.Add("dispo", Colors.GhostWhite);
+            COULEURS_STATUT.Add("annule", Colors.LightPink);
         }
 
         //===========//
@@ -92,7 +107,7 @@ namespace InterfaceClientWPF.ViewModels
             {
                 if (_enregistrerRDVCommand == null)
                 {
-                    _enregistrerRDVCommand = new RelayCommand(EnregistrerRDV);
+                    _enregistrerRDVCommand = new RelayCommand(EnregistrerRDV, CanUseRdv);
                 }
                 return _enregistrerRDVCommand;
             }
@@ -104,7 +119,7 @@ namespace InterfaceClientWPF.ViewModels
             {
                 if (_annulerRDVCommand == null)
                 {
-                    _annulerRDVCommand = new RelayCommand(AnnulerRDV);
+                    _annulerRDVCommand = new RelayCommand(AnnulerRDV, CanUseRdv);
                 }
                 return _annulerRDVCommand;
             }
@@ -124,6 +139,19 @@ namespace InterfaceClientWPF.ViewModels
             }
         }
 
+        public Rendezvous RdvSelectionnee
+        {
+            get { return _rdvSelectionnee; }
+            set
+            {
+                if (value != null && value.Equals(_rdvSelectionnee) == false)
+                {
+                    _rdvSelectionnee = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         //==========//
         // Méthodes //
         //==========//
@@ -133,18 +161,34 @@ namespace InterfaceClientWPF.ViewModels
             Client cl = ApplicationViewModel.Instance.ClientConnecte;
 
             ListeDisponibilites = ConversionUtil.ConvertirRDVToIRDV(RestDao.GetDisposRDVEmploye(
-                SelectedEmploye==null? 0:SelectedEmploye.id_employe, cl.id_client));
+                SelectedEmploye==null? 0:SelectedEmploye.id_employe, cl.id_client), COULEURS_STATUT);
         }
 
 
         private void EnregistrerRDV(object obj)
         {
-            throw new NotImplementedException();
+            Client cl = ApplicationViewModel.Instance.ClientConnecte;
+            RestDao.EnregistrerRdv(cl.id_client, RdvSelectionnee.id_rdv);
+            UpdateData();
         }
 
         private void AnnulerRDV(object obj)
         {
-            throw new NotImplementedException();
+            Client cl = ApplicationViewModel.Instance.ClientConnecte;
+            RestDao.AnnulerRdv(cl.id_client, RdvSelectionnee.id_rdv);
+            UpdateData();
+        }
+
+        private bool CanUseRdv(object obj)
+        {
+            List<IRendezVous> liste = ListeDisponibilites.Where(x => x.IsSelectionne).ToList();
+            if (liste.Count == 1)
+            {
+                RdvSelectionnee = ((RendezVousAdapter)liste.Single()).RDV;
+                return true;
+            }
+
+            return false;
         }
     }
 }

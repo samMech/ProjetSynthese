@@ -124,7 +124,7 @@ namespace ProjetRDV247.Controle
         /// <param name="idClient">L'identifiant du client</param>
         /// <param name="idRDV">Le id de la disponibilité à réserver pour rendez-vous</param>
         /// <returns>Le rendez-vous pris ou null si il n'était plus disponible</returns>
-        public Rendezvous PrendreRDV(int idClient, int idRDV)
+        public bool PrendreRDV(int idClient, int idRDV)
         {
             // Création de l'objet d'accès aux données
             dao = new Dao();
@@ -133,13 +133,13 @@ namespace ProjetRDV247.Controle
             Rendezvous dispo = dao.GetRendezvousById(idRDV);
             if (dispo == null)
             {
-                return null;// TODO: Exception dispo inexistante !!!
+                return false;// TODO: Exception dispo inexistante !!!
             }
 
             // On vérifie si le client existe
             if (dao.GetClientById(idClient) == null)
             {
-                return null;// TODO: Exception dispo inexistante !!!
+                return false;// TODO: Exception dispo inexistante !!!
             }
 
             // On vérifie si la disponibilité est toujours libre
@@ -147,15 +147,15 @@ namespace ProjetRDV247.Controle
             {
                 // Réservation
                 dispo.id_client_rdv = idClient;
-                dispo.statut_rdv = "LIBRE";
+                dispo.statut_rdv = "rv";
 
                 // Mise à jour
                 dao.UpdateRendezvous(dispo);
 
-                return dispo;
+                return true;
             }
 
-            return null;
+            return false;
         }
 
         /// <summary>
@@ -163,7 +163,7 @@ namespace ProjetRDV247.Controle
         /// </summary>
         /// <param name="idClient">L'identifiant du client</param>
         /// <param name="idRDV">Le id du rendez-vous du client</param>
-        public void AnnulerRDV(int idClient, int idRDV)
+        public bool AnnulerRDV(int idClient, int idRDV)
         {
             // Création de l'objet d'accès aux données
             dao = new Dao();
@@ -172,14 +172,14 @@ namespace ProjetRDV247.Controle
             Rendezvous rdv = dao.GetRendezvousById(idRDV);
             if (rdv == null)
             {
-                return;// TODO: Exception rdv inexistant !!!
+                return false;// TODO: Exception rdv inexistant !!!
             }
 
             // On vérifie si le client existe
             Client client = dao.GetClientById(idClient);
             if (client == null)
             {
-                return;// TODO: Exception rdv inexistant !!!
+                return false;// TODO: Exception rdv inexistant !!!
             }
 
             // On vérifie si le rendez-vous était bien au client
@@ -187,11 +187,14 @@ namespace ProjetRDV247.Controle
             {
                 // Annulation
                 rdv.id_client_rdv = null;
+                rdv.Client = null;
                 rdv.statut_rdv = "LIBRE";
 
                 // Mise à jour
                 dao.UpdateRendezvous(rdv);
+                return true;
             }
+            return false;
         }         
 
         /// <summary>

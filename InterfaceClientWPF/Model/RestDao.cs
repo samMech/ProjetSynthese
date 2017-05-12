@@ -86,5 +86,37 @@ namespace InterfaceClientWPF.Model
             string response = rc.MakeRequest();
             return JsonUtil.DeserialiserListeJson<Rendezvous>(response, "GetDisposRDVEmployeResult");
         }
+
+        public static bool EnregistrerRdv(int id_client, int id_rdv)
+        {
+            //Creation du client rest
+            RestClient rc = new RestClient("http://localhost:2057/Controle/ServiceRDV247.svc/PrendreRDV", HttpVerb.POST);
+
+            rc.PostData = JsonConvert.SerializeObject(new
+            {
+                idClient = id_client,
+                idRDV = id_rdv
+            });
+
+            // Récupération de la réponse
+            string response = rc.MakeRequest();
+            return JsonUtil.DeserialiserJson<bool>(response, "PrendreRDVResult");
+        }
+
+        public static bool AnnulerRdv(int id_client, int id_rdv)
+        {
+            //Creation du client rest
+            RestClient rc = new RestClient("http://localhost:2057/Controle/ServiceRDV247.svc/AnnulerRDV", HttpVerb.POST);
+
+            rc.PostData = JsonConvert.SerializeObject(new
+            {
+                idClient = id_client,
+                idRDV = id_rdv
+            });
+
+            // Récupération de la réponse
+            string response = rc.MakeRequest();
+            return JsonUtil.DeserialiserJson<bool>(response, "AnnulerRDVResult");
+        }
     }
 }

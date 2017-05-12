@@ -92,7 +92,7 @@
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>                            
                             <ComboBox Grid.Column="0" ItemsSource="{Binding Path=DureesRDV}" SelectedValue="{Binding Path=DureeRDV}" ItemTemplate="{StaticResource TemplateComboBoxDuree}" Margin="0,0,5,0"/>
-                            <ComboBox Grid.Column="1" ItemsSource="{Binding Path=ListeTypesRDV}" SelectedValue="{Binding Path=TypeRDV}" ItemTemplate="{StaticResource TemplateComboBoxTypeRDV}" Margin="5,0,0,0" />
+                            <ComboBox Grid.Column="1" ItemsSource="{Binding Path=ListeTypesRDV}" SelectedItem="{Binding Path=TypeRDV}" ItemTemplate="{StaticResource TemplateComboBoxTypeRDV}" Margin="5,0,0,0" />
                         </Grid>
 
                         <!-- Plage horaire -->
@@ -120,7 +120,7 @@
                 <TabItem Header="Modifier">
                     <StackPanel Margin="5,0">
 
-                        <GroupBox Header="Modification" Margin="10" IsEnabled="{Binding ElementName=btnModifier, Path=IsEnabled}">
+                        <GroupBox Header="Modification" Margin="10" IsEnabled="{Binding Path=IsBoutonModifierActif}">
                             <Grid Margin="5">
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
@@ -133,11 +133,11 @@
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
                                 
-                                <DatePicker Grid.Row="0" Grid.ColumnSpan="2" SelectedDate="{Binding DispoSelectionnee.debut_rdv}" Margin="0,10"/>
+                                <DatePicker Grid.Row="0" Grid.ColumnSpan="2" SelectedDate="{Binding Path=DebutDispoModifie}" Margin="0,10"/>
                                 <Label Grid.Row="1" Grid.Column="0" Content="Durée"/>
-                                <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Path=DureesRDV}" SelectedValue="{Binding Path=DureeRDVModifiee}" ItemTemplate="{StaticResource TemplateComboBoxDuree}" Margin="5"/>
+                                <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Path=DureesRDV}" SelectedValue="{Binding Path=DureeDispoModifiee}" ItemTemplate="{StaticResource TemplateComboBoxDuree}" Margin="5"/>
                                 <Label Grid.Row="2" Grid.Column="0" Content="Type"/>
-                                <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Path=ListeTypesRDV}" SelectedValue="{Binding Path=DispoSelectionnee.Typerdv}" ItemTemplate="{StaticResource TemplateComboBoxTypeRDV}" Margin="5"/>
+                                <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Path=ListeTypesRDV}" SelectedItem="{Binding Path=TypeDispoModifie}" ItemTemplate="{StaticResource TemplateComboBoxTypeRDV}" Margin="5"/>
 
                                 <Button Grid.Row="3" Grid.ColumnSpan="2" x:Name="btnModifier" Content="Modifier la disponibilité" Command="{Binding Path=ModifierDispoCommand}" Margin="5,10"/>
 

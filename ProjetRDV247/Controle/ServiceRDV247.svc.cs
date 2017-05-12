@@ -92,7 +92,7 @@ namespace ProjetRDV247.Controle
             DateTime dateJour = DateTime.ParseExact(date, "yyyyMMdd", CultureInfo.InvariantCulture).Date;
 
             // On retourne les rendez-vous de l'employé pour cette journée
-            List<Rendezvous> resultats = dao.GetDisposEmploye(Convert.ToInt32(idEmploye), dateJour, dateJour.AddDays(6));
+            List<Rendezvous> resultats = dao.GetDisposEmploye(Convert.ToInt32(idEmploye), dateJour, dateJour.AddDays(1));
             return resultats.Where(r => r.id_client_rdv != null).ToList();            
         }
 

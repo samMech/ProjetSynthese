@@ -7,7 +7,8 @@
         xmlns:vues="clr-namespace:InterfaceClientWPF.Vues"
         mc:Ignorable="d"
         Title="{Binding Path=TitrePage}" Height="350" Width="525"
-        SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen" ResizeMode="CanResize">
+        SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen" ResizeMode="CanResize"
+        SizeChanged="Window_SizeChanged">
 
     <Window.Resources>
         <!-- Template mapping pour les différentes page -->

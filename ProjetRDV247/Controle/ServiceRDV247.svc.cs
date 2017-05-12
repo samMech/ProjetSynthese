@@ -96,6 +96,25 @@ namespace ProjetRDV247.Controle
             return resultats.Where(r => r.id_client_rdv != null).ToList();            
         }
 
+
+        public List<Rendezvous> GetDisposRDVEmploye(string idEmploye, string idClient, string date)
+        {
+            // Validation des paramètres
+            if (Utilitaire.ValiderEntier(idClient) == false || Utilitaire.ValiderEntier(idEmploye) == false || Utilitaire.ValiderDate(date) == false)
+                throw new WebFaultException(HttpStatusCode.BadRequest);
+
+            // Création de l'objet d'accès aux données
+            dao = new Dao();
+
+            // On trouve la date du premier jour de la semaine
+            DateTime dateJour = DateTime.ParseExact(date, "yyyyMMdd", CultureInfo.InvariantCulture).Date;
+            DateTime lundi = Utilitaire.TrouverLundiPrecedent(DateTime.Today);
+            // On retourne les rendez-vous de l'employé pour cette journée
+            int id_client = Convert.ToInt32(idClient);
+            List<Rendezvous> resultats = dao.GetDisposEmploye(Convert.ToInt32(idEmploye), lundi, lundi.AddDays(6));
+            return resultats.Where(r => r.id_client_rdv == null || r.id_client_rdv == id_client).ToList();
+        }
+
         // POST
         //============================================================================================================================
 
@@ -321,5 +340,6 @@ namespace ProjetRDV247.Controle
                 SupprimerDispo(idEmploye, idDispo, raison);
             }
         }
+
     }
 }

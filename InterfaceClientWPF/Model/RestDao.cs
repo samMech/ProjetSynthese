@@ -57,5 +57,34 @@ namespace InterfaceClientWPF.Model
             string response = rc.MakeRequest();
             return JsonUtil.DeserialiserListeJson<Employe>(response, "GetEmployesResult");
         }
+
+        public static List<Rendezvous> GetDisposEmploye(int id_employe)
+        {
+            // Création du client rest
+            RestClient rc = new RestClient("http://localhost:2057/Controle/ServiceRDV247.svc/GetDisposEmploye", HttpVerb.GET);
+
+            // Ajout des paramètres GET
+            rc.RestURL += String.Format("/{0}", id_employe);
+            rc.RestURL += String.Format("/{0}", DateTime.Today.ToString("yyyyMMdd"));
+
+            // Récupération de la réponse
+            string response = rc.MakeRequest();
+            return JsonUtil.DeserialiserListeJson<Rendezvous>(response, "GetDisposEmployeResult");
+        }
+
+        public static List<Rendezvous> GetDisposRDVEmploye(int id_employe, int id_client)
+        {
+            // Création du client rest
+            RestClient rc = new RestClient("http://localhost:2057/Controle/ServiceRDV247.svc/GetDisposRDVEmploye", HttpVerb.GET);
+
+            // Ajout des paramètres GET
+            rc.RestURL += String.Format("/{0}", id_employe);
+            rc.RestURL += String.Format("/{0}", id_client);
+            rc.RestURL += String.Format("/{0}", DateTime.Today.ToString("yyyyMMdd"));
+
+            // Récupération de la réponse
+            string response = rc.MakeRequest();
+            return JsonUtil.DeserialiserListeJson<Rendezvous>(response, "GetDisposRDVEmployeResult");
+        }
     }
 }

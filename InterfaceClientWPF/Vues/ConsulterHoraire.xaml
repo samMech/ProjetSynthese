@@ -5,8 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:InterfaceClientWPF.Vues"
              xmlns:CalendrierRDV="clr-namespace:CalendrierRDV;assembly=CalendrierRDV" x:Class="InterfaceClientWPF.Vues.ConsulterHoraire"
-             mc:Ignorable="d" 
-             d:DesignHeight="400" d:DesignWidth="600">
+             mc:Ignorable="d" Height="729.155" Width="1043.596">
 
     <UserControl.Resources>
         <DataTemplate x:Key="ListeEmployes_DataTemplate">
@@ -28,8 +27,11 @@
             <RowDefinition/>
             <RowDefinition Height="0*"/>
         </Grid.RowDefinitions>
-        <ComboBox ItemsSource="{Binding ListeEmployes}" ItemTemplate="{StaticResource ListeEmployes_DataTemplate}" x:Name="comboBox" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="179"/>
-        <Calendar HorizontalAlignment="Left" Margin="10,27,0,0" VerticalAlignment="Top"/>
+        <ComboBox SelectedItem="{Binding SelectedEmploye}" ItemsSource="{Binding ListeEmployes}" ItemTemplate="{StaticResource ListeEmployes_DataTemplate}" x:Name="comboBox" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="179"/>
+        <Calendar  SelectedDate="{Binding Path=DateJour}" SelectionMode="SingleDate" HorizontalAlignment="Left" Margin="10,174,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="btnEnregistrer" Content="Enregistrer un rendez-vous" Command="{Binding Path=PrendreRDV}" HorizontalAlignment="Left" Margin="10,456,0,0" VerticalAlignment="Top" Width="179"/>
+        <Button x:Name="btnAnnuler" Content="Annuler ce rendez-vous" Command="{Binding Path=AnnulerRDV}" HorizontalAlignment="Left" Margin="10,491,0,0" VerticalAlignment="Top" Width="179"/>
+        <CalendrierRDV:CalendrierRDV ListeIRDV="{Binding Path=ListeDisponibilites}" DateCourante="{Binding Path=DateJour}" HorizontalAlignment="Left" Margin="194,10,0,0" VerticalAlignment="Top"/>
 
         <!-- <CalendrierRDV:CalendrierRDV ListeIRDV="{Binding Path=ListeDisponibilites}" DateCourante="{Binding Path=DateJour}" CouleurStatut="{Binding Path=CouleurStatuts}"/> -->
 

@@ -59,8 +59,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Model\RendezVousAdapter.cs" />
     <Compile Include="Model\RestClient.cs" />
     <Compile Include="Model\RestDao.cs" />
+    <Compile Include="Utilitaire\ConversionUtil.cs" />
     <Compile Include="Utilitaire\JsonUtil.cs" />
     <Compile Include="ViewModels\ApplicationViewModel.cs" />
     <Compile Include="ViewModels\ConnexionViewModel.cs" />

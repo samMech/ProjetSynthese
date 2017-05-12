@@ -44,6 +44,13 @@ namespace ProjetRDV247.Controle
            UriTemplate = "GetRDVEmploye/{idEmploye}/{date}")]
         List<Rendezvous> GetRDVEmploye(string idEmploye, string date);
 
+        [OperationContract]
+        [WebInvoke(Method = "GET",
+        ResponseFormat = WebMessageFormat.Json,
+        BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "GetDisposRDVEmploye/{idEmploye}/{idClient}/{date}")]
+        List<Rendezvous> GetDisposRDVEmploye(string idEmploye, string idClient, string date);
+
         // POST
         //=============================================================
 

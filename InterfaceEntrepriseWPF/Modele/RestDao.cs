@@ -141,7 +141,7 @@ namespace InterfaceEntrepriseWPF.Modele
         public static Rendezvous ModifierDispo(int idEmp, int idDispoParam, DateTime newDateDebut, DateTime newDateFin, int newIdType, string raisonParam)
         {
             // Création du client rest
-            RestClient rc = new RestClient("http://localhost:2057/Controle/ServiceRDV247.svc/AjouterDispos", HttpVerb.POST);
+            RestClient rc = new RestClient("http://localhost:2057/Controle/ServiceRDV247.svc/ModifierDispo", HttpVerb.POST);
 
             // Ajout des paramètres POST
             rc.PostData = JsonConvert.SerializeObject(new

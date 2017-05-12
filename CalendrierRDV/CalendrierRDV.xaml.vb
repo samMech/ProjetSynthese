@@ -210,14 +210,8 @@ Public Class CalendrierRDV
                     AfficherRV(r)
                 Next
             Case NotifyCollectionChangedAction.Remove
-                'On enlève les rendez-vous affichés
-                Dim elem As CelluleRDV
-                For Each r As IRendezVous In e.NewItems
-                    elem = gHoraire.Children.OfType(Of CelluleRDV).Where(Function(x) x.Name.StartsWith("rvcell" + r.ID.ToString())).SingleOrDefault()
-                    If elem IsNot Nothing Then
-                        gHoraire.Children.Remove(elem)
-                    End If
-                Next
+                'On réaffiche la liste
+                AfficherListeRV()
             Case NotifyCollectionChangedAction.Replace
                 'On réaffiche la liste
                 AfficherListeRV()
@@ -251,11 +245,13 @@ Public Class CalendrierRDV
     'Méthode pour afficher un rendez-vous
     Private Sub AfficherRV(rv As IRendezVous)
         'On vérifie d'abord si le rendez-vous est valide pour la vue courante
-        If rv.Debut >= DateDebut + HeureDebut.TimeOfDay AndAlso rv.Fin < DateDebut.AddDays(6) + HeureFin.TimeOfDay Then
+        If rv.Debut >= DateDebut + HeureDebut.TimeOfDay AndAlso rv.Fin < DateDebut.AddDays(6) + HeureFin.TimeOfDay _
+            AndAlso rv.Debut.TimeOfDay > HeureDebut.TimeOfDay AndAlso rv.Fin.TimeOfDay < HeureFin.TimeOfDay Then
 
             'Calcul de la position et de la hauteur du RV
             Dim heureBase As DateTime = New DateTime(HeureDebut.Year, HeureDebut.Month, HeureDebut.Day, HeureDebut.Hour, 0, 0)
             Dim colonneRV = 1 + (rv.Debut - DateDebut).Days
+            Dim test = (rv.Debut.TimeOfDay - heureBase.TimeOfDay).TotalMinutes
             Dim ligneRV = 2 + (rv.Debut.TimeOfDay - heureBase.TimeOfDay).TotalMinutes / IntervalleTempsMin.TotalMinutes
             Dim nbLignesRV = (rv.Fin - rv.Debut).TotalMinutes / IntervalleTempsMin.TotalMinutes
 

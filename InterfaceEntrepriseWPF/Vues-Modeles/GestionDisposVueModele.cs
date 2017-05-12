@@ -32,6 +32,7 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         private int _dureeDispoModifiee;
         private bool _isBoutonModifieActif;
         private Typerdv _typeDispoModifie;
+        private DateTime _dateDispoModifie;
         private DateTime _debutDispoModifie;
 
         // La liste des disponibilités pour le composant graphique
@@ -49,6 +50,8 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         // Pour les erreurs
         private bool _erreurDebutPlage;
         private bool _erreurFinPlage;
+        private bool _erreurDebutDispo;
+        private bool _erreurConflitDispoModifiee;
 
         // Booléen pour empêcher la mise à jour des valeurs plusieurs fois durant l'initialisation
         private bool initTermine = false;
@@ -198,16 +201,16 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         }
 
         /// <summary>
-        /// La date de début modifiée de la disponibilité sélectionnée
+        /// La date modifiée de la disponibilité sélectionnée
         /// </summary>
-        public DateTime DebutDispoModifie
+        public DateTime DateDispoModifie
         {
-            get { return _debutDispoModifie; }
+            get { return _dateDispoModifie; }
             set
             {
-                if (value != null && value.Equals(_debutDispoModifie) == false)
+                if (value != null && value.Equals(_dateDispoModifie) == false)
                 {
-                    _debutDispoModifie = value;
+                    _dateDispoModifie = value;
                     OnPropertyChanged();
                 }
             }
@@ -230,6 +233,22 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         }
 
         /// <summary>
+        /// Le début de la disponibilité modifiée
+        /// </summary>
+        public DateTime DebutDispoModifie
+        {
+            get { return _debutDispoModifie; }
+            set
+            {
+                if (value != null && value.Equals(_debutDispoModifie) == false)
+                {
+                    _debutDispoModifie = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        /// <summary>
         /// Est-ce que le début de la plage est invalide ?
         /// </summary>
         public bool ErreurDebutPlage
@@ -237,8 +256,11 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
             get { return _erreurDebutPlage; }
             set
             {
-                _erreurDebutPlage = value;
-                OnPropertyChanged();
+                if (value != _erreurDebutPlage)
+                {
+                    _erreurDebutPlage = value;
+                    OnPropertyChanged();
+                }
             }
         }
 
@@ -266,8 +288,27 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
             get { return _erreurFinPlage; }
             set
             {
-                _erreurFinPlage = value;
-                OnPropertyChanged();
+                if (value != _erreurFinPlage)
+                {
+                    _erreurFinPlage = value;
+                    OnPropertyChanged();
+                }                
+            }
+        }
+
+        /// <summary>
+        /// Est-ce que le début de la disponibilité modifiée est valide
+        /// </summary>
+        public bool ErreurDebutDispo
+        {
+            get { return _erreurDebutDispo; }
+            set
+            {
+                if (value != _erreurDebutDispo)
+                {
+                    _erreurDebutDispo = value;
+                    OnPropertyChanged();
+                }                
             }
         }
 
@@ -295,8 +336,27 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
             get { return _isDispoConflitClient; }
             set
             {
-                _isDispoConflitClient = value;
-                OnPropertyChanged();
+                if (value != _isDispoConflitClient)
+                {
+                    _isDispoConflitClient = value;
+                    OnPropertyChanged();
+                }                
+            }
+        }
+                
+        /// <summary>
+        /// Est-ce qu'un conflit a empêché la modification d'une disponibilité
+        /// </summary>
+        public bool ErreurConflitDispoModifiee
+        {
+            get { return _erreurConflitDispoModifiee; }
+            set
+            {
+                if (value != _erreurConflitDispoModifiee)
+                {
+                    _erreurConflitDispoModifiee = value;
+                    OnPropertyChanged();
+                }
             }
         }
 
@@ -314,9 +374,10 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
                     OnPropertyChanged();
 
                     // Ajustement des valeurs modifiées
-                    DureeDispoModifiee = (int)(_dispoSelectionnee.fin_rdv - _dispoSelectionnee.debut_rdv).TotalMinutes;
-                    TypeDispoModifie = _dispoSelectionnee.Typerdv;
+                    DateDispoModifie = _dispoSelectionnee.debut_rdv;
                     DebutDispoModifie = _dispoSelectionnee.debut_rdv;
+                    DureeDispoModifiee = (int) (_dispoSelectionnee.fin_rdv - _dispoSelectionnee.debut_rdv).TotalMinutes;
+                    TypeDispoModifie = _dispoSelectionnee.Typerdv;                    
                 }
             }
         }
@@ -361,8 +422,11 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
             get { return _isBoutonModifieActif; }
             set
             {
-                _isBoutonModifieActif = value;
-                OnPropertyChanged();
+                if (value != _isBoutonModifieActif)
+                {
+                    _isBoutonModifieActif = value;
+                    OnPropertyChanged();
+                }                
             }
         }
 
@@ -449,7 +513,7 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         {
             try
             {
-                // Calcul de la date de début et de fin et de la durée
+                // Calcul de la date de début et de fin
                 DateTime dateDebut = DateJour.Date + DebutPlageAjout.TimeOfDay;
                 DateTime dateFin = dateDebut + (FinPlageAjout - DebutPlageAjout);
 
@@ -470,13 +534,17 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         // Méthode pour savoir si on peut ajouter des disponibilités
         private bool CanAjouterDispos(object obj)
         {
+            // Ré-initialisation
+            ErreurDebutPlage = false;
+            ErreurFinPlage = false;
+
             return DateJour >= DateTime.Today && ValiderDebutPlage() && ValiderFinPlage();
         }
         
         // Méthode pour valider le début de la plage d'ajout
         private bool ValiderDebutPlage()
         {
-            ErreurDebutPlage = (DateJour == DateTime.Today) && (DebutPlageAjout.TimeOfDay < DateTime.Now.TimeOfDay);
+            ErreurDebutPlage = (DateJour <= DateTime.Today) && (DebutPlageAjout.TimeOfDay < DateTime.Now.TimeOfDay);
             return !ErreurDebutPlage;
         }
 
@@ -492,12 +560,19 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         {
             try
             {
+                // Ré-initialisation
+                ErreurConflitDispoModifiee = false;
+
                 // Récupération de l'empoyé courant
                 Employe emp = ApplicationVueModele.Instance.EmployeConnecte;
 
+                // Calcul de la nouvelle date de début et de fin
+                DateTime newDateDebut = DateDispoModifie.Date + DebutDispoModifie.TimeOfDay;
+                DateTime newDateFin = newDateDebut.AddMinutes(DureeDispoModifiee);
+
                 // Modification
                 Rendezvous dispoModifiee = RestDao.ModifierDispo(emp.id_employe, DispoSelectionnee.id_rdv,
-                    DebutDispoModifie, DebutDispoModifie.AddMinutes(DureeDispoModifiee), TypeDispoModifie.id_typerdv, Raison);
+                    newDateDebut, newDateFin, TypeDispoModifie.id_typerdv, Raison);
 
                 // Vérification
                 if (dispoModifiee != null)
@@ -507,7 +582,7 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
                 }
                 else
                 {
-                    // TODO
+                    ErreurConflitDispoModifiee = true;
                 }
             }
             catch (Exception)
@@ -517,28 +592,44 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
             }
         }
 
+        // Méthode pour valider le début de la disponibilité modifiée
+        private bool ValiderDebutDispoModifie()
+        {
+            ErreurDebutDispo = IsBoutonModifierActif && (DateDispoModifie.Add(DebutDispoModifie.TimeOfDay) < DateTime.Now);
+            if (DispoSelectionnee != null)
+            {
+                ErreurDebutDispo = ErreurDebutDispo && (DebutDispoModifie.TimeOfDay != DispoSelectionnee.debut_rdv.TimeOfDay);
+            }
+            return !ErreurDebutDispo;
+        }
+        
         // Méthode pour savoir si on peut modifier une disponibilité
         private bool CanModifierDispo(object obj)
         {
-            // Ré-initialisation
-            IsDispoConflitClient = false;
-            IsBoutonModifierActif = false;
-
             // On vérifie qu'une seule disponibilité est sélectionnée
             List<CalendrierRDV.IRendezVous> dispos = ListeDisponibilites.Where(x => x.IsSelectionne).ToList();
             if (dispos.Count == 1)
             {
                 // On signale l'activation
                 IsBoutonModifierActif = true;
+                
+                // Ré-initialisation
+                IsDispoConflitClient = false;
+                ErreurDebutDispo = false;
 
                 // On met à jour la disponibilité sélectionnée
                 DispoSelectionnee = ((RendezVousAdapter)dispos[0]).RDV;
 
                 // On vérifie si la disponibilité est déjà réservée
-                IsDispoConflitClient = (DispoSelectionnee.Client != null);
-                return !IsDispoConflitClient;
+                IsDispoConflitClient = (DispoSelectionnee.Client != null);            
             }
-            return false;            
+            else
+            {
+                IsBoutonModifierActif = false;
+                ErreurDebutDispo = false;// Pour désactiver l'erreur si le panneau n'est pas actif
+            }
+
+            return ValiderDebutDispoModifie() && !IsDispoConflitClient;
         }
 
         // Méthode pour supprimer des disponibilités
@@ -568,9 +659,6 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         // Méthode pour savoir si on peut supprimer des disponibilités
         private bool CanSupprimerDispos(object obj)
         {
-            // Ré-initialisation
-            IsDispoConflitClient = false;
-
             // On vérifie qu'au moins une disponibilité est sélectionnée
             List<CalendrierRDV.IRendezVous> dispos = ListeDisponibilites.Where(x => x.IsSelectionne).ToList();
             if (dispos.Count > 0)
@@ -578,6 +666,11 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
                 // On vérifie si une des disponibilités est déjà réservée
                 IsDispoConflitClient = (dispos.FirstOrDefault(x => x.NomClient != null) != null);
                 return !IsDispoConflitClient;
+            }
+            else
+            {
+                // Ré-initialisation
+                IsDispoConflitClient = false;
             }
             return false;
         }

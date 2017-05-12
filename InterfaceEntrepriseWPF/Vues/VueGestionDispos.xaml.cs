@@ -24,10 +24,6 @@ namespace InterfaceEntrepriseWPF.Vues
         {
             InitializeComponent();
         }
-
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            Console.WriteLine("CHANGE");
-        }
+        
     }
 }

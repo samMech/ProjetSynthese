@@ -44,6 +44,13 @@ namespace ProjetRDV247.Controle
            UriTemplate = "GetRDVEmploye/{idEmploye}/{date}")]
         List<Rendezvous> GetRDVEmploye(string idEmploye, string date);
 
+        [OperationContract]
+        [WebInvoke(Method = "GET",
+        ResponseFormat = WebMessageFormat.Json,
+        BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "GetDisposRDVEmploye/{idEmploye}/{idClient}/{date}")]
+        List<Rendezvous> GetDisposRDVEmploye(string idEmploye, string idClient, string date);
+
         // POST
         //=============================================================
 
@@ -53,7 +60,7 @@ namespace ProjetRDV247.Controle
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
             UriTemplate = "PrendreRDV")]
-        Rendezvous PrendreRDV(int idClient, int idRDV);
+        bool PrendreRDV(int idClient, int idRDV);
 
         [OperationContract]
         [WebInvoke(Method = "POST",
@@ -61,7 +68,7 @@ namespace ProjetRDV247.Controle
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
             UriTemplate = "AnnulerRDV")]
-        void AnnulerRDV(int idClient, int idRDV);
+        bool AnnulerRDV(int idClient, int idRDV);
 
         [OperationContract]
         [WebInvoke(Method = "POST",

@@ -27,6 +27,7 @@ namespace InterfaceClientWPF.ViewModels
         private ObservableCollection<CalendrierRDV.IRendezVous> _listeDisponibilites;
         private ObservableCollection<Employe> _listEmployes;
         private Employe _selectedEmploye;
+        private bool initTermine = false;
 
         //commandes
         private ICommand _enregistrerRDVCommand;
@@ -39,6 +40,7 @@ namespace InterfaceClientWPF.ViewModels
             DateJour = DateTime.Today;
             ListeEmployes = new ObservableCollection<Employe>(RestDao.GetEmployes());
             ListeDisponibilites = new ObservableCollection<IRendezVous>();
+            initTermine = true;
         }
 
         static ConsulterHoraireViewModel()
@@ -75,18 +77,25 @@ namespace InterfaceClientWPF.ViewModels
             {
                 if (value != null && value.Equals(_dateJour) == false)
                 {
+                    // Calcul du début de semaine pour comparaison
+                    DateTime nouveauLundi = CalendrierRDV.Utilitaire.TrouverLundiPrecedent(value);
+                    DateTime lundiActuel = CalendrierRDV.Utilitaire.TrouverLundiPrecedent(_dateJour);
+
+                    // Modification
+                    _dateJour = value;
+
                     // Vérification pour savoir si on a changé de semaine
-                    if (Math.Abs((value - CalendrierRDV.Utilitaire.TrouverLundiPrecedent(_dateJour)).Days) > 6)
+                    if (initTermine && Math.Abs((nouveauLundi - lundiActuel).Days) > 6)
                     {
                         // Mise à jour des données
                         UpdateData();
                     }
 
-                    _dateJour = value;
                     OnPropertyChanged();
                 }
             }
         }
+
 
         public ObservableCollection<IRendezVous> ListeDisponibilites
         {

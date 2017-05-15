@@ -16,7 +16,7 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
 {
     class GestionDisposVueModele : VueModele
     {
-        // Constantes
+        // Constantesf
         private static readonly List<int> DUREES_RDV = new List<int>(new int[]{10, 15, 20, 30, 45, 60, 90, 120});
         private static readonly Dictionary<string, Color> COULEURS_STATUT = new Dictionary<string, Color>();
 

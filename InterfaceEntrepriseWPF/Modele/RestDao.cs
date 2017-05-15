@@ -11,6 +11,7 @@ using CalendrierRDV;
 using System.Collections.ObjectModel;
 using System.Runtime.Serialization.Json;
 using System.IO;
+using System.Configuration;
 
 namespace InterfaceEntrepriseWPF.Modele
 {
@@ -19,6 +20,9 @@ namespace InterfaceEntrepriseWPF.Modele
     /// </summary>
     static class RestDao
     {
+        // Constante
+        private static readonly string webServiceURL = ConfigurationManager.AppSettings["webServiceURL"];
+
         /// <summary>
         /// Méthode pour authentifier un employe auprès du service web
         /// </summary>
@@ -27,8 +31,8 @@ namespace InterfaceEntrepriseWPF.Modele
         /// <returns>L'employé connecté ou null si inexistant</returns>
         public static Employe ConnexionEmploye(string loginParam, string passwordParam)
         {
-            // Création du client rest
-            RestClient rc = new RestClient("http://localhost:2057/Controle/ServiceConnexion.svc/AuthentifierEmp", HttpVerb.POST);
+            // Création du client rest            
+            RestClient rc = new RestClient(webServiceURL + "/Controle/ServiceConnexion.svc/AuthentifierEmp", HttpVerb.POST);
 
             // Ajout des paramètres POST
             rc.PostData = JsonConvert.SerializeObject(new { login = loginParam, password = passwordParam });
@@ -47,7 +51,7 @@ namespace InterfaceEntrepriseWPF.Modele
         public static List<Rendezvous> GetDisposEmploye(int id_employe, DateTime dateJourSemaine)
         {
             // Création du client rest
-            RestClient rc = new RestClient("http://localhost:2057/Controle/ServiceRDV247.svc/GetDisposEmploye", HttpVerb.GET);
+            RestClient rc = new RestClient(webServiceURL + "/Controle/ServiceRDV247.svc/GetDisposEmploye", HttpVerb.GET);
 
             // Ajout des paramètres GET
             rc.RestURL += String.Format("/{0}", id_employe);
@@ -67,7 +71,7 @@ namespace InterfaceEntrepriseWPF.Modele
         public static List<Rendezvous> GetRendezVousEmploye(int id_employe, DateTime dateJourSemaine)
         {
             // Création du client rest
-            RestClient rc = new RestClient("http://localhost:2057/Controle/ServiceRDV247.svc/GetRDVEmploye", HttpVerb.GET);
+            RestClient rc = new RestClient(webServiceURL + "/Controle/ServiceRDV247.svc/GetRDVEmploye", HttpVerb.GET);
 
             // Ajout des paramètres GET
             rc.RestURL += String.Format("/{0}", id_employe);
@@ -90,7 +94,7 @@ namespace InterfaceEntrepriseWPF.Modele
         public static List<Rendezvous> AjouterDispos(int idEmp, DateTime dateDebutParam, DateTime dateFinParam, int dureeMinutesDispoParam, int idTypeParam)
         {
             // Création du client rest
-            RestClient rc = new RestClient("http://localhost:2057/Controle/ServiceRDV247.svc/AjouterDispos", HttpVerb.POST);
+            RestClient rc = new RestClient(webServiceURL + "/Controle/ServiceRDV247.svc/AjouterDispos", HttpVerb.POST);
             
             // Ajout des paramètres POST
             rc.PostData = JsonConvert.SerializeObject(new
@@ -116,7 +120,7 @@ namespace InterfaceEntrepriseWPF.Modele
         public static void SupprimerDispos(int idEmp, List<int> idDisposParam, string raisonParam)
         {
             // Création du client rest
-            RestClient rc = new RestClient("http://localhost:2057/Controle/ServiceRDV247.svc/SupprimerDispos", HttpVerb.POST);
+            RestClient rc = new RestClient(webServiceURL + "/Controle/ServiceRDV247.svc/SupprimerDispos", HttpVerb.POST);
 
             // Ajout des paramètres POST
             rc.PostData = JsonConvert.SerializeObject(new
@@ -143,7 +147,7 @@ namespace InterfaceEntrepriseWPF.Modele
         public static Rendezvous ModifierDispo(int idEmp, int idDispoParam, DateTime newDateDebut, DateTime newDateFin, int newIdType, string raisonParam)
         {
             // Création du client rest
-            RestClient rc = new RestClient("http://localhost:2057/Controle/ServiceRDV247.svc/ModifierDispo", HttpVerb.POST);
+            RestClient rc = new RestClient(webServiceURL + "/Controle/ServiceRDV247.svc/ModifierDispo", HttpVerb.POST);
 
             // Ajout des paramètres POST
             rc.PostData = JsonConvert.SerializeObject(new

@@ -147,6 +147,7 @@
     <Content Include="Modele\ModeleRDV247.edmx.diagram">
       <DependentUpon>ModeleRDV247.edmx</DependentUpon>
     </Content>
+    <None Include="Properties\PublishProfiles\WebServiceRDV247.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

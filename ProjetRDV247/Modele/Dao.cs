@@ -70,7 +70,7 @@ namespace ProjetRDV247.Modele
         /// <param name="dateDebut">La date du début de l'intervalle recherché</param>
         /// <param name="dateFin">La date de fin de l'intervalle recherché</param>
         /// <returns>La liste des disponibilités de l'employés pour cette date</returns>
-        internal List<Rendezvous> GetDisposEmploye(int idEmploye, DateTime dateDebut, DateTime dateFin)
+        public List<Rendezvous> GetDisposEmploye(int idEmploye, DateTime dateDebut, DateTime dateFin)
         {
             using (RDV247Entities bd = new RDV247Entities())
             {
@@ -82,12 +82,12 @@ namespace ProjetRDV247.Modele
                 return dispos;
             }
         }
-        
+
         /// <summary>
         /// Ajoute une liste de nouvelles disponibilités
         /// </summary>
         /// <param name="dispoAjoutees">La liste des disponibilités à ajouter</param>
-        internal void InsertListeDispo(List<Rendezvous> dispoAjoutees)
+        public void InsertListeDispo(List<Rendezvous> dispoAjoutees)
         {
             int id;
             foreach (Rendezvous r in dispoAjoutees)
@@ -101,7 +101,7 @@ namespace ProjetRDV247.Modele
         /// Méthode pour mettre à jour un rendez-vous
         /// </summary>
         /// <param name="rdv">Le rendez-vous à mettre à jour</param>
-        internal void UpdateRendezvous(Rendezvous rdvModifie)
+        public void UpdateRendezvous(Rendezvous rdvModifie)
         {
             using (RDV247Entities bd = new RDV247Entities())
             {
@@ -116,7 +116,7 @@ namespace ProjetRDV247.Modele
         /// Retourne la liste de tous les employés
         /// </summary>
         /// <returns>La liste de tous les employés</returns>
-        internal List<Employe> GetListeEmployes()
+        public List<Employe> GetListeEmployes()
         {
             using (RDV247Entities bd = new RDV247Entities())
             {
@@ -130,7 +130,7 @@ namespace ProjetRDV247.Modele
         /// <param name="idClient">L'identifiant du client</param>
         /// <param name="date">La date à partir de laquelle chercher</param>
         /// <returns></returns>
-        internal List<Rendezvous> GetRendezvousClient(int idClient, DateTime date)
+        public List<Rendezvous> GetRendezvousClient(int idClient, DateTime date)
         {
             using (RDV247Entities bd = new RDV247Entities())
             {

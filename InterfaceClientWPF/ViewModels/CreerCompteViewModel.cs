@@ -133,12 +133,6 @@ namespace InterfaceClientWPF.ViewModels
 
         private bool CanRegistrer(object obj)
         {
-            Console.Write(Nom);
-            Console.Write(Prenom);
-            Console.Write(Telephone);
-            Console.Write(Courriel);
-            Console.Write(Password);
-
             return Nom.Length > 0 && Prenom.Length > 0 && Telephone.Length > 0 && Courriel.Length > 0 &&
                    Password.Length > 0;
         }

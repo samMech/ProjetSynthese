@@ -45,7 +45,7 @@
     </UserControl.Resources>
 
     <Grid>
-        <Label x:Name="label" Content="Label" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="label" Content="Rendez-vous prévus:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
         <ScrollViewer HorizontalAlignment="Left" Height="219" Margin="10,41,0,0" VerticalAlignment="Top" Width="280">
             <ItemsControl ItemsSource="{Binding ListeRendezvous}" ItemTemplate="{StaticResource ListeRDV_DataTemplate}"/>
         </ScrollViewer>

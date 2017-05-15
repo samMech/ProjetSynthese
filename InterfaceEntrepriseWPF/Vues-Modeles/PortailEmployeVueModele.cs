@@ -116,9 +116,10 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         /// </summary>
         public override void UpdateData()
         {
-            // Récupération des rendez-vous
+            // Récupération des rendez-vous pour aujourd'hui
             Employe emp = ApplicationVueModele.Instance.EmployeConnecte;
-            ListeRendezVous = new ObservableCollection<Rendezvous>(RestDao.GetRendezVousEmploye(emp.id_employe));
+            List<Rendezvous> rdvsAujourdhui = RestDao.GetRendezVousEmploye(emp.id_employe, DateTime.Today).Where(x => x.debut_rdv.Date.Equals(DateTime.Today.Date)).ToList();
+            ListeRendezVous = new ObservableCollection<Rendezvous>(rdvsAujourdhui);
         }
 
         // Méthode pour charger la page d'affichage des rendez-vous

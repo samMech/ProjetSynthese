@@ -39,18 +39,19 @@ namespace InterfaceEntrepriseWPF.Modele
         }
 
         /// <summary>
-        /// Méthode pour récupérer la liste des disponibilités de l'employé
+        /// Méthode pour récupérer la liste des disponibilités de l'employé pour une semaine
         /// </summary>
         /// <param name="id_employe">L'identifiant de l'employé</param>
+        /// <param name="dateJourSemaine">Une date d'un jour dans la semaine courante</param>
         /// <returns>La liste des disponibilités de l'employé</returns>
-        public static List<Rendezvous> GetDisposEmploye(int id_employe)
+        public static List<Rendezvous> GetDisposEmploye(int id_employe, DateTime dateJourSemaine)
         {
             // Création du client rest
             RestClient rc = new RestClient("http://localhost:2057/Controle/ServiceRDV247.svc/GetDisposEmploye", HttpVerb.GET);
 
             // Ajout des paramètres GET
             rc.RestURL += String.Format("/{0}", id_employe);
-            rc.RestURL += String.Format("/{0}", DateTime.Today.ToString("yyyyMMdd"));
+            rc.RestURL += String.Format("/{0}", dateJourSemaine.ToString("yyyyMMdd"));
 
             // Récupération de la réponse
             string response = rc.MakeRequest();
@@ -58,18 +59,19 @@ namespace InterfaceEntrepriseWPF.Modele
         }
 
         /// <summary>
-        /// Méthode pour récupérer la liste des rendez-vous de l'employé pour les 7 prochains jours incluant aujourd'hui
+        /// Méthode pour récupérer la liste des rendez-vous pours une semaine
         /// </summary>
         /// <param name="id_employe">L'identifiant de l'employé</param>
+        /// <param name="dateJourSemaine">Une date d'un jour dans la semaine courante</param>
         /// <returns>La liste des rendez-vous de l'employé</returns>
-        public static List<Rendezvous> GetRendezVousEmploye(int id_employe)
+        public static List<Rendezvous> GetRendezVousEmploye(int id_employe, DateTime dateJourSemaine)
         {
             // Création du client rest
             RestClient rc = new RestClient("http://localhost:2057/Controle/ServiceRDV247.svc/GetRDVEmploye", HttpVerb.GET);
 
             // Ajout des paramètres GET
             rc.RestURL += String.Format("/{0}", id_employe);
-            rc.RestURL += String.Format("/{0}", DateTime.Today.ToString("yyyyMMdd"));
+            rc.RestURL += String.Format("/{0}", dateJourSemaine.ToString("yyyyMMdd"));
             
             // Récupération de la réponse
             string response = rc.MakeRequest();

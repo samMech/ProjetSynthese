@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProjetRDV247.Modele;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -50,6 +51,30 @@ namespace ProjetRDV247.Utils
         {
             DateTime datetime;
             return DateTime.TryParseExact(date, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out datetime);
+        }
+
+        /// <summary>
+        /// Méthode pour créer une nouvelle copie d'un rendez-vous
+        /// </summary>
+        /// <param name="rdv">Le rendez-vous à copier</param>
+        /// <returns>La copie du rendez-vous</returns>
+        public static Rendezvous ClonerRendezVous(Rendezvous rdv)
+        {
+            Rendezvous rdvCopie = new Rendezvous();
+            rdvCopie.id_rdv = rdv.id_rdv;
+            rdvCopie.debut_rdv = rdv.debut_rdv;
+            rdvCopie.fin_rdv = rdv.fin_rdv;
+            rdvCopie.statut_rdv = rdv.statut_rdv;
+
+            rdvCopie.id_typerdv_rdv = rdv.id_typerdv_rdv;
+            rdvCopie.id_client_rdv = rdv.id_client_rdv;            
+            rdvCopie.id_employe_rdv = rdv.id_employe_rdv;
+
+            rdvCopie.Client = rdv.Client;
+            rdvCopie.Employe = rdv.Employe;
+            rdvCopie.Typerdv = rdv.Typerdv;
+            
+            return rdvCopie;
         }
     }
 }

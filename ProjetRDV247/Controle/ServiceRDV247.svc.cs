@@ -92,7 +92,7 @@ namespace ProjetRDV247.Controle
             DateTime dateJour = DateTime.ParseExact(date, "yyyyMMdd", CultureInfo.InvariantCulture).Date;
 
             // On retourne les rendez-vous de l'employé pour cette journée
-            List<Rendezvous> resultats = dao.GetDisposEmploye(Convert.ToInt32(idEmploye), dateJour, dateJour.AddDays(1));
+            List<Rendezvous> resultats = dao.GetDisposEmploye(Convert.ToInt32(idEmploye), dateJour, dateJour.AddDays(6));
             return resultats.Where(r => r.id_client_rdv != null).ToList();            
         }
 
@@ -220,8 +220,8 @@ namespace ProjetRDV247.Controle
                 return dispoAjoutees;// TODO: exception employé inexistant !!!
             }
 
-            // Récupération des disponibilités existantes de l'employé
-            List<Rendezvous> dispoExistantes = dao.GetDisposEmploye(idEmploye, dateDebut.Date, dateFin.Date);
+            // Récupération des disponibilités existantes de l'employé autour de la plage d'ajout            
+            List<Rendezvous> dispoExistantes = dao.GetDisposEmploye(idEmploye, dateDebut.AddDays(-1).Date, dateFin.AddDays(1).Date);
 
             // Création des disponibilités (TODO: prendre le statut prédéfini dans la BD ???)
             TimeSpan dureeDispo = new TimeSpan(0, dureeMinutesDispo, 0);
@@ -266,14 +266,8 @@ namespace ProjetRDV247.Controle
                 // Vérification des conflits
                 if (!HoraireUtil.IsRDVConflictuel(newDebut, newFin, dispoExistantes))
                 {
-                    // Création du rendez-vous modifiée
-                    Rendezvous dispoModifiee = new Rendezvous();
-                    dispoModifiee.id_rdv = dispo.id_rdv;
-                    dispoModifiee.id_client_rdv = dispo.id_client_rdv;
-                    dispoModifiee.statut_rdv = dispo.statut_rdv;
-                    dispoModifiee.id_employe_rdv = dispo.id_employe_rdv;
-
-                    // Modification des informations de la disponibilité                    
+                    // Modification des informations de la disponibilité
+                    Rendezvous dispoModifiee = Utilitaire.ClonerRendezVous(dispo);
                     dispoModifiee.debut_rdv = newDebut;
                     dispoModifiee.fin_rdv = newFin;
                     dispoModifiee.id_typerdv_rdv = idType;

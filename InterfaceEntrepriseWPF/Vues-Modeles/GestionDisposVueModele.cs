@@ -186,15 +186,21 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
             set
             {
                 if(value != null && value.Equals(_dateJour) == false)
-                {   
+                {
+                    // Calcul du début de semaine pour comparaison
+                    DateTime nouveauLundi = CalendrierRDV.Utilitaire.TrouverLundiPrecedent(value);
+                    DateTime lundiActuel = CalendrierRDV.Utilitaire.TrouverLundiPrecedent(_dateJour);
+                    
+                    // Modification
+                    _dateJour = value;
+
                     // Vérification pour savoir si on a changé de semaine
-                    if (initTermine && Math.Abs((value - CalendrierRDV.Utilitaire.TrouverLundiPrecedent(_dateJour)).Days) > 6)
+                    if (initTermine && Math.Abs((nouveauLundi - lundiActuel).Days) > 6)
                     {
                         // Mise à jour des données
                         UpdateData();
                     }
-                    
-                    _dateJour = value;
+
                     OnPropertyChanged();
                 }                
             }
@@ -505,7 +511,7 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         {
             // Récupération des disponibilités pour la semaine courante
             Employe emp = ApplicationVueModele.Instance.EmployeConnecte;
-            ListeDisponibilites = ConversionUtil.ConvertirRDVToIRDV(RestDao.GetDisposEmploye(emp.id_employe), COULEURS_STATUT);
+            ListeDisponibilites = ConversionUtil.ConvertirRDVToIRDV(RestDao.GetDisposEmploye(emp.id_employe, DateJour), COULEURS_STATUT);
         }
 
         // Méthode pour ajouter des disponibilités

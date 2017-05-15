@@ -25,6 +25,9 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
 
         // Commandes
         private ICommand _gererDisposCommand;
+        
+        // Booléen pour empêcher la mise à jour des valeurs plusieurs fois durant l'initialisation
+        private bool initTermine = false;
 
         /// <summary>
         /// Constructeur statique pour initialiser les constantes
@@ -33,6 +36,8 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         {
             // TODO (prendre la liste du service web pour les status)
             COULEURS_STATUT.Add("rv", Colors.Lavender);
+            COULEURS_STATUT.Add("dispo", Colors.GhostWhite);
+            COULEURS_STATUT.Add("annule", Colors.LightPink);
         }
 
         /// <summary>
@@ -46,6 +51,9 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
             // Initialisation des valeurs
             DateJour = DateTime.Today;
             ListeRendezVous = new ObservableCollection<CalendrierRDV.IRendezVous>();
+
+            // Initialisation terminée
+            initTermine = true;
         }
 
         //============//
@@ -70,7 +78,20 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
             {
                 if (_dateJour != null)
                 {
+                    // Calcul du début de semaine pour comparaison
+                    DateTime nouveauLundi = CalendrierRDV.Utilitaire.TrouverLundiPrecedent(value);
+                    DateTime lundiActuel = CalendrierRDV.Utilitaire.TrouverLundiPrecedent(_dateJour);
+
+                    // Modification
                     _dateJour = value;
+
+                    // Vérification pour savoir si on a changé de semaine
+                    if (initTermine && Math.Abs((nouveauLundi - lundiActuel).Days) > 6)
+                    {
+                        // Mise à jour des données
+                        UpdateData();
+                    }
+
                     OnPropertyChanged();
                 }
             }
@@ -114,10 +135,9 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
         /// </summary>
         public override void UpdateData()
         {
-            // Récupération des rendez-vous pour la journée actuelle
+            // Récupération des rendez-vous pour la semaine courante
             Employe emp = ApplicationVueModele.Instance.EmployeConnecte;
-            List<Rendezvous> rdvsAujourdhui = RestDao.GetRendezVousEmploye(emp.id_employe).Where(x => x.debut_rdv.Date.Equals(DateTime.Today.Date)).ToList();
-            ListeRendezVous = ConversionUtil.ConvertirRDVToIRDV(rdvsAujourdhui);
+            ListeRendezVous = ConversionUtil.ConvertirRDVToIRDV(RestDao.GetRendezVousEmploye(emp.id_employe, DateJour), COULEURS_STATUT);
         }
 
         // Méthode pour aller à la page de gestion des disponibilités

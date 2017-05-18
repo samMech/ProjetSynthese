@@ -635,7 +635,7 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
                 ErreurDebutDispo = false;// Pour désactiver l'erreur si le panneau n'est pas actif
             }
 
-            return ValiderDebutDispoModifie() && !IsDispoConflitClient;
+            return ValiderDebutDispoModifie() && (!IsDispoConflitClient || Raison.Length > 0);
         }
 
         // Méthode pour supprimer des disponibilités
@@ -671,7 +671,7 @@ namespace InterfaceEntrepriseWPF.Vues_Modeles
             {
                 // On vérifie si une des disponibilités est déjà réservée
                 IsDispoConflitClient = (dispos.FirstOrDefault(x => x.NomClient != null) != null);
-                return !IsDispoConflitClient;
+                return !IsDispoConflitClient || Raison.Length > 0;
             }
             else
             {

@@ -174,7 +174,7 @@
                                 <TextBlock TextWrapping="Wrap" Text="Avant de valider, veuillez fournir la raison du changement pour aviser les clients concernés !"/>
                             </Label.Content>
                         </Label>
-                        <TextBox Style="{StaticResource StyleTextBoxRaison}" IsEnabled="{Binding Path=IsDispoConflitClient}"/>
+                        <TextBox Text="{Binding Path=Raison, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource StyleTextBoxRaison}" IsEnabled="{Binding Path=IsDispoConflitClient}"/>
 
                         <Button Content="Supprimer les disponibilités" Command="{Binding Path=SupprimerDisposCommand}"/>
                     </StackPanel>

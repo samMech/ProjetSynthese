@@ -69,8 +69,10 @@
                                         BorderThickness="{TemplateBinding BorderThickness}"
                                         Background="{TemplateBinding Background}"
                                         BorderBrush="{TemplateBinding BorderBrush}">
-                                    <ContentPresenter x:Name="SelectedContentHost" ContentSource="SelectedContent" />
-                                </Border>
+                                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                        <ContentPresenter x:Name="SelectedContentHost" ContentSource="SelectedContent" />
+                                    </ScrollViewer>
+                            </Border>
                             </Grid>
                     </ControlTemplate>
                 </Setter.Value>
